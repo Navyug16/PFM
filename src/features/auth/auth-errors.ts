@@ -3,7 +3,9 @@ import type { AuthError } from '@supabase/supabase-js'
 /**
  * Maps Supabase Auth errors and string messages to friendly, beginner-readable notices.
  */
-export const getFriendlyAuthError = (error: AuthError | string | null): string => {
+export const getFriendlyAuthError = (
+  error: AuthError | Error | string | null
+): string => {
   if (!error) return ''
 
   const message = typeof error === 'string' ? error : error.message

@@ -89,6 +89,7 @@ export const SignupPage: React.FC = () => {
       const { error: signUpError, data } = await signUp(email, password, name)
 
       if (signUpError) {
+        console.error('Signup error response:', signUpError)
         setError(getFriendlyAuthError(signUpError))
       } else if (data && !(data as { session?: unknown }).session) {
         // Case B: Email confirmation is enabled in Supabase dashboard
@@ -98,6 +99,7 @@ export const SignupPage: React.FC = () => {
         navigate('/overview')
       }
     } catch (err: unknown) {
+      console.error('Signup caught exception:', err)
       setError(getFriendlyAuthError(err as Error))
     } finally {
       setLoading(false)

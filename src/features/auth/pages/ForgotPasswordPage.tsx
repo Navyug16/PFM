@@ -39,12 +39,14 @@ export const ForgotPasswordPage: React.FC = () => {
       const { error: resetError } = await requestPasswordReset(email)
 
       if (resetError) {
+        console.error('Password reset request error response:', resetError)
         setError(getFriendlyAuthError(resetError))
       } else {
         // Privacy-first message: don't reveal if account exists
         setSuccess(true)
       }
     } catch (err: unknown) {
+      console.error('Password reset request caught exception:', err)
       setError(getFriendlyAuthError(err as Error))
     } finally {
       setLoading(false)

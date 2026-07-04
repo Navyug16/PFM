@@ -59,11 +59,13 @@ export const LoginPage: React.FC = () => {
     try {
       const { error: signInError } = await signIn(email, password)
       if (signInError) {
+        console.error('Login error response:', signInError)
         setError(getFriendlyAuthError(signInError))
       } else {
         navigate('/overview')
       }
     } catch (err: unknown) {
+      console.error('Login caught exception:', err)
       setError(getFriendlyAuthError(err as Error))
     } finally {
       setLoading(false)

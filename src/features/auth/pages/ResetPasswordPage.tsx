@@ -64,11 +64,13 @@ export const ResetPasswordPage: React.FC = () => {
       const { error: updateError } = await updatePassword(password)
 
       if (updateError) {
+        console.error('Password update error response:', updateError)
         setError(getFriendlyAuthError(updateError))
       } else {
         setSuccess(true)
       }
     } catch (err: unknown) {
+      console.error('Password update caught exception:', err)
       setError(getFriendlyAuthError(err as Error))
     } finally {
       setLoading(false)

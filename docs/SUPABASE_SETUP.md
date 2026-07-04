@@ -59,15 +59,16 @@ Vite only exposes environment variables prefixed with `VITE_` to your client app
 
 ---
 
-## 4. Running SQL Script & Creating Schema
+## 4. Running SQL Scripts & Creating Schema
 
-To initialize the profiles schema, trigger functions, and security policies:
-1. Navigate to **SQL Editor** (the terminal icon on the left sidebar).
-2. Click **New query**.
-3. Open PFM's database setup file: [setup.sql](file:///e:/PFM/supabase/setup.sql) and copy the entire SQL script.
-4. Paste the SQL query into the Supabase editor.
-5. Click **Run** on the top right.
-6. Verify the output states `Success. No rows returned` or shows created tables.
+To initialize the database schema, trigger functions, security policies, and default categories, run the following SQL scripts in order:
+
+### Order of Execution:
+1. **Initial Profiles**: Open [setup.sql](file:///e:/PFM/supabase/setup.sql), copy its contents, paste them into the SQL Editor, and click **Run**.
+2. **Financial Foundation Schema**: Open [20260704000001_financial_foundation.sql](file:///e:/PFM/supabase/migrations/20260704000001_financial_foundation.sql), copy its contents, paste them into a new SQL Editor query, and click **Run**.
+3. **Default Categories Seed**: Open [20260704000002_default_categories.sql](file:///e:/PFM/supabase/migrations/20260704000002_default_categories.sql), copy its contents, paste them into a new query, and click **Run**.
+
+*Verify that each query output states `Success` or shows that tables and policies were created successfully.*
 
 ---
 
@@ -99,9 +100,20 @@ Every query targeting the `profiles` table is filtered by these server-enforced 
 
 ## 6. How to Verify Everything is Working
 
+### Profiles Verification
 1. **Verify Profiles trigger**: Sign up a new user via the app's `/signup` page. Then check the **Table Editor** > `profiles` table. You should see a row automatically created with the correct `id` and `display_name`.
-2. **Verify RLS policies**: Try to retrieve profiles from the browser console using the Supabase client without logging in; it will return an empty array.
+2. **Verify Profiles RLS policies**: Try to retrieve profiles from the browser console using the Supabase client without logging in; it will return an empty array.
 3. **Verify Password Reset**: Go to `/forgot-password`, input your email, click send, and verify that you receive an email link that takes you to `/reset-password` allowing credentials update.
+
+### Financial Foundation Verification
+1. **Verify Trigger Constraints**: Try to log a transaction of type `transfer` where `account_id` and `transfer_to_account_id` are identical or category type is mismatched. Verify that the database throws a SQL exception and prevents the write.
+2. **Verify Two-User RLS Isolation**:
+   - Log in with User A and create an account named "User A Checking".
+   - Log in with User B in a separate incognito window. Verify that "User A Checking" is not visible in User B's accounts list.
+   - Run a raw SQL select from the Supabase Dashboard: `SELECT * FROM public.accounts;` (this bypasses RLS in the dashboard as it runs as owner). You will see both accounts.
+   - Run the same select query through the API client using User B's credentials: it will only return User B's accounts, proving the RLS policies are active and correctly separating user datasets.
+3. **Verify Tag & Goal Ownership Triggers**: Try to insert a row in `transaction_tags` linking User A's transaction to User B's tag. Verify that the trigger `validate_transaction_tag_ownership` blocks the insertion.
+4. **Verify Category Deletion Safety**: Try to delete a custom category that has transactions logged under it. Verify that the system blocks the deletion, forcing archiving (`is_active = false`) instead.
 
 ---
 

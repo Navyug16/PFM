@@ -9,6 +9,7 @@
     "lint": "eslint src --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
+    "test": "vitest run",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\" \"*.{ts,js,json}\""
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "tailwindcss": "^4.3.2",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.62.1",
-    "vite": "^8.1.1"
+    "vite": "^8.1.1",
+    "vitest": "^4.1.9"
   }
 }

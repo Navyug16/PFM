@@ -2,9 +2,9 @@
 
 Help the user understand their money in under 60 seconds.
 
-## Current Milestone: Milestone 2 — Authentication & Security Foundation
+## Current Milestone: Milestone 3 — Financial Data Foundation & Core Ledger Engine
 
-This milestone introduces secure user signup, login, session state restoration, password recovery flows, protected route layouts, database sync triggers, and server-side Row-Level Security (RLS) policies.
+This milestone establishes the robust financial ledger database schema, Row-Level Security (RLS) policies, database ownership safety triggers, typescript domain types, custom validation checking, date utilities, deterministic financial calculations, automated test coverage, and interactive verification UI screens (Accounts, Transactions, Goals).
 
 ---
 

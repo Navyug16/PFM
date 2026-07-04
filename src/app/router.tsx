@@ -42,9 +42,9 @@ export const router = createBrowserRouter([
   {
     path: '/reset-password',
     element: (
-      <PublicRoute>
+      <ProtectedRoute>
         <ResetPasswordPage />
-      </PublicRoute>
+      </ProtectedRoute>
     ),
   },
   {

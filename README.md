@@ -2,9 +2,11 @@
 
 Help the user understand their money in under 60 seconds.
 
-## Milestone 1 — Project Foundation
+## Current Milestone: Milestone 2 — Authentication & Security Foundation
 
-This is the initial foundation stage of the Personal Finance Manager (PFM) application. This milestone sets up the core architecture, routing, visual style tokens, responsive layout, Supabase client configurations, and offline checking mechanisms.
+This milestone introduces secure user signup, login, session state restoration, password recovery flows, protected route layouts, database sync triggers, and server-side Row-Level Security (RLS) policies.
+
+---
 
 ## Tech Stack
 - **Core Framework**: React 19, TypeScript
@@ -12,103 +14,80 @@ This is the initial foundation stage of the Personal Finance Manager (PFM) appli
 - **Client-Side Routing**: React Router v7
 - **Styling & Layout**: Tailwind CSS v4, Lucide Icons
 - **Data Layer Integration**: Supabase JavaScript SDK
+- **Database**: Supabase PostgreSQL with Row Level Security (RLS)
 
-## Requirements
+---
+
+## Getting Started
+
+### 1. Requirements
 - **Node.js**: v22+
 - **npm**: v10+
 
-## Setup & Installation
+### 2. Installation
+```bash
+npm install
+```
 
-1. **Clone the repository** (or navigate to the workspace directory)
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Environment Setup**:
-   Copy `.env.example` to `.env` and fill in your Supabase configuration:
+### 3. Database Setup (SQL Script)
+Before running the application, you must initialize the backend tables and triggers in your Supabase project:
+1. Copy the SQL script in [setup.sql](file:///e:/PFM/supabase/setup.sql).
+2. Go to your **Supabase Dashboard** > **SQL Editor** > **New Query**.
+3. Paste the script and click **Run**.
+4. Read the detailed [Supabase Project Setup Guide](file:///e:/PFM/docs/SUPABASE_SETUP.md) for full configuration steps.
+
+### 4. Local Environment Setup
+1. Copy `.env.example` to `.env`:
    ```bash
    cp .env.example .env
    ```
-   *Note: Placeholders are provided by default to prevent runtime bootstrap crashes if credentials are not configured yet.*
+2. Open `.env` and fill in your Supabase credentials:
+   ```env
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-public-key-here
+   ```
 
-## Development Commands
-
+### 5. Running the Application
 - **Start Dev Server**:
   ```bash
   npm run dev
-  ```
-- **Build Production Bundle**:
-  ```bash
-  npm run build
-  ```
-- **Preview Production Build**:
-  ```bash
-  npm run preview
   ```
 - **Code Linting**:
   ```bash
   npm run lint
   ```
-- **TypeScript Compilation Check**:
+- **TypeScript Check**:
   ```bash
   npm run typecheck
   ```
-- **Prettier Code Formatting**:
+- **Build Production Bundle**:
   ```bash
-  npm run format
+  npm run build
   ```
 
-## Project Directory Structure
+---
 
-```
-src/
-  app/
-    App.tsx          # Main entry point mounting Router & Network Status
-    router.tsx       # React Router hierarchy mapping paths to feature placeholders
-  components/
-    layout/
-      AppShell.tsx   # Master responsive shell (Sidebar / Bottom Navigation)
-      PageHeader.tsx # Styled page headers for views
-      PageContainer.tsx # Responsive width-restricted content container
-    ui/
-      EmptyState.tsx # Reusable empty records indicator
-      ErrorState.tsx # Reusable error feedback component with Retry action
-      LoadingState.tsx # Reusable loader spinner
-      NetworkStatus.tsx # Global online/offline network monitor banner
-  features/
-    auth/
-      LoginPage.tsx  # Standalone login mockup
-      SignupPage.tsx # Standalone signup mockup
-    overview/        # Landing page placeholder
-    transactions/    # Transaction log placeholder
-    accounts/        # Accounts overview placeholder
-    goals/           # Budgets/goals placeholder
-    insights/        # Questions & analysis placeholder
-    metals/          # Gold/Silver Spot price tracker placeholder
-    settings/        # Profile preferences & export placeholder
-  lib/
-    supabase.ts      # Supabase client setup with graceful env checking
-  styles/
-    globals.css      # CSS entry point with Tailwind v4 & Design system color tokens
-  main.tsx           # React bootstrap mount point
-```
+## Route Access Map
 
-## Included in Milestone 1
-- **Project Scaffold**: Clean React + Vite + strict TypeScript configurations.
-- **Strict ESLint & Prettier**: Static analysis and code formatting configuration.
-- **Vite Path Aliases**: Reusable `@/*` maps to the `src/*` folder.
-- **Routing Engine**: Functional routing configuration for 9 application pages.
-- **Premium Styling tokens**: Custom dark-graphite palette variables integrated using Tailwind CSS v4.
-- **Responsive App Shell**: Sidebar for desktop and tabbed bottom navigation for mobile, featuring active path highlights and tap targets.
-- **Mock Authentication Access**: Bypasses login/signup screen to review the application layouts.
-- **Network Status Monitor**: Custom hook checking online status with a warning banner when offline.
-- **Graceful Supabase Client**: Non-blocking client configuration logging warnings instead of crashing on boot.
+### Public Auth Routes (Accessible only by unauthenticated users)
+- `/login` — Form validation, password visibility toggles, and connection check.
+- `/signup` — Interactive name, email, and password registration form. Handles cases with or without email verification settings.
+- `/forgot-password` — Requests recovery links using privacy-conscious confirmation copy.
+- `/reset-password` — Enter and confirm new password to recover credentials.
 
-## Intentionally Not Implemented Yet (Deferred to Future Milestones)
-- Supabase Authentication logic & secure session management.
-- PostgreSQL database schemas, indexes, and row-level security policies.
-- CRUD operations for Accounts, Transactions, or Transfers.
-- Goals calculations, financial period comparisons, and trend engines.
-- External Precious Metals Spot price API hooks.
-- PWA configurations (service workers, offline caching).
-- PDF or CSV statements export.
+### Protected App Routes (Accessible only by authenticated users)
+- `/overview` — Primary financial overview dashboard.
+- `/transactions` — Cash flow ledger entries.
+- `/accounts` — Asset bank accounts.
+- `/goals` — Saving goals and budgets.
+- `/insights` — Smart queries.
+- `/metals` — Gold & Silver tracker.
+- `/settings` — Profile settings and logout.
+
+---
+
+## Security Model
+
+- **Frontend Route Protection**: Unauthenticated hits to protected paths automatically redirect to `/login` preserving the initial path state. Authenticated users are prevented from returning to `/login` or `/signup` and are redirected to `/overview`.
+- **Database Row-Level Security (RLS)**: Enforced on the `profiles` table in Supabase PostgreSQL. Users can select or update only the profile row matching their authenticated UUID (`auth.uid() = id`).
+- **Profile Synchronization**: Handled entirely via database trigger functions (`SECURITY DEFINER`) executing on `INSERT` events in `auth.users`, ensuring profile records are created reliably on signup.

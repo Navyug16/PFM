@@ -12,6 +12,8 @@ import {
   Wallet,
 } from 'lucide-react'
 
+import { useAuth } from '@/features/auth/auth-provider'
+
 interface NavItem {
   name: string
   path: string
@@ -29,10 +31,25 @@ const NAVIGATION_ITEMS: NavItem[] = [
 ]
 
 export const AppShell: React.FC = () => {
+  const { user, signOut } = useAuth()
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    navigate('/login')
+  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || 'User'
+  const email = user?.email || 'user@example.com'
+  const initials = displayName
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || 'U'
+
+  const handleLogout = async () => {
+    try {
+      await signOut()
+      navigate('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
 
   return (
@@ -44,7 +61,7 @@ export const AppShell: React.FC = () => {
           <Wallet className="text-brand-purple" size={24} />
           <span className="font-bold text-lg tracking-tight text-text-primary">PFM</span>
           <span className="text-[10px] uppercase font-semibold text-brand-purple bg-brand-purple/10 px-1.5 py-0.5 rounded-custom-sm">
-            M1
+            M2
           </span>
         </div>
 
@@ -72,16 +89,16 @@ export const AppShell: React.FC = () => {
         <div className="p-4 border-t border-border-neutral space-y-2 bg-surface-primary/50">
           <div className="flex items-center gap-3 px-2 py-1.5">
             <div className="w-8 h-8 rounded-full bg-brand-purple/10 border border-brand-purple/20 flex items-center justify-center font-semibold text-xs text-brand-purple">
-              JD
+              {initials}
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="text-xs font-semibold text-text-primary truncate">Demo User</p>
-              <p className="text-[10px] text-text-muted truncate">user@example.com</p>
+              <p className="text-xs font-semibold text-text-primary truncate">{displayName}</p>
+              <p className="text-[10px] text-text-muted truncate">{email}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-custom-md text-sm font-medium text-state-expense hover:bg-state-expense/10 transition-colors duration-200 cursor-pointer text-left"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-custom-md text-sm font-medium text-state-expense hover:bg-state-expense/10 transition-colors duration-200 cursor-pointer text-left border-none"
           >
             <LogOut size={16} />
             <span>Sign Out</span>

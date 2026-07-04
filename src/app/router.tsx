@@ -7,21 +7,53 @@ import { GoalsPage } from '@/features/goals/GoalsPage'
 import { InsightsPage } from '@/features/insights/InsightsPage'
 import { MetalsPage } from '@/features/metals/MetalsPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
-import { LoginPage } from '@/features/auth/LoginPage'
-import { SignupPage } from '@/features/auth/SignupPage'
+import { LoginPage } from '@/features/auth/pages/LoginPage'
+import { SignupPage } from '@/features/auth/pages/SignupPage'
+import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
+import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage'
+import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute'
+import { PublicRoute } from '@/features/auth/components/PublicRoute'
 
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
   },
   {
     path: '/signup',
-    element: <SignupPage />,
+    element: (
+      <PublicRoute>
+        <SignupPage />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: '/forgot-password',
+    element: (
+      <PublicRoute>
+        <ForgotPasswordPage />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: '/reset-password',
+    element: (
+      <PublicRoute>
+        <ResetPasswordPage />
+      </PublicRoute>
+    ),
   },
   {
     path: '/',
-    element: <AppShell />,
+    element: (
+      <ProtectedRoute>
+        <AppShell />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

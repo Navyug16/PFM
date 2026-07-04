@@ -28,8 +28,20 @@ export const ResetPasswordPage: React.FC = () => {
     if (!password) {
       setPasswordError('New password is required.')
       isValid = false
-    } else if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters.')
+    } else if (password.length < 8) {
+      setPasswordError('Password must be at least 8 characters long.')
+      isValid = false
+    } else if (!/[A-Z]/.test(password)) {
+      setPasswordError('Password must contain at least one uppercase letter.')
+      isValid = false
+    } else if (!/[a-z]/.test(password)) {
+      setPasswordError('Password must contain at least one lowercase letter.')
+      isValid = false
+    } else if (!/[0-9]/.test(password)) {
+      setPasswordError('Password must contain at least one number.')
+      isValid = false
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setPasswordError('Password must contain at least one special character.')
       isValid = false
     } else {
       setPasswordError(null)

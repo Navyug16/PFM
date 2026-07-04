@@ -8,7 +8,7 @@ interface PublicRouteProps {
 }
 
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth()
+  const { user, loading, isRecoveryMode } = useAuth()
   const location = useLocation()
 
   if (loading) {
@@ -20,6 +20,9 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   }
 
   if (user) {
+    if (isRecoveryMode) {
+      return <Navigate to="/reset-password" replace />
+    }
     // Redirect to the page they came from, or default to /overview
     const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/overview'
     return <Navigate to={from} replace />

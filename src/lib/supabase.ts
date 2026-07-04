@@ -19,6 +19,6 @@ if (!hasCredentials) {
 
 // Fallback to placeholder values if variables are missing to prevent application crash on boot
 export const supabase = createClient(
-  supabaseUrl || 'https://brqjvepcdmnvwutyrwuz.supabase.co',
-  supabaseAnonKey || 'sb_publishable_F6UJQkSA6MYEpKEUCIFVog_PpIK0tBQ'
+  supabaseUrl || 'https://placeholder-project-id.supabase.co',
+  supabaseAnonKey || 'placeholder-anon-key'
 )

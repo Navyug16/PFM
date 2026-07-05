@@ -15,9 +15,22 @@ import {
   calculateRequiredMonthlySavings,
   calculateRequiredWeeklySavings,
   comparePeriodSpending,
-  identifyLargestExpenseCategory
+  identifyLargestExpenseCategory,
+  calculateAvailableBalance,
+  calculateTodaySpending,
+  calculateAverageDailySpending,
+  calculateGoalPaceStatus,
+  calculateCategoryShare,
+  calculatePeriodComparison,
+  groupCashFlowByInterval
 } from './calculations'
-import { getIndianFinancialYear, getRemainingMonths, getRemainingWeeks } from './date-utils'
+import {
+  getIndianFinancialYear,
+  getRemainingMonths,
+  getRemainingWeeks,
+  getPeriodBounds,
+  getEquivalentPreviousPeriod
+} from './date-utils'
 
 // Mock Data Builders
 const createMockAccount = (overrides: Partial<Account> = {}): Account => ({
@@ -272,6 +285,141 @@ describe('Financial Calculations Engine', () => {
     it('should calculate remaining months and weeks between two date boundaries', () => {
       expect(getRemainingMonths('2026-07-04', '2026-10-04')).toBe(3)
       expect(getRemainingWeeks('2026-07-04', '2026-09-26')).toBe(12)
+    })
+  })
+
+  describe('13. calculateAvailableBalance', () => {
+    it('should include checking, savings, and cash; exclude credit card and loan', () => {
+      const accounts = [
+        createMockAccount({ id: 'acc-checking', opening_balance: 5000, account_type: 'checking' }),
+        createMockAccount({ id: 'acc-savings', opening_balance: 10000, account_type: 'savings' }),
+        createMockAccount({ id: 'acc-cash', opening_balance: 1000, account_type: 'cash' }),
+        createMockAccount({ id: 'acc-cc', opening_balance: -3000, account_type: 'credit_card' }), // Excluded
+        createMockAccount({ id: 'acc-loan', opening_balance: -2000, account_type: 'loan' }), // Excluded
+      ]
+      const avail = calculateAvailableBalance(accounts, [])
+      expect(avail).toBe(16000) // 5000 + 10000 + 1000
+    })
+  })
+
+  describe('14. calculateTodaySpending', () => {
+    it('should sum only expense transactions on the specified date', () => {
+      const txs = [
+        createMockTransaction({ transaction_type: 'expense', amount: 300, transaction_date: '2026-07-04' }),
+        createMockTransaction({ transaction_type: 'expense', amount: 500, transaction_date: '2026-07-04' }),
+        createMockTransaction({ transaction_type: 'expense', amount: 400, transaction_date: '2026-07-05' }), // Different date
+        createMockTransaction({ transaction_type: 'income', amount: 1000, transaction_date: '2026-07-04' }), // Income
+      ]
+      expect(calculateTodaySpending(txs, '2026-07-04')).toBe(800)
+    })
+  })
+
+  describe('15. calculateAverageDailySpending', () => {
+    it('should calculate daily average based on elapsed days in period', () => {
+      const txs = [
+        createMockTransaction({ transaction_type: 'expense', amount: 2000, transaction_date: '2026-07-05' }),
+      ]
+      // 10 days in current period (July 1 to July 10), average should be 200 per day
+      const avg = calculateAverageDailySpending(txs, '2026-07-01', '2026-07-10', '2026-07-10')
+      expect(avg).toBe(200)
+    })
+  })
+
+  describe('16. calculateGoalPaceStatus', () => {
+    const goal = {
+      start_date: '2026-07-01',
+      target_date: '2026-07-11', // 10 days total duration
+      target_amount: 10000,
+    }
+    // Halfway through (July 6 is 5 days elapsed). Expected = 5000. 2% tolerance = 200.
+
+    it('should return on_track if within 2% tolerance', () => {
+      // Saved = 4900 (expected 5000, difference -100 is within 200 tolerance)
+      expect(calculateGoalPaceStatus(goal, 4900, '2026-07-06')).toBe('on_track')
+    })
+
+    it('should return behind if savings are below 2% tolerance threshold', () => {
+      // Saved = 4700 (expected 5000, difference -300 exceeds 200 tolerance)
+      expect(calculateGoalPaceStatus(goal, 4700, '2026-07-06')).toBe('behind')
+    })
+
+    it('should return ahead if savings are above 2% tolerance threshold or target reached', () => {
+      // Saved = 5300 (difference +300)
+      expect(calculateGoalPaceStatus(goal, 5300, '2026-07-06')).toBe('ahead')
+      // Saved = 10000 (target reached)
+      expect(calculateGoalPaceStatus(goal, 10000, '2026-07-02')).toBe('ahead')
+    })
+  })
+
+  describe('17. calculateCategoryShare', () => {
+    it('should compute category percentage correctly', () => {
+      expect(calculateCategoryShare(300, 1200)).toBe(25)
+      expect(calculateCategoryShare(100, 0)).toBe(0)
+    })
+  })
+
+  describe('18. Period Comparison Engine', () => {
+    it('should return correct results for increases and decreases', () => {
+      const res1 = calculatePeriodComparison(150, 100) // Increase +50%
+      expect(res1.absoluteChange).toBe(50)
+      expect(res1.percentageChange).toBe(50)
+      expect(res1.direction).toBe('up')
+      expect(res1.comparisonAvailable).toBe(true)
+
+      const res2 = calculatePeriodComparison(80, 100) // Decrease -20%
+      expect(res2.absoluteChange).toBe(-20)
+      expect(res2.percentageChange).toBe(20)
+      expect(res2.direction).toBe('down')
+      expect(res2.comparisonAvailable).toBe(true)
+    })
+
+    it('should handle zero bounds and missing comparisons cleanly', () => {
+      const res1 = calculatePeriodComparison(100, 0) // From zero
+      expect(res1.absoluteChange).toBe(100)
+      expect(res1.percentageChange).toBe(0) // Growth percentage is treated as unavailable (0)
+      expect(res1.percentChangeAvailable).toBe(false)
+      expect(res1.direction).toBe('up')
+
+      const res2 = calculatePeriodComparison(100, 100, false) // Comparison unavailable
+      expect(res2.comparisonAvailable).toBe(false)
+      expect(res2.percentChangeAvailable).toBe(false)
+      expect(res2.direction).toBe('unavailable')
+    })
+  })
+
+  describe('19. Date Bounds & Comparison Ranges', () => {
+    it('should shift periods backward correctly and fetch correct bounds', () => {
+      // Period bounds check
+      const bounds = getPeriodBounds('month', new Date('2026-07-15'))
+      expect(bounds.start).toBe('2026-07-01')
+      expect(bounds.end).toBe('2026-07-31')
+
+      // Week shift
+      const prevWeek = getEquivalentPreviousPeriod('2026-07-14', '2026-07-20', 'week')
+      expect(prevWeek.start).toBe('2026-07-07')
+      expect(prevWeek.end).toBe('2026-07-13')
+
+      // Month shift
+      const prevMonth = getEquivalentPreviousPeriod('2026-07-01', '2026-07-10', 'month')
+      expect(prevMonth.start).toBe('2026-06-01')
+      expect(prevMonth.end).toBe('2026-06-10')
+
+      // Safe date rollover shift (July 31 minus 1 month -> June 30)
+      const prevMonthRoll = getEquivalentPreviousPeriod('2026-07-31', '2026-07-31', 'month')
+      expect(prevMonthRoll.start).toBe('2026-06-30')
+    })
+  })
+
+  describe('20. groupCashFlowByInterval', () => {
+    it('should group transactions into weekly intervals for monthly period', () => {
+      const txs = [
+        createMockTransaction({ transaction_type: 'income', amount: 500, transaction_date: '2026-07-03' }), // Week 1
+        createMockTransaction({ transaction_type: 'expense', amount: 200, transaction_date: '2026-07-10' }), // Week 2
+      ]
+      const cashFlow = groupCashFlowByInterval(txs, 'month', '2026-07-01', '2026-07-31')
+      expect(cashFlow[0].income).toBe(500) // Week 1
+      expect(cashFlow[1].expenses).toBe(200) // Week 2
+      expect(cashFlow.length).toBe(5) // 5 Weeks
     })
   })
 })

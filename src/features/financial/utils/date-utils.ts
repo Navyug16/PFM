@@ -91,3 +91,70 @@ export const getRemainingWeeks = (
   const weeks = Math.ceil(diffDays / 7)
   return weeks || 1 // Return at least 1 to prevent division by zero
 }
+
+// Subtracts months safely without rolling over to next month if days mismatch (e.g., March 31 -> Feb 28)
+const subtractMonthsSafely = (date: Date, months: number): Date => {
+  const result = new Date(date)
+  const day = result.getDate()
+  result.setMonth(result.getMonth() - months)
+  if (result.getDate() !== day) {
+    result.setDate(0) // Adjust to last day of the intended month
+  }
+  return result
+}
+
+// Determines the start and end dates for a supported period option
+export const getPeriodBounds = (
+  periodType: 'week' | 'month' | 'last_month' | 'financial_year',
+  referenceDate: Date = new Date()
+): { start: string; end: string } => {
+  const year = referenceDate.getFullYear()
+  const month = referenceDate.getMonth()
+
+  switch (periodType) {
+    case 'week':
+      return getWeekBounds(referenceDate)
+    case 'month':
+      return getMonthBounds(year, month)
+    case 'last_month': {
+      const prevDate = subtractMonthsSafely(referenceDate, 1)
+      return getMonthBounds(prevDate.getFullYear(), prevDate.getMonth())
+    }
+    case 'financial_year':
+      return getIndianFinancialYear(referenceDate)
+    default:
+      return getMonthBounds(year, month)
+  }
+}
+
+// Calculates equivalent previous elapsed period bounds
+export const getEquivalentPreviousPeriod = (
+  startDate: string,
+  endDate: string,
+  periodType: 'week' | 'month' | 'last_month' | 'financial_year'
+): { start: string; end: string } => {
+  const dStart = new Date(startDate)
+  const dEnd = new Date(endDate)
+
+  switch (periodType) {
+    case 'week': {
+      dStart.setDate(dStart.getDate() - 7)
+      dEnd.setDate(dEnd.getDate() - 7)
+      return { start: formatDateString(dStart), end: formatDateString(dEnd) }
+    }
+    case 'month':
+    case 'last_month': {
+      const prevStart = subtractMonthsSafely(dStart, 1)
+      const prevEnd = subtractMonthsSafely(dEnd, 1)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+    case 'financial_year': {
+      dStart.setFullYear(dStart.getFullYear() - 1)
+      dEnd.setFullYear(dEnd.getFullYear() - 1)
+      return { start: formatDateString(dStart), end: formatDateString(dEnd) }
+    }
+    default:
+      return { start: startDate, end: endDate }
+  }
+}
+

@@ -2,9 +2,9 @@
 
 Help the user understand their money in under 60 seconds.
 
-## Current Milestone: Milestone 3 — Financial Data Foundation & Core Ledger Engine
+## Current Milestone: Milestone 4 — Overview Intelligence & Daily Money Experience
 
-This milestone establishes the robust financial ledger database schema, Row-Level Security (RLS) policies, database ownership safety triggers, typescript domain types, custom validation checking, date utilities, deterministic financial calculations, automated test coverage, and interactive verification UI screens (Accounts, Transactions, Goals).
+This milestone delivers the comprehensive intelligence dashboard, incorporating Available Balance definitions, structured period comparisons, prioritized question-driven insight cards (e.g. deficits, spending spikes, goals pacing), cash flow visual intervals, and fully responsive quick entry modals.
 
 ---
 

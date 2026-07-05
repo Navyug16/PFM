@@ -271,3 +271,284 @@ export const identifyLargestExpenseCategory = (
   const category = categories.find((c) => c.id === maxCatId) || null
   return { category, amount: maxAmt }
 }
+
+// 16. Available Balance: sum of current balances for checking, savings, and cash accounts
+export const calculateAvailableBalance = (
+  accounts: Account[],
+  transactions: Transaction[]
+): number => {
+  const liquidAccounts = accounts.filter(
+    (acc) =>
+      acc.is_active &&
+      (acc.account_type === 'checking' ||
+        acc.account_type === 'savings' ||
+        acc.account_type === 'cash')
+  )
+  let totalCents = 0
+  for (const acc of liquidAccounts) {
+    const balance = calculateAccountBalance(acc, transactions)
+    totalCents += Math.round(balance * 100)
+  }
+  return totalCents / 100
+}
+
+// 17. Today's Spending: sum of expense transactions logged on specified date
+export const calculateTodaySpending = (
+  transactions: Transaction[],
+  todayDateString: string
+): number => {
+  const todayTxs = transactions.filter(
+    (tx) => tx.transaction_type === 'expense' && tx.transaction_date === todayDateString
+  )
+  const cents = todayTxs.reduce((sum, tx) => sum + Math.round(tx.amount * 100), 0)
+  return cents / 100
+}
+
+// 18. Average Daily Spending: sum of expenses divided by number of elapsed days in period
+export const calculateAverageDailySpending = (
+  transactions: Transaction[],
+  startDate: string,
+  endDate: string,
+  todayString: string
+): number => {
+  const periodExpenses = calculatePeriodExpenses(transactions, startDate, endDate)
+  const dStart = new Date(startDate)
+  const dEnd = new Date(endDate)
+  const dToday = new Date(todayString)
+
+  const effectiveEnd = dToday >= dStart && dToday <= dEnd ? dToday : dEnd
+
+  const oneDay = 24 * 60 * 60 * 1000
+  const elapsedDays = Math.max(
+    Math.ceil((effectiveEnd.getTime() - dStart.getTime()) / oneDay) + 1,
+    1
+  )
+
+  const expCents = Math.round(periodExpenses * 100)
+  const avgCents = Math.round(expCents / elapsedDays)
+  return avgCents / 100
+}
+
+// 19. Goal Pace Status: calculates elapsed time progress versus actual progress with 2% tolerance
+export const calculateGoalPaceStatus = (
+  goal: { start_date: string; target_date: string; target_amount: number },
+  savedAmount: number,
+  todayString: string
+): 'ahead' | 'on_track' | 'behind' | 'unavailable' => {
+  const dStart = new Date(goal.start_date)
+  const dEnd = new Date(goal.target_date)
+  const dToday = new Date(todayString)
+
+  const totalDuration = dEnd.getTime() - dStart.getTime()
+  if (totalDuration <= 0) return 'unavailable'
+
+  const elapsed = Math.min(Math.max(dToday.getTime() - dStart.getTime(), 0), totalDuration)
+  const expectedProgress = (elapsed / totalDuration) * goal.target_amount
+  const actualProgress = savedAmount
+  const progressDifference = actualProgress - expectedProgress
+  const tolerance = goal.target_amount * 0.02 // 2% tolerance boundary
+
+  if (actualProgress >= goal.target_amount || progressDifference >= tolerance) {
+    return 'ahead'
+  }
+  if (progressDifference <= -tolerance) {
+    return 'behind'
+  }
+  return 'on_track'
+}
+
+// 20. Category Share: relative percentage of total period expenses
+export const calculateCategoryShare = (amount: number, totalPeriodExpenses: number): number => {
+  if (totalPeriodExpenses <= 0) return 0
+  const share = (amount / totalPeriodExpenses) * 100
+  return Math.round(share * 100) / 100
+}
+
+// 21. Structured Period Comparison Result
+export interface PeriodComparisonResult {
+  currentAmount: number
+  previousAmount: number
+  absoluteChange: number
+  percentageChange: number // Absolute value of percentage change
+  direction: 'up' | 'down' | 'unchanged' | 'unavailable'
+  comparisonAvailable: boolean
+  percentChangeAvailable: boolean
+}
+
+export const calculatePeriodComparison = (
+  currentAmount: number,
+  previousAmount: number,
+  hasPreviousData: boolean = true
+): PeriodComparisonResult => {
+  if (!hasPreviousData) {
+    return {
+      currentAmount,
+      previousAmount: 0,
+      absoluteChange: 0,
+      percentageChange: 0,
+      direction: 'unavailable',
+      comparisonAvailable: false,
+      percentChangeAvailable: false,
+    }
+  }
+
+  const currentCents = Math.round(currentAmount * 100)
+  const previousCents = Math.round(previousAmount * 100)
+  const absoluteCents = currentCents - previousCents
+  const absoluteChange = absoluteCents / 100
+
+  if (previousCents === 0) {
+    return {
+      currentAmount,
+      previousAmount: 0,
+      absoluteChange,
+      percentageChange: 0, // Zero growth percentage from zero baseline
+      direction: currentCents > 0 ? 'up' : (currentCents < 0 ? 'down' : 'unchanged'),
+      comparisonAvailable: true,
+      percentChangeAvailable: false,
+    }
+  }
+
+  const percentageChange = Math.round((absoluteCents / previousCents) * 10000) / 100
+  let direction: 'up' | 'down' | 'unchanged' = 'unchanged'
+  if (absoluteCents > 0) direction = 'up'
+  else if (absoluteCents < 0) direction = 'down'
+
+  return {
+    currentAmount,
+    previousAmount,
+    absoluteChange,
+    percentageChange: Math.abs(percentageChange),
+    direction,
+    comparisonAvailable: true,
+    percentChangeAvailable: true,
+  }
+}
+
+// 22. Group Cash Flow by Interval: Groups income and expenses into intervals based on periodType
+export interface CashFlowInterval {
+  label: string
+  income: number
+  expenses: number
+}
+
+export const groupCashFlowByInterval = (
+  transactions: Transaction[],
+  periodType: 'week' | 'month' | 'last_month' | 'financial_year',
+  startDate: string,
+  _endDate: string
+): CashFlowInterval[] => {
+  const dStart = new Date(startDate)
+
+  if (periodType === 'week') {
+    // 7 separate days
+    const intervals: CashFlowInterval[] = []
+    const temp = new Date(dStart)
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    for (let i = 0; i < 7; i++) {
+      const dateStr = temp.toISOString().split('T')[0]
+      const label = dayNames[temp.getDay()]
+
+      const txs = transactions.filter((t) => t.transaction_date === dateStr)
+      const income = txs
+        .filter((t) => t.transaction_type === 'income')
+        .reduce((sum, t) => sum + Math.round(t.amount * 100), 0)
+      const expenses = txs
+        .filter((t) => t.transaction_type === 'expense')
+        .reduce((sum, t) => sum + Math.round(t.amount * 100), 0)
+
+      intervals.push({
+        label,
+        income: income / 100,
+        expenses: expenses / 100,
+      })
+      temp.setDate(temp.getDate() + 1)
+    }
+    return intervals
+  } else if (periodType === 'month' || periodType === 'last_month') {
+    // 5 weekly intervals
+    const intervals: CashFlowInterval[] = []
+    const dayRanges = [
+      { label: 'W1 (1-7)', startDay: 1, endDay: 7 },
+      { label: 'W2 (8-14)', startDay: 8, endDay: 14 },
+      { label: 'W3 (15-21)', startDay: 15, endDay: 21 },
+      { label: 'W4 (22-28)', startDay: 22, endDay: 28 },
+      { label: 'W5 (29+)', startDay: 29, endDay: 31 },
+    ]
+
+    for (const range of dayRanges) {
+      const txs = transactions.filter((t) => {
+        const txDate = new Date(t.transaction_date)
+        if (txDate.getFullYear() !== dStart.getFullYear() || txDate.getMonth() !== dStart.getMonth()) {
+          return false
+        }
+        const day = txDate.getDate()
+        return day >= range.startDay && day <= range.endDay
+      })
+
+      const income = txs
+        .filter((t) => t.transaction_type === 'income')
+        .reduce((sum, t) => sum + Math.round(t.amount * 100), 0)
+      const expenses = txs
+        .filter((t) => t.transaction_type === 'expense')
+        .reduce((sum, t) => sum + Math.round(t.amount * 100), 0)
+
+      intervals.push({
+        label: range.label,
+        income: income / 100,
+        expenses: expenses / 100,
+      })
+    }
+    return intervals
+  } else {
+    // financial_year: group by month (April to March)
+    const intervals: CashFlowInterval[] = []
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
+
+    // Determine the sequence of months from dStart to dEnd
+    const temp = new Date(dStart)
+    // Avoid timezone offsets by setting day to 15
+    temp.setDate(15)
+
+    for (let i = 0; i < 12; i++) {
+      const m = temp.getMonth()
+      const y = temp.getFullYear()
+      const label = `${monthNames[m]} ${String(y).slice(-2)}`
+
+      const txs = transactions.filter((t) => {
+        const txDate = new Date(t.transaction_date)
+        return txDate.getFullYear() === y && txDate.getMonth() === m
+      })
+
+      const income = txs
+        .filter((t) => t.transaction_type === 'income')
+        .reduce((sum, t) => sum + Math.round(t.amount * 100), 0)
+      const expenses = txs
+        .filter((t) => t.transaction_type === 'expense')
+        .reduce((sum, t) => sum + Math.round(t.amount * 100), 0)
+
+      intervals.push({
+        label,
+        income: income / 100,
+        expenses: expenses / 100,
+      })
+
+      temp.setMonth(temp.getMonth() + 1)
+    }
+    return intervals
+  }
+}
+

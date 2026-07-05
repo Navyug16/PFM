@@ -94,6 +94,19 @@ export const OverviewPage: React.FC = () => {
     )
   }
 
+  const renderInsightAnswer = (text: string) => {
+    if (text.includes('**')) {
+      const parts = text.split('**')
+      return (
+        <>
+          <strong className="font-bold text-text-primary">{parts[1]}</strong>
+          {parts[2]}
+        </>
+      )
+    }
+    return text
+  }
+
   // Date Bounds Label
   const { start: dateStart, end: dateEnd } = getPeriodBounds(period)
   const dateRangeLabel = `${new Date(dateStart).toLocaleDateString('en-IN', {
@@ -296,7 +309,7 @@ export const OverviewPage: React.FC = () => {
                       {ins.question}
                     </p>
                     <p className="text-sm font-medium text-text-primary leading-relaxed pr-6">
-                      {ins.answer}
+                      {renderInsightAnswer(ins.answer)}
                     </p>
                   </div>
 

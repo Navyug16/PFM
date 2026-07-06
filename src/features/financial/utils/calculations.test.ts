@@ -22,7 +22,12 @@ import {
   calculateGoalPaceStatus,
   calculateCategoryShare,
   calculatePeriodComparison,
-  groupCashFlowByInterval
+  groupCashFlowByInterval,
+  calculateGoalElapsedPercentage,
+  calculateGoalExpectedProgress,
+  calculateGoalContributionRate,
+  calculateGoalProjectedCompletionDate,
+  calculateGoalRecoveryAmount
 } from './calculations'
 import {
   getIndianFinancialYear,
@@ -422,4 +427,44 @@ describe('Financial Calculations Engine', () => {
       expect(cashFlow.length).toBe(5) // 5 Weeks
     })
   })
+
+  describe('21. Goal Intelligence Calculations', () => {
+    it('should calculate correct elapsed percentage and expected progress', () => {
+      // 10 days elapsed of 40 days -> 25%
+      const elapsed = calculateGoalElapsedPercentage('2026-07-01', '2026-08-10', '2026-07-11')
+      expect(elapsed).toBe(25.0)
+
+      // Expected progress: 25% of 10000 target = 2500
+      const expected = calculateGoalExpectedProgress('2026-07-01', '2026-08-10', '2026-07-11', 10000)
+      expect(expected).toBe(2500)
+    })
+
+    it('should calculate correct daily contribution rate and projected completion date', () => {
+      // Saved 1000 over 10 days elapsed (July 1 to July 10, inclusive = 10 days) -> rate is 100/day
+      const rate = calculateGoalContributionRate(1000, '2026-07-01', '2026-07-10')
+      expect(rate).toBe(100)
+
+      // Projected completion date for 3000 target: remaining 2000 at 100/day -> 20 remaining days from July 10 -> July 30
+      const compDate = calculateGoalProjectedCompletionDate('2026-07-01', 1000, 3000, '2026-07-10', '2026-07-31')
+      expect(compDate).toBe('2026-07-30')
+    })
+
+    it('should calculate correct recovery amount required if behind', () => {
+      // Remaining: 12000, target date: 4 months from today -> 3000/month
+      const recovery = calculateGoalRecoveryAmount(12000, '2026-11-10', '2026-07-10')
+      expect(recovery).toBe(3000)
+    })
+
+    it('should handle completed goal limits correctly', () => {
+      // If completed (saved >= target), projected completion date should equal target date
+      const compDate = calculateGoalProjectedCompletionDate('2026-07-01', 5000, 4000, '2026-07-10', '2026-07-31')
+      expect(compDate).toBe('2026-07-31')
+    })
+
+    it('should handle zero contribution rate safely', () => {
+      const compDate = calculateGoalProjectedCompletionDate('2026-07-01', 0, 4000, '2026-07-10', '2026-07-31')
+      expect(compDate).toBeNull()
+    })
+  })
 })
+

@@ -552,3 +552,85 @@ export const groupCashFlowByInterval = (
   }
 }
 
+// 22. Goal Elapsed Percentage (Clamped between 0 and 100)
+export const calculateGoalElapsedPercentage = (
+  startDate: string,
+  targetDate: string,
+  today: string
+): number => {
+  const dStart = new Date(startDate)
+  const dEnd = new Date(targetDate)
+  const dToday = new Date(today)
+
+  const total = dEnd.getTime() - dStart.getTime()
+  if (total <= 0) return 0
+
+  const elapsed = dToday.getTime() - dStart.getTime()
+  const pct = (elapsed / total) * 100
+  return Math.min(Math.max(Math.round(pct * 100) / 100, 0), 100)
+}
+
+// 23. Goal Expected Progress
+export const calculateGoalExpectedProgress = (
+  startDate: string,
+  targetDate: string,
+  today: string,
+  targetAmount: number
+): number => {
+  const elapsedPct = calculateGoalElapsedPercentage(startDate, targetDate, today)
+  const expected = (elapsedPct / 100) * targetAmount
+  return Math.round(expected * 100) / 100
+}
+
+// 24. Goal Contribution Rate (Saved per day elapsed, including today)
+export const calculateGoalContributionRate = (
+  savedAmount: number,
+  startDate: string,
+  today: string
+): number => {
+  const dStart = new Date(startDate)
+  const dToday = new Date(today)
+  const oneDay = 24 * 60 * 60 * 1000
+
+  if (dToday < dStart) return 0
+  const elapsedDays = Math.round((dToday.getTime() - dStart.getTime()) / oneDay) + 1
+  return savedAmount / Math.max(elapsedDays, 1)
+}
+
+// 25. Goal Projected Completion Date (Returns YYYY-MM-DD or null if never)
+export const calculateGoalProjectedCompletionDate = (
+  startDate: string,
+  savedAmount: number,
+  targetAmount: number,
+  today: string,
+  targetDate: string
+): string | null => {
+  if (savedAmount >= targetAmount) {
+    return targetDate
+  }
+
+  const rate = calculateGoalContributionRate(savedAmount, startDate, today)
+  if (rate <= 0) return null
+
+  const remainingAmount = targetAmount - savedAmount
+  const remainingDays = Math.ceil(remainingAmount / rate)
+
+  const compDate = new Date(today)
+  compDate.setDate(compDate.getDate() + remainingDays)
+
+  const y = compDate.getFullYear()
+  const m = String(compDate.getMonth() + 1).padStart(2, '0')
+  const d = String(compDate.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+// 26. Goal Recovery Amount Required (Monthly amount required from reference date to recover from behind pace)
+export const calculateGoalRecoveryAmount = (
+  remainingAmount: number,
+  targetDate: string,
+  today: string
+): number => {
+  return calculateRequiredMonthlySavings(remainingAmount, targetDate, today)
+}
+
+

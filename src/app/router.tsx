@@ -7,6 +7,7 @@ import { GoalsPage } from '@/features/goals/GoalsPage'
 import { InsightsPage } from '@/features/insights/InsightsPage'
 import { MetalsPage } from '@/features/metals/MetalsPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
+import { PlanningPage } from '@/features/budgets/PlanningPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { SignupPage } from '@/features/auth/pages/SignupPage'
 import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
       {
         path: 'settings',
         element: <SettingsPage />,
+      },
+      {
+        path: 'planning',
+        element: <PlanningPage />,
       },
     ],
   },

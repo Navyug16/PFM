@@ -17,7 +17,10 @@ import {
   calculateGoalRemaining,
   calculateGoalProgressPercentage,
   calculateRequiredMonthlySavings,
-  calculateRequiredWeeklySavings
+  calculateRequiredWeeklySavings,
+  calculateGoalPaceStatus,
+  calculateGoalProjectedCompletionDate,
+  calculateGoalRecoveryAmount
 } from '../financial/utils/calculations'
 import type { Goal, GoalContribution, GoalType } from '../financial/types'
 
@@ -317,6 +320,9 @@ export const GoalsPage: React.FC = () => {
                 const progress = calculateGoalProgressPercentage(g.target_amount, saved)
                 const reqMonthly = calculateRequiredMonthlySavings(remaining, g.target_date, todayStr)
                 const reqWeekly = calculateRequiredWeeklySavings(remaining, g.target_date, todayStr)
+                const paceStatus = calculateGoalPaceStatus(g, saved, todayStr)
+                const projectedCompletion = calculateGoalProjectedCompletionDate(g.start_date, saved, g.target_amount, todayStr, g.target_date)
+                const recoveryMonthly = calculateGoalRecoveryAmount(remaining, g.target_date, todayStr)
 
                 return (
                   <div
@@ -330,6 +336,15 @@ export const GoalsPage: React.FC = () => {
                       <div>
                         <h4 className="font-bold text-text-primary text-base flex items-center gap-2">
                           {g.name}
+                          {g.status === 'active' && (
+                            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
+                              paceStatus === 'ahead' ? 'bg-state-positive/10 text-state-positive border-state-positive/20' :
+                              paceStatus === 'behind' ? 'bg-state-expense/10 text-state-expense border-state-expense/20' :
+                              'bg-brand-purple/10 text-brand-purple border-brand-purple/20'
+                            }`}>
+                              {paceStatus === 'ahead' ? 'Ahead' : paceStatus === 'behind' ? 'Behind' : 'On Track'}
+                            </span>
+                          )}
                           {g.status === 'archived' && (
                             <span className="text-[9px] bg-surface-secondary text-text-secondary px-2 py-0.5 rounded border border-border-neutral uppercase">
                               Archived
@@ -372,20 +387,38 @@ export const GoalsPage: React.FC = () => {
 
                     {/* Projections */}
                     {remaining > 0 && g.status === 'active' && (
-                      <div className="grid grid-cols-2 gap-4 bg-surface-secondary p-3 rounded-custom-md border border-border-neutral text-xs">
-                        <div className="flex items-center gap-2">
-                          <DollarSign size={14} className="text-brand-purple" />
-                          <div>
-                            <p className="text-text-muted uppercase text-[9px] font-bold">Monthly Saving Target</p>
-                            <p className="font-bold text-text-primary mt-0.5">{formatCurrency(reqMonthly)} / mo</p>
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-4 bg-surface-secondary p-3 rounded-custom-md border border-border-neutral text-xs">
+                          <div className="flex items-center gap-2">
+                            <DollarSign size={14} className="text-brand-purple" />
+                            <div>
+                              <p className="text-text-muted uppercase text-[9px] font-bold">Monthly Target</p>
+                              <p className="font-bold text-text-primary mt-0.5">{formatCurrency(reqMonthly)} / mo</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Calendar size={14} className="text-brand-purple" />
+                            <div>
+                              <p className="text-text-muted uppercase text-[9px] font-bold">Weekly Target</p>
+                              <p className="font-bold text-text-primary mt-0.5">{formatCurrency(reqWeekly)} / wk</p>
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Calendar size={14} className="text-brand-purple" />
-                          <div>
-                            <p className="text-text-muted uppercase text-[9px] font-bold">Weekly Saving Target</p>
-                            <p className="font-bold text-text-primary mt-0.5">{formatCurrency(reqWeekly)} / wk</p>
+
+                        {/* Forecasts & Recovery alert */}
+                        <div className="bg-surface-secondary/40 border border-border-neutral/60 p-3 rounded-custom-md text-xs space-y-1.5">
+                          <div className="flex justify-between text-text-secondary">
+                            <span>Projected Completion:</span>
+                            <span className="font-semibold text-text-primary">
+                              {projectedCompletion ? new Date(projectedCompletion).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Never (Zero Rate)'}
+                            </span>
                           </div>
+
+                          {paceStatus === 'behind' && (
+                            <div className="pt-1.5 border-t border-border-neutral/40 flex items-start gap-1 text-[11px] text-state-expense font-semibold">
+                              <span>⚠️ Behind pace. Need {formatCurrency(recoveryMonthly)}/mo to restore timeline.</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}

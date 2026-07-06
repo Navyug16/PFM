@@ -2,9 +2,9 @@
 
 Help the user understand their money in under 60 seconds.
 
-## Current Milestone: Milestone 4 — Overview Intelligence & Daily Money Experience
+## Current Milestone: Milestone 5 — Goals, Budgets & Planning Intelligence
 
-This milestone delivers the comprehensive intelligence dashboard, incorporating Available Balance definitions, structured period comparisons, prioritized question-driven insight cards (e.g. deficits, spending spikes, goals pacing), cash flow visual intervals, and fully responsive quick entry modals.
+This milestone delivers the comprehensive budgeting, spending limits, daily safe-to-spend allowance calculations, projected variance analysis, and savings goal intelligence systems.
 
 ---
 

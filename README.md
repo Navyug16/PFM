@@ -91,3 +91,12 @@ Before running the application, you must initialize the backend tables and trigg
 - **Frontend Route Protection**: Unauthenticated hits to protected paths automatically redirect to `/login` preserving the initial path state. Authenticated users are prevented from returning to `/login` or `/signup` and are redirected to `/overview`.
 - **Database Row-Level Security (RLS)**: Enforced on the `profiles` table in Supabase PostgreSQL. Users can select or update only the profile row matching their authenticated UUID (`auth.uid() = id`).
 - **Profile Synchronization**: Handled entirely via database trigger functions (`SECURITY DEFINER`) executing on `INSERT` events in `auth.users`, ensuring profile records are created reliably on signup.
+
+---
+
+## Post-Completion Production Checklist
+
+Before launching the application to real production users, make sure to configure the production email flows:
+- [ ] **Verify Custom Domain in Resend**: Purchase your domain and add it under the **Domains** tab in your Resend Dashboard (configure the MX/TXT DNS records).
+- [ ] **Enable Supabase Signup Email Confirmation**: In the Supabase Dashboard under **Authentication -> Providers -> Email**, turn **Confirm email** to **ON / Enabled** to require verification for new signups.
+- [ ] **Update Sender Address**: In Supabase SMTP Settings, change the **Sender Email** from `onboarding@resend.dev` to your custom verified email address (e.g., `noreply@yourdomain.com`).

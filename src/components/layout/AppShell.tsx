@@ -11,7 +11,8 @@ import {
   LogOut,
   Wallet,
   ChevronDown,
-  Sliders
+  Sliders,
+  Calendar
 } from 'lucide-react'
 
 import { useAuth } from '@/features/auth/auth-provider'
@@ -28,6 +29,7 @@ const NAVIGATION_ITEMS: NavItem[] = [
   { name: 'Accounts', path: '/accounts', icon: Landmark },
   { name: 'Goals', path: '/goals', icon: Target },
   { name: 'Budgets & Planning', path: '/planning', icon: Sliders },
+  { name: 'Recurring Rules', path: '/recurring', icon: Calendar },
   { name: 'Insights', path: '/insights', icon: TrendingUp },
   { name: 'Metals', path: '/metals', icon: Coins },
   { name: 'Settings', path: '/settings', icon: Settings },

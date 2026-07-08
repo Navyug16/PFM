@@ -20,9 +20,17 @@ import {
   Target,
   ArrowLeftRight,
   Clock,
-  ChevronDown
+  ChevronDown,
+  Calendar,
+  X
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { deleteTransaction } from '@/features/financial/api/financial-api'
+import { TransactionForm } from '@/components/financial/TransactionForm'
+import { useRecurringData } from '@/features/transactions/hooks/useRecurringData'
+import { detectDuplicateCandidates } from '@/features/transactions/utils/duplicate-engine'
+import { evaluateTransactionQuality } from '@/features/transactions/utils/quality-engine'
+import { DailyCheckInModal } from '@/features/transactions/components/DailyCheckInModal'
 
 export const OverviewPage: React.FC = () => {
   const { user } = useAuth()
@@ -30,8 +38,64 @@ export const OverviewPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [defaultTxType, setDefaultTxType] = useState<'expense' | 'income' | 'transfer'>('expense')
 
+  // Check-In and Edit States
+  const [isDailyCheckInOpen, setIsDailyCheckInOpen] = useState(false)
+  const [editingTx, setEditingTx] = useState<Transaction | null>(null)
+
   const { data, loading, error, refetch } = useOverviewData(period)
   const budgetInfo = useBudgetData()
+
+  const {
+    occurrences,
+    dismissedPairs,
+    confirmOccurrence,
+    skipOccurrence,
+    dismissDuplicate,
+    refetch: refetchRecurring
+  } = useRecurringData()
+
+  const todayStr = new Date().toISOString().split('T')[0]
+
+  const categoryContext = React.useMemo(() => {
+    const ctx: { [id: string]: { name: string; is_active: boolean } } = {}
+    if (data) {
+      data.categories.forEach((cat) => {
+        ctx[cat.id] = { name: cat.name, is_active: cat.is_active }
+      })
+    }
+    return ctx
+  }, [data])
+
+  const accountContext = React.useMemo(() => {
+    const ctx: { [id: string]: { name: string; is_active: boolean } } = {}
+    if (data) {
+      data.accounts.forEach((acc) => {
+        ctx[acc.id] = { name: acc.name, is_active: acc.is_active }
+      })
+    }
+    return ctx
+  }, [data])
+
+  const duplicateWarnings = React.useMemo(() => {
+    if (!data) return []
+    return detectDuplicateCandidates(data.transactions, dismissedPairs)
+  }, [data, dismissedPairs])
+
+  const qualityWarnings = React.useMemo(() => {
+    if (!data) return []
+    const warnings: QualityWarning[] = []
+    data.transactions.forEach((tx) => {
+      const txWarnings = evaluateTransactionQuality(tx, { categories: categoryContext, accounts: accountContext }, todayStr)
+      warnings.push(...txWarnings)
+    })
+    return warnings
+  }, [data, categoryContext, accountContext, todayStr])
+
+  const pendingOccurrences = React.useMemo(() => {
+    return occurrences.filter((occ) => occ.status === 'pending' && occ.due_date <= todayStr)
+  }, [occurrences, todayStr])
+
+  const hasDailyCheckInIssues = pendingOccurrences.length > 0 || duplicateWarnings.length > 0 || qualityWarnings.length > 0
 
   const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || 'User'
   const firstName = displayName.split(' ')[0]
@@ -281,6 +345,27 @@ export const OverviewPage: React.FC = () => {
       </div>
 
       <div className="mt-6 space-y-6">
+
+        {/* Daily Money Check-In Callout */}
+        {hasDailyCheckInIssues && (
+          <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-custom-xl p-5 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-subtle select-none">
+            <div className="flex items-start gap-3">
+              <Calendar className="text-brand-purple shrink-0 mt-0.5" size={20} />
+              <div>
+                <h4 className="text-sm font-bold text-text-primary">Daily Money Check-In</h4>
+                <p className="text-xs text-text-secondary mt-1">
+                  You have {pendingOccurrences.length} scheduled bills, {duplicateWarnings.length} duplicates, and {qualityWarnings.length} ledger quality recommendations pending review.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsDailyCheckInOpen(true)}
+              className="px-4.5 py-2.5 bg-brand-purple hover:bg-brand-purple/95 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all shrink-0 self-end md:self-center"
+            >
+              Start 60s Check-In
+            </button>
+          </div>
+        )}
         
         {/* SECTION B — FINANCIAL HERO (STOCK + FLOWS) */}
         <div className="space-y-4">
@@ -722,6 +807,70 @@ export const OverviewPage: React.FC = () => {
         }}
         defaultType={defaultTxType}
       />
+
+      {/* Daily Check-In Modal Dialog */}
+      <DailyCheckInModal
+        isOpen={isDailyCheckInOpen}
+        onClose={() => setIsDailyCheckInOpen(false)}
+        pendingOccurrences={pendingOccurrences}
+        duplicateWarnings={duplicateWarnings}
+        qualityWarnings={qualityWarnings}
+        transactions={data.transactions}
+        accounts={data.accounts}
+        categories={data.categories}
+        onConfirmOccurrence={async (id) => {
+          const tx = await confirmOccurrence(id)
+          await refetch()
+          return tx
+        }}
+        onSkipOccurrence={async (id) => {
+          await skipOccurrence(id)
+          await refetch()
+        }}
+        onDismissDuplicate={async (tx1, tx2) => {
+          await dismissDuplicate(tx1, tx2)
+          await refetch()
+        }}
+        onDeleteTransaction={async (id) => {
+          await deleteTransaction(id)
+          await refetch()
+        }}
+        onEditTransaction={(tx) => setEditingTx(tx)}
+        onSuccess={async () => {
+          await refetch()
+          await refetchRecurring()
+          budgetInfo.refetch()
+        }}
+      />
+
+      {/* Quick Edit Transaction Modal Overlay */}
+      {editingTx && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-surface-primary border border-border-neutral rounded-custom-xl p-6 shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-base font-bold text-text-primary">Edit Ledger Entry</h2>
+              <button
+                onClick={() => setEditingTx(null)}
+                className="p-1 hover:bg-surface-secondary rounded-custom-md text-text-secondary hover:text-text-primary transition-all cursor-pointer border-none bg-transparent"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <TransactionForm
+              initialTransaction={editingTx}
+              accounts={data.accounts}
+              categories={data.categories}
+              onSuccess={async () => {
+                setEditingTx(null)
+                await refetch()
+                await refetchRecurring()
+                budgetInfo.refetch()
+              }}
+              onCancel={() => setEditingTx(null)}
+            />
+          </div>
+        </div>
+      )}
     </PageContainer>
   )
 }

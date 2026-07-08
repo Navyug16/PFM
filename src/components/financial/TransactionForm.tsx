@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Plus, AlertCircle } from 'lucide-react'
-import { createTransaction } from '@/features/financial/api/financial-api'
+import { Plus, AlertCircle, Save } from 'lucide-react'
+import { createTransaction, updateTransaction } from '@/features/financial/api/financial-api'
 import { validateTransaction } from '@/features/financial/validation'
-import type { Account, Category, TransactionType } from '@/features/financial/types'
+import type { Account, Category, Transaction, TransactionType } from '@/features/financial/types'
 
 interface TransactionFormProps {
+  initialTransaction?: Partial<Transaction> | null
   accounts: Account[]
   categories: Category[]
   onSuccess: () => void | Promise<void>
@@ -13,20 +14,21 @@ interface TransactionFormProps {
 }
 
 export const TransactionForm: React.FC<TransactionFormProps> = ({
+  initialTransaction,
   accounts,
   categories,
   onSuccess,
   onCancel,
   defaultType = 'expense'
 }) => {
-  const [type, setType] = useState<TransactionType>(defaultType)
-  const [amount, setAmount] = useState('')
-  const [accountId, setAccountId] = useState('')
-  const [categoryId, setCategoryId] = useState('')
-  const [transferToAccountId, setTransferToAccountId] = useState('')
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
-  const [payeeOrSource, setPayeeOrSource] = useState('')
-  const [notes, setNotes] = useState('')
+  const [type, setType] = useState<TransactionType>(initialTransaction?.transaction_type || defaultType)
+  const [amount, setAmount] = useState(initialTransaction?.amount ? initialTransaction.amount.toString() : '')
+  const [accountId, setAccountId] = useState(initialTransaction?.account_id || '')
+  const [categoryId, setCategoryId] = useState(initialTransaction?.category_id || '')
+  const [transferToAccountId, setTransferToAccountId] = useState(initialTransaction?.transfer_to_account_id || '')
+  const [date, setDate] = useState(initialTransaction?.transaction_date || new Date().toISOString().split('T')[0])
+  const [payeeOrSource, setPayeeOrSource] = useState(initialTransaction?.payee_or_source || '')
+  const [notes, setNotes] = useState(initialTransaction?.notes || '')
   
   const [actionLoading, setActionLoading] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
@@ -48,7 +50,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
 
     setActionLoading(true)
     try {
-      await createTransaction({
+      const txData = {
         transaction_type: type,
         amount: amtNum,
         account_id: resolvedAccountId,
@@ -57,18 +59,23 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         transaction_date: date,
         payee_or_source: payeeOrSource.trim() || null,
         notes: notes.trim() || null
-      })
-      
-      // Clear inputs
-      setAmount('')
-      setPayeeOrSource('')
-      setNotes('')
-      setCategoryId('')
-      setTransferToAccountId('')
+      }
+
+      if (initialTransaction && initialTransaction.id) {
+        await updateTransaction(initialTransaction.id, txData)
+      } else {
+        await createTransaction(txData)
+        // Clear inputs only on new creation
+        setAmount('')
+        setPayeeOrSource('')
+        setNotes('')
+        setCategoryId('')
+        setTransferToAccountId('')
+      }
       
       await onSuccess()
     } catch (err: unknown) {
-      setFormError(err instanceof Error ? err.message : 'Failed to create transaction.')
+      setFormError(err instanceof Error ? err.message : 'Failed to save transaction.')
     } finally {
       setActionLoading(false)
     }
@@ -245,7 +252,8 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             disabled={actionLoading}
             className="flex-1 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-semibold text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <Plus size={16} /> {actionLoading ? 'Saving...' : 'Add Entry'}
+            {initialTransaction ? <Save size={16} /> : <Plus size={16} />} 
+            {actionLoading ? 'Saving...' : initialTransaction ? 'Save Changes' : 'Add Entry'}
           </button>
         </div>
       </form>

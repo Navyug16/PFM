@@ -2,9 +2,9 @@
 
 Help the user understand their money in under 60 seconds.
 
-## Current Milestone: Milestone 5 — Goals, Budgets & Planning Intelligence
+## Current Milestone: Milestone 6 — Daily Money Operations & Transaction Reliability (Completed)
 
-This milestone delivers the comprehensive budgeting, spending limits, daily safe-to-spend allowance calculations, projected variance analysis, and savings goal intelligence systems.
+This milestone delivers scheduled recurring transaction rules/occurrences, atomic transaction confirmation, double-entry duplicate checking, ledger quality checks, and the step-by-step Daily Check-In modal flow.
 
 ---
 
@@ -76,8 +76,9 @@ Before running the application, you must initialize the backend tables and trigg
 - `/reset-password` — Enter and confirm new password to recover credentials.
 
 ### Protected App Routes (Accessible only by authenticated users)
-- `/overview` — Primary financial overview dashboard.
-- `/transactions` — Cash flow ledger entries.
+- `/overview` — Primary financial overview dashboard with Daily Money Check-In warnings.
+- `/transactions` — Cash flow ledger entries with Edit and Repeat actions.
+- `/recurring` — Scheduled recurring transaction rules & expected timelines.
 - `/accounts` — Asset bank accounts.
 - `/goals` — Saving goals and budgets.
 - `/insights` — Smart queries.

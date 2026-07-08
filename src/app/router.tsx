@@ -8,6 +8,7 @@ import { InsightsPage } from '@/features/insights/InsightsPage'
 import { MetalsPage } from '@/features/metals/MetalsPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
 import { PlanningPage } from '@/features/budgets/PlanningPage'
+import { RecurringPage } from '@/features/transactions/RecurringPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { SignupPage } from '@/features/auth/pages/SignupPage'
 import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
       {
         path: 'planning',
         element: <PlanningPage />,
+      },
+      {
+        path: 'recurring',
+        element: <RecurringPage />,
       },
     ],
   },

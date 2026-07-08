@@ -48,9 +48,9 @@ CREATE TABLE IF NOT EXISTS public.recurring_occurrences (
 );
 
 -- Unique constraint ensuring only 1 occurrence per rule/date
+DROP INDEX IF EXISTS public.idx_rule_due_date;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_rule_due_date 
-ON public.recurring_occurrences (recurring_rule_id, due_date) 
-WHERE recurring_rule_id IS NOT NULL;
+ON public.recurring_occurrences (recurring_rule_id, due_date);
 
 CREATE INDEX IF NOT EXISTS idx_recurring_occurrences_user_id ON public.recurring_occurrences(user_id);
 
@@ -70,11 +70,13 @@ CREATE INDEX IF NOT EXISTS idx_duplicate_dismissals_user_id ON public.duplicate_
 -- 2. Timestamp Trigger Setup
 -- =========================================================================
 
+DROP TRIGGER IF EXISTS set_recurring_rules_updated_at ON public.recurring_rules;
 CREATE TRIGGER set_recurring_rules_updated_at
   BEFORE UPDATE ON public.recurring_rules
   FOR EACH ROW
   EXECUTE FUNCTION public.set_current_timestamp_updated_at();
 
+DROP TRIGGER IF EXISTS set_recurring_occurrences_updated_at ON public.recurring_occurrences;
 CREATE TRIGGER set_recurring_occurrences_updated_at
   BEFORE UPDATE ON public.recurring_occurrences
   FOR EACH ROW
@@ -89,35 +91,45 @@ ALTER TABLE public.recurring_occurrences ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.duplicate_dismissals ENABLE ROW LEVEL SECURITY;
 
 -- recurring_rules Policies
+DROP POLICY IF EXISTS recurring_rules_select ON public.recurring_rules;
 CREATE POLICY recurring_rules_select ON public.recurring_rules
   FOR SELECT TO authenticated USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS recurring_rules_insert ON public.recurring_rules;
 CREATE POLICY recurring_rules_insert ON public.recurring_rules
   FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS recurring_rules_update ON public.recurring_rules;
 CREATE POLICY recurring_rules_update ON public.recurring_rules
   FOR UPDATE TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS recurring_rules_delete ON public.recurring_rules;
 CREATE POLICY recurring_rules_delete ON public.recurring_rules
   FOR DELETE TO authenticated USING (user_id = auth.uid());
 
 -- recurring_occurrences Policies
+DROP POLICY IF EXISTS recurring_occurrences_select ON public.recurring_occurrences;
 CREATE POLICY recurring_occurrences_select ON public.recurring_occurrences
   FOR SELECT TO authenticated USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS recurring_occurrences_insert ON public.recurring_occurrences;
 CREATE POLICY recurring_occurrences_insert ON public.recurring_occurrences
   FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS recurring_occurrences_update ON public.recurring_occurrences;
 CREATE POLICY recurring_occurrences_update ON public.recurring_occurrences
   FOR UPDATE TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS recurring_occurrences_delete ON public.recurring_occurrences;
 CREATE POLICY recurring_occurrences_delete ON public.recurring_occurrences
   FOR DELETE TO authenticated USING (user_id = auth.uid());
 
 -- duplicate_dismissals Policies
+DROP POLICY IF EXISTS duplicate_dismissals_select ON public.duplicate_dismissals;
 CREATE POLICY duplicate_dismissals_select ON public.duplicate_dismissals
   FOR SELECT TO authenticated USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS duplicate_dismissals_insert ON public.duplicate_dismissals;
 CREATE POLICY duplicate_dismissals_insert ON public.duplicate_dismissals
   FOR INSERT TO authenticated WITH CHECK (
     user_id = auth.uid() AND
@@ -125,6 +137,7 @@ CREATE POLICY duplicate_dismissals_insert ON public.duplicate_dismissals
     EXISTS (SELECT 1 FROM public.transactions WHERE id = tx2_id AND user_id = auth.uid())
   );
 
+DROP POLICY IF EXISTS duplicate_dismissals_delete ON public.duplicate_dismissals;
 CREATE POLICY duplicate_dismissals_delete ON public.duplicate_dismissals
   FOR DELETE TO authenticated USING (user_id = auth.uid());
 

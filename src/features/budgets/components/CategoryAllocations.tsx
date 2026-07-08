@@ -1,6 +1,7 @@
 import React from 'react'
 import { AlertCircle, Inbox } from 'lucide-react'
 import type { CategoryBudgetDetails } from '../hooks/useBudgetData'
+import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
 
 interface CategoryAllocationsProps {
   categoryBreakdown: CategoryBudgetDetails[]
@@ -17,13 +18,7 @@ export const CategoryAllocations: React.FC<CategoryAllocationsProps> = ({
   totalUnallocatedAmount,
   totalLimit,
 }) => {
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
 
   const getPaceColor = (status: string) => {
     switch (status) {

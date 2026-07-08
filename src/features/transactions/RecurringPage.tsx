@@ -8,6 +8,7 @@ import { listAccounts, listCategories } from '../financial/api/financial-api'
 import type { Account, Category } from '../financial/types'
 import type { RecurringRule } from './types/recurring'
 import { RecurringRuleForm } from './components/RecurringRuleForm'
+import { formatCurrency } from '@/features/financial/utils/formatters'
 
 export const RecurringPage: React.FC = () => {
   const {
@@ -82,12 +83,6 @@ export const RecurringPage: React.FC = () => {
     }
   }
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR'
-    }).format(val)
-  }
 
   const loading = recurringLoading || apiLoading
   const error = recurringError || apiError

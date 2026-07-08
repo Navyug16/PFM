@@ -1,5 +1,6 @@
 import React from 'react'
 import { Calendar, ArrowDownRight, ArrowUpRight } from 'lucide-react'
+import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
 
 interface BudgetProgressCardProps {
   name: string
@@ -30,13 +31,7 @@ export const BudgetProgressCard: React.FC<BudgetProgressCardProps> = ({
   paceStatus,
   daysCounts,
 }) => {
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
 
   const getPaceBadgeColor = () => {
     switch (paceStatus) {

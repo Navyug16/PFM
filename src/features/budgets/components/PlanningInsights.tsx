@@ -1,6 +1,7 @@
 import React from 'react'
 import { Sparkles, AlertCircle, CheckCircle, TrendingUp } from 'lucide-react'
 import type { CategoryBudgetDetails } from '../hooks/useBudgetData'
+import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
 
 interface PlanningInsightsProps {
   spent: number
@@ -24,13 +25,7 @@ export const PlanningInsights: React.FC<PlanningInsightsProps> = ({
   remainingDays,
   categoryBreakdown,
 }) => {
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
 
   // Generate insights list
   const insights: {

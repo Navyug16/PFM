@@ -7,6 +7,7 @@ import type { Transaction, Account, Category } from '@/features/financial/types'
 import { DuplicateWarningCard } from './DuplicateWarningCard'
 import { QualityWarningCard } from './QualityWarningCard'
 import { TransactionForm } from '@/components/financial/TransactionForm'
+import { formatCurrency } from '@/features/financial/utils/formatters'
 
 interface DailyCheckInModalProps {
   isOpen: boolean
@@ -107,12 +108,6 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
     }
   }
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR'
-    }).format(val)
-  }
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">

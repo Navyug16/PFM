@@ -2,6 +2,7 @@ import React from 'react'
 import { AlertCircle, Edit } from 'lucide-react'
 import type { QualityWarning } from '../utils/quality-engine'
 import type { Transaction } from '@/features/financial/types'
+import { formatCurrency } from '@/features/financial/utils/formatters'
 
 interface QualityWarningCardProps {
   warning: QualityWarning
@@ -30,7 +31,7 @@ export const QualityWarningCard: React.FC<QualityWarningCardProps> = ({
           <h4 className="text-sm font-bold text-text-primary">Record Quality Warning</h4>
           <p className="text-xs text-text-secondary mt-1">{message}</p>
           <div className="text-[10px] text-text-secondary mt-2">
-            Reference: #{transaction.id.slice(0, 8)} — {transaction.payee_or_source || 'Untitled Transaction'} ({new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(transaction.amount)} on {transaction.transaction_date})
+            Reference: #{transaction.id.slice(0, 8)} — {transaction.payee_or_source || 'Untitled Transaction'} ({formatCurrency(transaction.amount)} on {transaction.transaction_date})
           </div>
         </div>
       </div>

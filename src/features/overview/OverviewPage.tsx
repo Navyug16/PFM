@@ -10,6 +10,7 @@ import { QuickActionModal } from './components/QuickActionModal'
 import { calculatePeriodComparison } from '../financial/utils/calculations'
 import { getPeriodBounds } from '../financial/utils/date-utils'
 import type { PeriodOption } from './types'
+import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
 import {
   ArrowUpRight,
   ArrowDownRight,
@@ -114,13 +115,7 @@ export const OverviewPage: React.FC = () => {
   }
 
   // Format Helper
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
 
   const renderComparisonLabel = (
     compare: {

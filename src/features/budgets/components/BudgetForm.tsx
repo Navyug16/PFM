@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { AlertTriangle, Save, X } from 'lucide-react'
 import type { Category } from '../../financial/types'
 import type { BudgetWithAllocations } from '../types'
+import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
 
 interface BudgetFormProps {
   initialBudget?: BudgetWithAllocations | null
@@ -127,13 +128,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     }
   }
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

@@ -23,6 +23,7 @@ import {
   calculateGoalRecoveryAmount
 } from '../financial/utils/calculations'
 import type { Goal, GoalContribution, GoalType } from '../financial/types'
+import { formatCurrency } from '@/features/financial/utils/formatters'
 
 export const GoalsPage: React.FC = () => {
   const [goals, setGoals] = useState<Goal[]>([])
@@ -171,12 +172,6 @@ export const GoalsPage: React.FC = () => {
     }
   }
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-    }).format(val)
-  }
 
   const todayStr = new Date().toISOString().split('T')[0]
 

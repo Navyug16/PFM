@@ -13,6 +13,7 @@ import {
 import { validateAccount } from '../financial/validation'
 import { calculateAccountBalance, calculateTotalAccountBalance } from '../financial/utils/calculations'
 import type { Account, Transaction, AccountType } from '../financial/types'
+import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
 
 export const AccountsPage: React.FC = () => {
   const [accounts, setAccounts] = useState<Account[]>([])
@@ -115,12 +116,7 @@ export const AccountsPage: React.FC = () => {
 
   // Calculate Net Position
   const totals = calculateTotalAccountBalance(accounts, transactions)
-  const formatCurrency = (val: number, code: string) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: code,
-    }).format(val)
-  }
+  const formatCurrency = (val: number, code: string) => sharedFormatCurrency(val, code)
 
   return (
     <PageContainer>

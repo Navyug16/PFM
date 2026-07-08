@@ -18,6 +18,7 @@ import {
   calculatePeriodSavings,
   calculateSavingsRate
 } from '../financial/utils/calculations'
+import { formatCurrency } from '@/features/financial/utils/formatters'
 import type { Account, Category, Transaction, TransactionType, Tag as DomainTag } from '../financial/types'
 import { TransactionForm } from '@/components/financial/TransactionForm'
 import { detectDuplicateCandidates } from './utils/duplicate-engine'
@@ -179,12 +180,6 @@ export const TransactionsPage: React.FC = () => {
   const savingsTotal = calculatePeriodSavings(transactions)
   const rateTotal = calculateSavingsRate(incomeTotal, expenseTotal)
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-    }).format(val)
-  }
 
   return (
     <PageContainer>

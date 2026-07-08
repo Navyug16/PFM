@@ -1,5 +1,6 @@
 import type { Transaction } from '@/features/financial/types'
 import type { DuplicateDismissal } from '../types/recurring'
+import { formatCurrency } from '@/features/financial/utils/formatters'
 
 export interface DuplicateWarning {
   tx1: Transaction
@@ -52,7 +53,7 @@ export const detectDuplicateCandidates = (
             tx1,
             tx2,
             confidence: 'high',
-            message: `Identical entries of ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(tx1.amount)} on ${tx1.transaction_date}`
+            message: `Identical entries of ${formatCurrency(tx1.amount)} on ${tx1.transaction_date}`
           })
           flaggedSet.add(pairKey)
         } else if (diffDays <= 3) {
@@ -60,7 +61,7 @@ export const detectDuplicateCandidates = (
             tx1,
             tx2,
             confidence: 'medium',
-            message: `Similar entries of ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(tx1.amount)} within 3 days (${tx1.transaction_date} vs ${tx2.transaction_date})`
+            message: `Similar entries of ${formatCurrency(tx1.amount)} within 3 days (${tx1.transaction_date} vs ${tx2.transaction_date})`
           })
           flaggedSet.add(pairKey)
         }

@@ -1,5 +1,6 @@
 import type { Transaction, Goal, GoalContribution, Category } from '../../financial/types'
 import type { FinancialInsight } from '../types'
+import { formatCurrency } from '../../financial/utils/formatters'
 import {
   calculatePeriodIncome,
   calculatePeriodExpenses,
@@ -37,12 +38,6 @@ export const generateInsights = (
   const prevExpenses = calculatePeriodExpenses(transactions, prevStartDate, prevEndDate)
 
   // Format Helpers
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-    }).format(val)
-  }
 
   // 1. Deficit Alert (A)
   if (savings < 0) {

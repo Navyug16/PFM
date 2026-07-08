@@ -46,29 +46,36 @@ ALTER TABLE public.budgets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.budget_categories ENABLE ROW LEVEL SECURITY;
 
 -- Budgets RLS Policies
+DROP POLICY IF EXISTS budgets_select ON public.budgets;
 CREATE POLICY budgets_select ON public.budgets
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS budgets_insert ON public.budgets;
 CREATE POLICY budgets_insert ON public.budgets
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS budgets_update ON public.budgets;
 CREATE POLICY budgets_update ON public.budgets
   FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS budgets_delete ON public.budgets;
 CREATE POLICY budgets_delete ON public.budgets
   FOR DELETE USING (auth.uid() = user_id);
 
 -- Budget Categories RLS Policies
+DROP POLICY IF EXISTS budget_categories_select ON public.budget_categories;
 CREATE POLICY budget_categories_select ON public.budget_categories
   FOR SELECT USING (
     budget_id IN (SELECT id FROM public.budgets WHERE user_id = auth.uid())
   );
 
+DROP POLICY IF EXISTS budget_categories_insert ON public.budget_categories;
 CREATE POLICY budget_categories_insert ON public.budget_categories
   FOR INSERT WITH CHECK (
     budget_id IN (SELECT id FROM public.budgets WHERE user_id = auth.uid())
   );
 
+DROP POLICY IF EXISTS budget_categories_update ON public.budget_categories;
 CREATE POLICY budget_categories_update ON public.budget_categories
   FOR UPDATE USING (
     budget_id IN (SELECT id FROM public.budgets WHERE user_id = auth.uid())
@@ -76,6 +83,7 @@ CREATE POLICY budget_categories_update ON public.budget_categories
     budget_id IN (SELECT id FROM public.budgets WHERE user_id = auth.uid())
   );
 
+DROP POLICY IF EXISTS budget_categories_delete ON public.budget_categories;
 CREATE POLICY budget_categories_delete ON public.budget_categories
   FOR DELETE USING (
     budget_id IN (SELECT id FROM public.budgets WHERE user_id = auth.uid())
@@ -119,6 +127,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_validate_budget_category ON public.budget_categories;
 CREATE TRIGGER trg_validate_budget_category
   BEFORE INSERT OR UPDATE ON public.budget_categories
   FOR EACH ROW
@@ -145,13 +154,14 @@ BEGIN
 
   -- Verify new total doesn't exceed budget limit
   IF (allocated_sum + NEW.allocated_amount) > b_limit THEN
-    RAISE EXCEPTION 'Total allocated category amounts (%%) cannot exceed the overall budget limit (%%)', (allocated_sum + NEW.allocated_amount), b_limit;
+    RAISE EXCEPTION 'Total allocated category amounts (%) cannot exceed the overall budget limit (%)', (allocated_sum + NEW.allocated_amount), b_limit;
   END IF;
 
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_validate_allocation_totals ON public.budget_categories;
 CREATE TRIGGER trg_validate_allocation_totals
   BEFORE INSERT OR UPDATE ON public.budget_categories
   FOR EACH ROW
@@ -184,6 +194,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_prevent_overlapping_active_budgets ON public.budgets;
 CREATE TRIGGER trg_prevent_overlapping_active_budgets
   BEFORE INSERT OR UPDATE ON public.budgets
   FOR EACH ROW
@@ -194,11 +205,13 @@ CREATE TRIGGER trg_prevent_overlapping_active_budgets
 -- 5. updated_at Automatic Binding
 -- =========================================================================
 
+DROP TRIGGER IF EXISTS trg_budgets_updated_at ON public.budgets;
 CREATE TRIGGER trg_budgets_updated_at
   BEFORE UPDATE ON public.budgets
   FOR EACH ROW
   EXECUTE FUNCTION public.set_current_timestamp_updated_at();
 
+DROP TRIGGER IF EXISTS trg_budget_categories_updated_at ON public.budget_categories;
 CREATE TRIGGER trg_budget_categories_updated_at
   BEFORE UPDATE ON public.budget_categories
   FOR EACH ROW

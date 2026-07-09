@@ -2,9 +2,9 @@
 
 Help the user understand their money in under 60 seconds.
 
-## Current Milestone: Milestone 6 — Daily Money Operations & Transaction Reliability (Completed)
+## Current Milestone: Milestone 7 — Reports, Financial Insights & Export Intelligence (Completed)
 
-This milestone delivers scheduled recurring transaction rules/occurrences, atomic transaction confirmation, double-entry duplicate checking, ledger quality checks, and the step-by-step Daily Check-In modal flow.
+This milestone delivers deterministic report periods, periodic summaries, category spending breakdowns, merchant rankings, cash flow/savings trend grouping, local CSV exports (Transactions, Account Summary, Category Spending, Goal Progress), and an Indian Financial Year Review section.
 
 ---
 

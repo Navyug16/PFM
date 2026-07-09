@@ -158,3 +158,143 @@ export const getEquivalentPreviousPeriod = (
   }
 }
 
+export type ReportPeriodPreset =
+  | 'this_week'
+  | 'this_month'
+  | 'last_month'
+  | 'last_3_months'
+  | 'last_6_months'
+  | 'this_calendar_year'
+  | 'indian_financial_year'
+  | 'custom'
+
+export const getReportPeriodBounds = (
+  preset: ReportPeriodPreset,
+  referenceDate: Date = new Date(),
+  customStart?: string,
+  customEnd?: string
+): { start: string; end: string } => {
+  const d = new Date(referenceDate)
+  const year = d.getFullYear()
+  const month = d.getMonth()
+
+  switch (preset) {
+    case 'this_week':
+      return {
+        start: getWeekBounds(d).start,
+        end: formatDateString(d),
+      }
+    case 'this_month':
+      return {
+        start: formatDateString(new Date(year, month, 1)),
+        end: formatDateString(d),
+      }
+    case 'last_month': {
+      const prevDate = subtractMonthsSafely(d, 1)
+      return getMonthBounds(prevDate.getFullYear(), prevDate.getMonth())
+    }
+    case 'last_3_months': {
+      const start = new Date(year, month - 3, 1)
+      const end = new Date(year, month, 0)
+      return {
+        start: formatDateString(start),
+        end: formatDateString(end),
+      }
+    }
+    case 'last_6_months': {
+      const start = new Date(year, month - 6, 1)
+      const end = new Date(year, month, 0)
+      return {
+        start: formatDateString(start),
+        end: formatDateString(end),
+      }
+    }
+    case 'this_calendar_year':
+      return {
+        start: formatDateString(new Date(year, 0, 1)),
+        end: formatDateString(d),
+      }
+    case 'indian_financial_year': {
+      const { start } = getIndianFinancialYear(d)
+      return {
+        start,
+        end: formatDateString(d),
+      }
+    }
+    case 'custom':
+      if (!customStart || !customEnd) {
+        throw new Error('Custom date bounds require both start and end dates.')
+      }
+      return {
+        start: customStart,
+        end: customEnd,
+      }
+    default:
+      return {
+        start: formatDateString(new Date(year, month, 1)),
+        end: formatDateString(d),
+      }
+  }
+}
+
+export const getReportComparisonBounds = (
+  preset: ReportPeriodPreset,
+  start: string,
+  end: string
+): { start: string; end: string } => {
+  const dStart = new Date(start)
+  const dEnd = new Date(end)
+
+  switch (preset) {
+    case 'this_week': {
+      dStart.setDate(dStart.getDate() - 7)
+      dEnd.setDate(dEnd.getDate() - 7)
+      return { start: formatDateString(dStart), end: formatDateString(dEnd) }
+    }
+    case 'this_month': {
+      const prevStart = subtractMonthsSafely(dStart, 1)
+      const prevEnd = subtractMonthsSafely(dEnd, 1)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+    case 'last_month': {
+      const prevStart = subtractMonthsSafely(dStart, 1)
+      const prevEnd = subtractMonthsSafely(dEnd, 1)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+    case 'last_3_months': {
+      const prevStart = subtractMonthsSafely(dStart, 3)
+      const prevEnd = subtractMonthsSafely(dEnd, 3)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+    case 'last_6_months': {
+      const prevStart = subtractMonthsSafely(dStart, 6)
+      const prevEnd = subtractMonthsSafely(dEnd, 6)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+    case 'this_calendar_year': {
+      dStart.setFullYear(dStart.getFullYear() - 1)
+      dEnd.setFullYear(dEnd.getFullYear() - 1)
+      return { start: formatDateString(dStart), end: formatDateString(dEnd) }
+    }
+    case 'indian_financial_year': {
+      dStart.setFullYear(dStart.getFullYear() - 1)
+      dEnd.setFullYear(dEnd.getFullYear() - 1)
+      return { start: formatDateString(dStart), end: formatDateString(dEnd) }
+    }
+    case 'custom': {
+      const diffTime = Math.abs(dEnd.getTime() - dStart.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
+      const prevStart = new Date(dStart)
+      prevStart.setDate(prevStart.getDate() - diffDays)
+      const prevEnd = new Date(dEnd)
+      prevEnd.setDate(prevEnd.getDate() - diffDays)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+    default: {
+      const prevStart = subtractMonthsSafely(dStart, 1)
+      const prevEnd = subtractMonthsSafely(dEnd, 1)
+      return { start: formatDateString(prevStart), end: formatDateString(prevEnd) }
+    }
+  }
+}
+

@@ -27,6 +27,8 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { deleteTransaction } from '@/features/financial/api/financial-api'
+import type { Transaction } from '@/features/financial/types'
+import type { QualityWarning } from '@/features/transactions/utils/quality-engine'
 import { TransactionForm } from '@/components/financial/TransactionForm'
 import { useRecurringData } from '@/features/transactions/hooks/useRecurringData'
 import { detectDuplicateCandidates } from '@/features/transactions/utils/duplicate-engine'

@@ -61,7 +61,7 @@ export const useRecurringData = () => {
     return () => clearTimeout(timer)
   }, [fetchAll])
 
-  const handleCreateRule = async (ruleData: Omit<RecurringRule, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'is_active' | 'archived_at'>) => {
+  const handleCreateRule = async (ruleData: Omit<RecurringRule, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'is_active' | 'archived_at' | 'next_due_date'>) => {
     await createRecurringRule(ruleData)
     await fetchAll()
   }

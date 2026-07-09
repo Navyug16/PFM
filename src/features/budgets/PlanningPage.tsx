@@ -45,7 +45,7 @@ export const PlanningPage: React.FC = () => {
       if (activeBudget) {
         await updateBudget(activeBudget.id, budgetData, allocationsData)
       } else {
-        await createBudget(budgetData, allocationsData)
+        await createBudget({ ...budgetData, currency: 'INR', is_active: true }, allocationsData)
       }
       setIsFormOpen(false)
       await refetch()
@@ -192,7 +192,6 @@ export const PlanningPage: React.FC = () => {
             limit={activeBudget!.total_limit}
             remaining={remaining}
             dailySafeToSpend={dailySafeToSpend}
-            projectedSpending={projectedSpending}
             projectedVariance={projectedVariance}
             paceStatus={paceStatus}
             remainingDays={daysCounts.remainingDays}

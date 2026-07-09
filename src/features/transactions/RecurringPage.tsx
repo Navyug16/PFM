@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { Calendar, Plus, RefreshCw, Play, Pause, Archive, Trash2, Edit2, Clock } from 'lucide-react'
+import { Calendar, Plus, RefreshCw, Play, Pause, Archive, Trash2, Edit2, Clock, X } from 'lucide-react'
 import { useRecurringData } from './hooks/useRecurringData'
 import { listAccounts, listCategories } from '../financial/api/financial-api'
 import type { Account, Category } from '../financial/types'
@@ -142,7 +142,7 @@ export const RecurringPage: React.FC = () => {
       ) : activeTab === 'rules' && rules.length === 0 ? (
         <div className="mt-12">
           <EmptyState
-            icon={Calendar}
+            icon={<Calendar size={32} />}
             title="No Recurring Rules Set Up"
             description="Create template schedules to track predictable payments like rent, salaries, and subscriptions."
             actionLabel="Setup First Rule"

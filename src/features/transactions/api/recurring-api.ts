@@ -29,7 +29,7 @@ export const listRecurringRules = async (): Promise<RecurringRule[]> => {
 }
 
 export const createRecurringRule = async (
-  rule: Omit<RecurringRule, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'is_active' | 'archived_at'>
+  rule: Omit<RecurringRule, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'is_active' | 'archived_at' | 'next_due_date'>
 ): Promise<RecurringRule> => {
   const userId = await getUserId()
   

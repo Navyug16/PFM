@@ -1,6 +1,19 @@
 import { supabase } from '@/lib/supabase'
 import type { Budget, BudgetCategory, BudgetWithAllocations, BudgetAllocationWithDetails } from '../types'
 
+interface DBAllocation {
+  id: string
+  budget_id: string
+  category_id: string
+  allocated_amount: number | string
+  created_at: string
+  updated_at: string
+  categories: {
+    name: string
+    icon: string | null
+  } | null
+}
+
 // Securely fetch authenticated user's ID
 const getUserId = async (): Promise<string> => {
   const {
@@ -54,18 +67,7 @@ export const getActiveBudget = async (): Promise<BudgetWithAllocations | null> =
 
   if (allocError) throw new Error(allocError.message)
 
-  interface DBAllocation {
-    id: string
-    budget_id: string
-    category_id: string
-    allocated_amount: number | string
-    created_at: string
-    updated_at: string
-    categories: {
-      name: string
-      icon: string | null
-    } | null
-  }
+
 
   const formattedAllocations: BudgetAllocationWithDetails[] = (
     (allocations as unknown as DBAllocation[]) || []

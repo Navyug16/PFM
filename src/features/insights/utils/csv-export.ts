@@ -141,13 +141,7 @@ export const exportGoalProgressToCSV = (
     const progress = calculateGoalProgressPercentage(g.target_amount, saved)
     
     // Pace calculations
-    const paceStatus = calculateGoalPaceStatus({
-      startDate: g.start_date,
-      targetDate: g.target_date,
-      targetAmount: g.target_amount,
-      savedAmount: saved,
-      today: todayString
-    })
+    const paceStatus = calculateGoalPaceStatus(g, saved, todayString)
 
     const row = [
       escapeCSVValue(g.name),

@@ -80,11 +80,11 @@ describe('PFM CSV Export Engine', () => {
 
   test('5. Compile Goals Progress and Pace Status CSV', () => {
     const goals: Goal[] = [
-      { id: 'g-1', user_id: 'u', name: 'Emergency Fund', target_amount: 10000, currency: 'INR', start_date: '2026-01-01', target_date: '2026-12-31', status: 'active', created_at: '', updated_at: '' }
+      { id: 'g-1', user_id: 'u', name: 'Emergency Fund', target_amount: 10000, goal_type: 'personal', start_date: '2026-01-01', target_date: '2026-12-31', status: 'active', created_at: '', updated_at: '' }
     ]
     const contributions: { [goalId: string]: GoalContribution[] } = {
       'g-1': [
-        { id: 'c-1', user_id: 'u', goal_id: 'g-1', amount: 5000, contribution_date: '2026-06-01', created_at: '', updated_at: '' }
+        { id: 'c-1', user_id: 'u', goal_id: 'g-1', amount: 5000, contribution_date: '2026-06-01', notes: null, created_at: '' }
       ]
     }
 

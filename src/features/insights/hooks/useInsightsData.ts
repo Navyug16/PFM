@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { Transaction, Account, Category, Goal, GoalContribution, Budget } from '@/features/financial/types'
+import type { Transaction, Account, Category, Goal, GoalContribution } from '@/features/financial/types'
+import type { Budget } from '@/features/budgets/types'
 import type { RecurringOccurrence } from '@/features/transactions/types/recurring'
 import {
   getReportPeriodBounds,
@@ -199,16 +200,10 @@ export const useInsightsData = (
         contributionsMap[c.goal_id].push(c)
       })
 
-      const goalPaceMap: { [goalId: string]: 'ahead' | 'on_pace' | 'behind' } = {}
+      const goalPaceMap: { [goalId: string]: 'ahead' | 'on_track' | 'behind' | 'unavailable' } = {}
       goals.forEach((g) => {
         const saved = calculateGoalSavedAmount(contributionsMap[g.id] || [])
-        goalPaceMap[g.id] = calculateGoalPaceStatus({
-          startDate: g.start_date,
-          targetDate: g.target_date,
-          targetAmount: g.target_amount,
-          savedAmount: saved,
-          today: todayStr
-        })
+        goalPaceMap[g.id] = calculateGoalPaceStatus(g, saved, todayStr)
       })
 
       // Budget allocations context

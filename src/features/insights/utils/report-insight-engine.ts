@@ -43,7 +43,7 @@ export const generateReportInsights = (params: {
   budgetSpent: number // budget spent amount
   budgetLimit: number // budget limit
   goals: Goal[]
-  goalPaceMap: { [goalId: string]: 'ahead' | 'on_pace' | 'behind' }
+  goalPaceMap: { [goalId: string]: 'ahead' | 'on_track' | 'behind' | 'unavailable' }
 }): FinancialInsight[] => {
   const {
     income,

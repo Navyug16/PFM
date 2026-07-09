@@ -42,7 +42,7 @@ export interface TrendPoint {
 export const calculateCategoryBreakdown = (
   categories: Category[],
   transactions: Transaction[],
-  prevTransactions: Transaction[],
+  _prevTransactions: Transaction[],
   totalExpenses: number,
   prevCategoryAmounts: { [catId: string]: number } = {}
 ): CategoryBreakdownDetail[] => {

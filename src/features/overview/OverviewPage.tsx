@@ -7,10 +7,11 @@ import { OverviewSkeleton } from './components/OverviewSkeleton'
 import { OverviewEmptyState } from './components/OverviewEmptyState'
 import { OverviewErrorState } from './components/OverviewErrorState'
 import { QuickActionModal } from './components/QuickActionModal'
-import { calculatePeriodComparison } from '../financial/utils/calculations'
+import { calculatePeriodComparisonMulti } from '../financial/utils/calculations'
 import { getPeriodBounds } from '../financial/utils/date-utils'
 import type { PeriodOption } from './types'
 import { formatCurrency as sharedFormatCurrency } from '@/features/financial/utils/formatters'
+import { useSettings } from '@/features/settings/hooks/useSettings'
 import {
   ArrowUpRight,
   ArrowDownRight,
@@ -116,8 +117,29 @@ export const OverviewPage: React.FC = () => {
     setIsModalOpen(true)
   }
 
-  // Format Helper
-  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
+  const { profile } = useSettings()
+  const primaryCurrency = profile?.currency || 'INR'
+  const userLocale = profile?.locale || 'en-IN'
+
+  const formatCurrency = (val: number, curr?: string) => {
+    return sharedFormatCurrency(val, curr || primaryCurrency, userLocale, { maximumFractionDigits: 0 })
+  }
+
+  const formatMultiCurrency = (value: { [currency: string]: number }) => {
+    const entries = Object.entries(value)
+    if (entries.length === 0) return formatCurrency(0)
+    if (entries.length === 1) return formatCurrency(entries[0][1], entries[0][0])
+    return entries
+      .map(([curr, val]) => sharedFormatCurrency(val, curr, userLocale, { maximumFractionDigits: 0 }))
+      .join(' | ')
+  }
+
+  const formatMultiPercentage = (value: { [currency: string]: number }) => {
+    const entries = Object.entries(value)
+    if (entries.length === 0) return '0.0%'
+    if (entries.length === 1) return `${entries[0][1].toFixed(1)}%`
+    return entries.map(([curr, val]) => `${curr}: ${val.toFixed(1)}%`).join(' | ')
+  }
 
   const renderComparisonLabel = (
     compare: {
@@ -222,9 +244,9 @@ export const OverviewPage: React.FC = () => {
   }
 
   // Compare Flow Cards
-  const incomeCompare = calculatePeriodComparison(data.periodIncome, data.prevPeriodIncome)
-  const expenseCompare = calculatePeriodComparison(data.periodExpenses, data.prevPeriodExpenses)
-  const savingsCompare = calculatePeriodComparison(data.periodSavings, data.prevPeriodSavings)
+  const incomeCompare = calculatePeriodComparisonMulti(data.periodIncome, data.prevPeriodIncome, primaryCurrency)
+  const expenseCompare = calculatePeriodComparisonMulti(data.periodExpenses, data.prevPeriodExpenses, primaryCurrency)
+  const savingsCompare = calculatePeriodComparisonMulti(data.periodSavings, data.prevPeriodSavings, primaryCurrency)
 
   const renderMonthlyPlan = () => {
     if (budgetInfo.loading) {
@@ -376,7 +398,7 @@ export const OverviewPage: React.FC = () => {
                 </span>
                 <h4 className="text-xs font-semibold text-text-secondary mt-2">Available Balance</h4>
                 <h1 className="text-2xl md:text-3xl font-extrabold text-text-primary tracking-tight mt-0.5 tabular-nums">
-                  {formatCurrency(data.availableBalance)}
+                  {formatMultiCurrency(data.availableBalance)}
                 </h1>
               </div>
               <p className="text-[10px] text-text-secondary mt-3">
@@ -392,7 +414,7 @@ export const OverviewPage: React.FC = () => {
                 </span>
                 <h4 className="text-xs font-semibold text-text-secondary mt-2">Net Financial Position</h4>
                 <h2 className="text-xl md:text-2xl font-bold text-text-primary tracking-tight mt-0.5 tabular-nums">
-                  {formatCurrency(data.netPosition)}
+                  {formatMultiCurrency(data.netPosition)}
                 </h2>
               </div>
               <p className="text-[10px] text-text-secondary mt-3">
@@ -412,7 +434,7 @@ export const OverviewPage: React.FC = () => {
                 Income — Period
               </span>
               <p className="text-lg font-bold text-state-positive mt-1 tabular-nums">
-                {formatCurrency(data.periodIncome)}
+                {formatMultiCurrency(data.periodIncome)}
               </p>
               {renderComparisonLabel(incomeCompare, false)}
             </div>
@@ -423,7 +445,7 @@ export const OverviewPage: React.FC = () => {
                 Expenses — Period
               </span>
               <p className="text-lg font-bold text-state-expense mt-1 tabular-nums">
-                {formatCurrency(data.periodExpenses)}
+                {formatMultiCurrency(data.periodExpenses)}
               </p>
               {renderComparisonLabel(expenseCompare, true)}
             </div>
@@ -433,8 +455,8 @@ export const OverviewPage: React.FC = () => {
               <span className="text-text-secondary text-[10px] font-semibold uppercase tracking-wider">
                 Savings — Period
               </span>
-              <p className={`text-lg font-bold mt-1 tabular-nums ${data.periodSavings >= 0 ? 'text-state-positive' : 'text-state-expense'}`}>
-                {formatCurrency(data.periodSavings)}
+              <p className={`text-lg font-bold mt-1 tabular-nums ${(data.periodSavings[primaryCurrency] || 0) >= 0 ? 'text-state-positive' : 'text-state-expense'}`}>
+                {formatMultiCurrency(data.periodSavings)}
               </p>
               {renderComparisonLabel(savingsCompare, false)}
             </div>
@@ -445,7 +467,7 @@ export const OverviewPage: React.FC = () => {
                 Savings Rate
               </span>
               <p className="text-lg font-bold text-brand-purple mt-1 tabular-nums">
-                {data.savingsRate.toFixed(1)}%
+                {formatMultiPercentage(data.savingsRate)}
               </p>
               <div className="flex items-center gap-1 mt-1.5 text-[10px] text-text-muted">
                 <span>Target threshold is 20%</span>
@@ -556,7 +578,7 @@ export const OverviewPage: React.FC = () => {
               <div className="space-y-1">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">Spent Today</span>
                 <p className="text-base md:text-lg font-bold text-text-primary tabular-nums">
-                  {formatCurrency(data.todayExpenses)}
+                  {formatMultiCurrency(data.todayExpenses)}
                 </p>
               </div>
               <div className="space-y-1">
@@ -568,7 +590,7 @@ export const OverviewPage: React.FC = () => {
               <div className="space-y-1">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">Daily Average</span>
                 <p className="text-base md:text-lg font-bold text-text-secondary tabular-nums">
-                  {formatCurrency(data.dailyAverage)}
+                  {formatMultiCurrency(data.dailyAverage)}
                 </p>
               </div>
             </div>
@@ -645,14 +667,14 @@ export const OverviewPage: React.FC = () => {
                 <div className="space-y-1 bg-surface-secondary/20 border border-border-neutral/40 rounded-custom-lg p-4 flex-1 mx-2">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">Total Income</span>
                   <p className="text-lg font-bold text-state-positive tabular-nums">
-                    {formatCurrency(data.periodIncome)}
+                    {formatMultiCurrency(data.periodIncome)}
                   </p>
                   <div className="w-8 h-1 bg-brand-purple rounded-full mx-auto mt-2" />
                 </div>
                 <div className="space-y-1 bg-surface-secondary/20 border border-border-neutral/40 rounded-custom-lg p-4 flex-1 mx-2">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">Total Expenses</span>
                   <p className="text-lg font-bold text-state-expense tabular-nums">
-                    {formatCurrency(data.periodExpenses)}
+                    {formatMultiCurrency(data.periodExpenses)}
                   </p>
                   <div className="w-8 h-1 bg-surface-secondary border border-border-neutral rounded-full mx-auto mt-2" />
                 </div>

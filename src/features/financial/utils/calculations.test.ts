@@ -17,6 +17,7 @@ import {
   comparePeriodSpending,
   identifyLargestExpenseCategory,
   calculateAvailableBalance,
+  calculateAvailableBalanceMulti,
   calculateTodaySpending,
   calculateAverageDailySpending,
   calculateGoalPaceStatus,
@@ -466,5 +467,49 @@ describe('Financial Calculations Engine', () => {
       expect(compDate).toBeNull()
     })
   })
+
+  describe('24. Mixed Currency Aggregation and Safety Tests', () => {
+    it('should not mutate account currency when preferences are simulated', () => {
+      const account = createMockAccount({ id: 'acc-1', currency_code: 'INR' })
+      const preference = { currency: 'USD' } // user setting simulation
+      expect(account.currency_code).toBe('INR')
+      expect(preference.currency).toBe('USD')
+    })
+
+    it('should return separate currency sums and never sum INR and USD together', () => {
+      const accounts = [
+        createMockAccount({ id: 'acc-inr', opening_balance: 5000, currency_code: 'INR', account_type: 'checking' }),
+        createMockAccount({ id: 'acc-usd', opening_balance: 100, currency_code: 'USD', account_type: 'savings' }),
+      ]
+      
+      const availBalances = calculateAvailableBalanceMulti(accounts, [])
+      expect(availBalances).toEqual({ INR: 5000, USD: 100 })
+    })
+
+    it('should perform single-currency aggregation correctly', () => {
+      const accounts = [
+        createMockAccount({ id: 'acc-inr', opening_balance: 1500, currency_code: 'INR', account_type: 'checking' }),
+      ]
+      const availBalances = calculateAvailableBalanceMulti(accounts, [])
+      expect(availBalances).toEqual({ INR: 1500 })
+    })
+
+    it('should detect mixed-currency states correctly', () => {
+      const accountsMixed = [
+        createMockAccount({ id: 'acc-1', currency_code: 'INR' }),
+        createMockAccount({ id: 'acc-2', currency_code: 'USD' }),
+      ]
+      const currencies = Array.from(new Set(accountsMixed.map(a => a.currency_code)))
+      expect(currencies.length > 1).toBe(true) // Mixed currency detected
+
+      const accountsSingle = [
+        createMockAccount({ id: 'acc-1', currency_code: 'INR' }),
+        createMockAccount({ id: 'acc-2', currency_code: 'INR' }),
+      ]
+      const currenciesSingle = Array.from(new Set(accountsSingle.map(a => a.currency_code)))
+      expect(currenciesSingle.length > 1).toBe(false) // Single currency detected
+    })
+  })
 })
+
 

@@ -1,27 +1,50 @@
+import { lazy, Suspense } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
-import { OverviewPage } from '@/features/overview/OverviewPage'
-import { TransactionsPage } from '@/features/transactions/TransactionsPage'
-import { AccountsPage } from '@/features/accounts/AccountsPage'
-import { GoalsPage } from '@/features/goals/GoalsPage'
-import { InsightsPage } from '@/features/insights/InsightsPage'
-import { MetalsPage } from '@/features/metals/MetalsPage'
-import { SettingsPage } from '@/features/settings/SettingsPage'
-import { PlanningPage } from '@/features/budgets/PlanningPage'
-import { RecurringPage } from '@/features/transactions/RecurringPage'
-import { LoginPage } from '@/features/auth/pages/LoginPage'
-import { SignupPage } from '@/features/auth/pages/SignupPage'
-import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
-import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage'
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute'
 import { PublicRoute } from '@/features/auth/components/PublicRoute'
+import { LoadingState } from '@/components/ui/LoadingState'
+import { AppErrorBoundary } from '@/components/errors/AppErrorBoundary'
+
+// Lazy loaded page components
+const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage').then(m => ({ default: m.LoginPage })))
+const SignupPage = lazy(() => import('@/features/auth/pages/SignupPage').then(m => ({ default: m.SignupPage })))
+const ForgotPasswordPage = lazy(() => import('@/features/auth/pages/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })))
+const ResetPasswordPage = lazy(() => import('@/features/auth/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })))
+
+const OverviewPage = lazy(() => import('@/features/overview/OverviewPage').then(m => ({ default: m.OverviewPage })))
+const TransactionsPage = lazy(() => import('@/features/transactions/TransactionsPage').then(m => ({ default: m.TransactionsPage })))
+const AccountsPage = lazy(() => import('@/features/accounts/AccountsPage').then(m => ({ default: m.AccountsPage })))
+const GoalsPage = lazy(() => import('@/features/goals/GoalsPage').then(m => ({ default: m.GoalsPage })))
+const InsightsPage = lazy(() => import('@/features/insights/InsightsPage').then(m => ({ default: m.InsightsPage })))
+const MetalsPage = lazy(() => import('@/features/metals/MetalsPage').then(m => ({ default: m.MetalsPage })))
+const SettingsPage = lazy(() => import('@/features/settings/SettingsPage').then(m => ({ default: m.SettingsPage })))
+const PlanningPage = lazy(() => import('@/features/budgets/PlanningPage').then(m => ({ default: m.PlanningPage })))
+const RecurringPage = lazy(() => import('@/features/transactions/RecurringPage').then(m => ({ default: m.RecurringPage })))
+
+// Suspense Layout Wrappers
+const AuthLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-bg-primary">
+    <LoadingState message="Loading..." />
+  </div>
+)
+
+const SectionLoader = () => (
+  <div className="min-h-[300px] flex items-center justify-center">
+    <LoadingState message="Loading section..." />
+  </div>
+)
 
 export const router = createBrowserRouter([
   {
     path: '/login',
     element: (
       <PublicRoute>
-        <LoginPage />
+        <AppErrorBoundary>
+          <Suspense fallback={<AuthLoader />}>
+            <LoginPage />
+          </Suspense>
+        </AppErrorBoundary>
       </PublicRoute>
     ),
   },
@@ -29,7 +52,11 @@ export const router = createBrowserRouter([
     path: '/signup',
     element: (
       <PublicRoute>
-        <SignupPage />
+        <AppErrorBoundary>
+          <Suspense fallback={<AuthLoader />}>
+            <SignupPage />
+          </Suspense>
+        </AppErrorBoundary>
       </PublicRoute>
     ),
   },
@@ -37,7 +64,11 @@ export const router = createBrowserRouter([
     path: '/forgot-password',
     element: (
       <PublicRoute>
-        <ForgotPasswordPage />
+        <AppErrorBoundary>
+          <Suspense fallback={<AuthLoader />}>
+            <ForgotPasswordPage />
+          </Suspense>
+        </AppErrorBoundary>
       </PublicRoute>
     ),
   },
@@ -45,7 +76,11 @@ export const router = createBrowserRouter([
     path: '/reset-password',
     element: (
       <ProtectedRoute>
-        <ResetPasswordPage />
+        <AppErrorBoundary>
+          <Suspense fallback={<AuthLoader />}>
+            <ResetPasswordPage />
+          </Suspense>
+        </AppErrorBoundary>
       </ProtectedRoute>
     ),
   },
@@ -53,7 +88,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <ProtectedRoute>
-        <AppShell />
+        <AppErrorBoundary>
+          <AppShell />
+        </AppErrorBoundary>
       </ProtectedRoute>
     ),
     children: [
@@ -63,39 +100,75 @@ export const router = createBrowserRouter([
       },
       {
         path: 'overview',
-        element: <OverviewPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <OverviewPage />
+          </Suspense>
+        ),
       },
       {
         path: 'transactions',
-        element: <TransactionsPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <TransactionsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'accounts',
-        element: <AccountsPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <AccountsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'goals',
-        element: <GoalsPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <GoalsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'insights',
-        element: <InsightsPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <InsightsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'metals',
-        element: <MetalsPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <MetalsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'settings',
-        element: <SettingsPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <SettingsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'planning',
-        element: <PlanningPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <PlanningPage />
+          </Suspense>
+        ),
       },
       {
         path: 'recurring',
-        element: <RecurringPage />,
+        element: (
+          <Suspense fallback={<SectionLoader />}>
+            <RecurringPage />
+          </Suspense>
+        ),
       },
     ],
   },
@@ -104,3 +177,4 @@ export const router = createBrowserRouter([
     element: <Navigate to="/overview" replace />,
   },
 ])
+export default router

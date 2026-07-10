@@ -633,4 +633,225 @@ export const calculateGoalRecoveryAmount = (
   return calculateRequiredMonthlySavings(remainingAmount, targetDate, today)
 }
 
+// 27. Available Balance grouped by currency code
+export const calculateAvailableBalanceMulti = (
+  accounts: Account[],
+  transactions: Transaction[]
+): { [currency: string]: number } => {
+  const liquidAccounts = accounts.filter(
+    (acc) => acc.is_active && ['checking', 'savings', 'cash'].includes(acc.account_type)
+  )
+  const totals: { [currency: string]: number } = {}
+  for (const acc of liquidAccounts) {
+    const bal = calculateAccountBalance(acc, transactions)
+    const curr = acc.currency_code.toUpperCase()
+    totals[curr] = Math.round(((totals[curr] || 0) + bal) * 100) / 100
+  }
+  return totals
+}
+
+// 28. Net Position grouped by currency code
+export const getSingleCurrencyNetPositionMulti = (
+  accounts: Account[],
+  transactions: Transaction[]
+): { [currency: string]: number } => {
+  const activeAccounts = accounts.filter((acc) => acc.is_active)
+  const totals: { [currency: string]: number } = {}
+  for (const acc of activeAccounts) {
+    const bal = calculateAccountBalance(acc, transactions)
+    const curr = acc.currency_code.toUpperCase()
+    totals[curr] = Math.round(((totals[curr] || 0) + bal) * 100) / 100
+  }
+  return totals
+}
+
+// 29. Period Income grouped by currency code
+export const calculatePeriodIncomeMulti = (
+  transactions: Transaction[],
+  accounts: Account[],
+  startDate?: string,
+  endDate?: string
+): { [currency: string]: number } => {
+  const accountCurrencyMap = new Map(accounts.map((a) => [a.id, a.currency_code.toUpperCase()]))
+  const totals: { [currency: string]: number } = {}
+
+  const filtered = transactions.filter((tx) => {
+    if (tx.transaction_type !== 'income') return false
+    if (startDate && tx.transaction_date < startDate) return false
+    if (endDate && tx.transaction_date > endDate) return false
+    return true
+  })
+
+  for (const tx of filtered) {
+    const curr = accountCurrencyMap.get(tx.account_id) || 'INR'
+    const currentValCents = Math.round((totals[curr] || 0) * 100)
+    const txValCents = Math.round(tx.amount * 100)
+    totals[curr] = (currentValCents + txValCents) / 100
+  }
+  return totals
+}
+
+// 30. Period Expenses grouped by currency code
+export const calculatePeriodExpensesMulti = (
+  transactions: Transaction[],
+  accounts: Account[],
+  startDate?: string,
+  endDate?: string
+): { [currency: string]: number } => {
+  const accountCurrencyMap = new Map(accounts.map((a) => [a.id, a.currency_code.toUpperCase()]))
+  const totals: { [currency: string]: number } = {}
+
+  const filtered = transactions.filter((tx) => {
+    if (tx.transaction_type !== 'expense') return false
+    if (startDate && tx.transaction_date < startDate) return false
+    if (endDate && tx.transaction_date > endDate) return false
+    return true
+  })
+
+  for (const tx of filtered) {
+    const curr = accountCurrencyMap.get(tx.account_id) || 'INR'
+    const currentValCents = Math.round((totals[curr] || 0) * 100)
+    const txValCents = Math.round(tx.amount * 100)
+    totals[curr] = (currentValCents + txValCents) / 100
+  }
+  return totals
+}
+
+// 31. Period Savings grouped by currency code
+export const calculatePeriodSavingsMulti = (
+  transactions: Transaction[],
+  accounts: Account[],
+  startDate?: string,
+  endDate?: string
+): { [currency: string]: number } => {
+  const income = calculatePeriodIncomeMulti(transactions, accounts, startDate, endDate)
+  const expenses = calculatePeriodExpensesMulti(transactions, accounts, startDate, endDate)
+  
+  const totals: { [currency: string]: number } = {}
+  const currencies = new Set([...Object.keys(income), ...Object.keys(expenses)])
+
+  for (const curr of currencies) {
+    const incCents = Math.round((income[curr] || 0) * 100)
+    const expCents = Math.round((expenses[curr] || 0) * 100)
+    totals[curr] = (incCents - expCents) / 100
+  }
+  return totals
+}
+
+// 32. Savings Rate grouped by currency code
+export const calculateSavingsRateMulti = (
+  income: { [currency: string]: number },
+  expenses: { [currency: string]: number }
+): { [currency: string]: number } => {
+  const rates: { [currency: string]: number } = {}
+  const currencies = new Set([...Object.keys(income), ...Object.keys(expenses)])
+  for (const curr of currencies) {
+    const inc = income[curr] || 0
+    const exp = expenses[curr] || 0
+    if (inc <= 0) {
+      rates[curr] = 0
+    } else {
+      const savings = inc - exp
+      const rate = (savings / inc) * 100
+      rates[curr] = Math.round(rate * 100) / 100
+    }
+  }
+  return rates
+}
+
+// 33. Period Comparison grouped by currency code (returns comparison status matching primaryCurrency)
+export const calculatePeriodComparisonMulti = (
+  current: { [currency: string]: number },
+  previous: { [currency: string]: number },
+  primaryCurrency: string = 'INR'
+) => {
+  const curVal = current[primaryCurrency.toUpperCase()] || 0
+  const prevVal = previous[primaryCurrency.toUpperCase()] || 0
+
+  const curCents = Math.round(curVal * 100)
+  const prevCents = Math.round(prevVal * 100)
+  const absoluteChange = (curCents - prevCents) / 100
+
+  if (prevCents === 0) {
+    return {
+      absoluteChange,
+      percentageChange: 0,
+      direction: curCents > 0 ? ('up' as const) : (curCents < 0 ? ('down' as const) : ('unchanged' as const)),
+      comparisonAvailable: true,
+      percentChangeAvailable: false
+    }
+  }
+
+  const pct = (absoluteChange / prevVal) * 100
+  return {
+    absoluteChange,
+    percentageChange: Math.abs(Math.round(pct * 100) / 100),
+    direction: absoluteChange > 0 ? ('up' as const) : (absoluteChange < 0 ? ('down' as const) : ('unchanged' as const)),
+    comparisonAvailable: true,
+    percentChangeAvailable: true
+  }
+}
+
+// 34. Today Spending grouped by currency code
+export const calculateTodaySpendingMulti = (
+  transactions: Transaction[],
+  accounts: Account[],
+  todayStr: string
+): { [currency: string]: number } => {
+  const accountCurrencyMap = new Map(accounts.map((a) => [a.id, a.currency_code.toUpperCase()]))
+  const totals: { [currency: string]: number } = {}
+  
+  const todayExpenses = transactions.filter(
+    (tx) => tx.transaction_date === todayStr && tx.transaction_type === 'expense'
+  )
+  for (const tx of todayExpenses) {
+    const curr = accountCurrencyMap.get(tx.account_id) || 'INR'
+    const currentValCents = Math.round((totals[curr] || 0) * 100)
+    const txValCents = Math.round(tx.amount * 100)
+    totals[curr] = (currentValCents + txValCents) / 100
+  }
+  return totals
+}
+
+// 35. Average Daily Spending grouped by currency code
+export const calculateAverageDailySpendingMulti = (
+  transactions: Transaction[],
+  accounts: Account[],
+  startDate: string,
+  endDate: string,
+  todayStr: string
+): { [currency: string]: number } => {
+  const accountCurrencyMap = new Map(accounts.map((a) => [a.id, a.currency_code.toUpperCase()]))
+  const totals: { [currency: string]: number } = {}
+  
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  const today = new Date(todayStr)
+  
+  const activeEnd = today < end ? today : end
+  const diffTime = Math.max(activeEnd.getTime() - start.getTime(), 0)
+  const elapsedDays = Math.max(Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1, 1)
+
+  const filteredExpenses = transactions.filter((tx) => {
+    if (tx.transaction_type !== 'expense') return false
+    if (tx.transaction_date < startDate || tx.transaction_date > endDate) return false
+    return true
+  })
+
+  for (const tx of filteredExpenses) {
+    const curr = accountCurrencyMap.get(tx.account_id) || 'INR'
+    const currentValCents = Math.round((totals[curr] || 0) * 100)
+    const txValCents = Math.round(tx.amount * 100)
+    totals[curr] = (currentValCents + txValCents) / 100
+  }
+
+  const result: { [currency: string]: number } = {}
+  for (const [curr, total] of Object.entries(totals)) {
+    result[curr] = Math.round((total / elapsedDays) * 100) / 100
+  }
+  return result
+}
+
+
+
 

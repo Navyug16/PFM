@@ -1,37 +1,32 @@
 import React, { useState, useEffect } from 'react'
+import { useNetworkStatus } from '@/hooks/useNetworkStatus'
 import { WifiOff, X } from 'lucide-react'
 
 export const NetworkStatus: React.FC = () => {
-  const [isOffline, setIsOffline] = useState(!navigator.onLine)
+  const isOnline = useNetworkStatus()
   const [dismissed, setDismissed] = useState(false)
 
+  // Reset dismissal state whenever connection goes offline
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOffline(false)
+    if (!isOnline) {
       setDismissed(false)
     }
-    const handleOffline = () => {
-      setIsOffline(true)
-      setDismissed(false)
-    }
+  }, [isOnline])
 
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
-
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
-
-  if (!isOffline || dismissed) return null
+  if (isOnline || dismissed) {
+    return null
+  }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-state-expense text-text-primary px-4 py-3 flex items-center justify-between text-sm font-medium shadow-elevated">
+    <div
+      role="status"
+      aria-live="polite"
+      className="fixed top-0 left-0 right-0 z-[100] bg-state-expense text-text-primary px-4 py-3 flex items-center justify-between text-xs font-bold uppercase tracking-wider shadow-elevated"
+    >
       <div className="flex items-center gap-2">
-        <WifiOff size={18} className="shrink-0" />
+        <WifiOff size={16} className="shrink-0" />
         <span>
-          You are offline. Some features will be unavailable until the connection returns.
+          Offline Mode. Financial ledger aggregates may be stale until connection is restored.
         </span>
       </div>
       <button
@@ -39,8 +34,9 @@ export const NetworkStatus: React.FC = () => {
         className="text-text-primary hover:text-text-primary/80 transition-colors p-1 cursor-pointer"
         aria-label="Dismiss offline notification"
       >
-        <X size={16} />
+        <X size={14} />
       </button>
     </div>
   )
 }
+export default NetworkStatus

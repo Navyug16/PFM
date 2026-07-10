@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useSettings } from '@/features/settings/hooks/useSettings'
 import {
   listAccounts,
   listTransactions,
@@ -7,14 +8,14 @@ import {
   listCategories
 } from '../../financial/api/financial-api'
 import {
-  calculateAvailableBalance,
-  getSingleCurrencyNetPosition,
-  calculatePeriodIncome,
-  calculatePeriodExpenses,
-  calculatePeriodSavings,
-  calculateSavingsRate,
-  calculateTodaySpending,
-  calculateAverageDailySpending,
+  calculateAvailableBalanceMulti,
+  getSingleCurrencyNetPositionMulti,
+  calculatePeriodIncomeMulti,
+  calculatePeriodExpensesMulti,
+  calculatePeriodSavingsMulti,
+  calculateSavingsRateMulti,
+  calculateTodaySpendingMulti,
+  calculateAverageDailySpendingMulti,
   calculateCategorySpending,
   calculateCategoryShare,
   groupCashFlowByInterval
@@ -25,6 +26,9 @@ import type { Account, Transaction, Goal, GoalContribution, Category } from '../
 import type { PeriodOption, OverviewData } from '../types'
 
 export const useOverviewData = (period: PeriodOption) => {
+  const { profile } = useSettings()
+  const primaryCurrency = profile?.currency || 'INR'
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [rawData, setRawData] = useState<{
@@ -36,37 +40,35 @@ export const useOverviewData = (period: PeriodOption) => {
   } | null>(null)
 
   const fetchRawData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
     try {
-      // 1. Fetch main financial foundation (Accounts, Transactions, Categories)
-      const [accounts, transactions, categories] = await Promise.all([
+      setLoading(true)
+      const [accounts, transactions, goals, categories] = await Promise.all([
         listAccounts(),
-        listTransactions(), // Note: Fetching full history is a derived-balance limitation. Optimized balance tables can be added in later milestones.
-        listCategories(),
+        listTransactions(),
+        listGoals(),
+        listCategories()
       ])
 
-      // 2. Fetch goals and goal contributions in parallel (resilient secondary fail path)
-      let goals: Goal[] = []
+      // Load contributions per goal
       const contributions: { [goalId: string]: GoalContribution[] } = {}
-      try {
-        const goalsList = await listGoals()
-        goals = goalsList.filter((g) => g.status === 'active')
-        await Promise.all(
-          goals.map(async (g) => {
-            const contribs = await listGoalContributions(g.id)
-            contributions[g.id] = contribs
-          })
-        )
-      } catch (goalErr) {
-        console.error('Secondary goals loading failed:', goalErr)
-        // Secondary section failure does not destroy the main dashboard loading state
-      }
+      await Promise.all(
+        goals.map(async (g) => {
+          const list = await listGoalContributions(g.id)
+          contributions[g.id] = list
+        })
+      )
 
-      setRawData({ accounts, transactions, goals, contributions, categories })
+      setRawData({
+        accounts,
+        transactions,
+        goals,
+        contributions,
+        categories
+      })
+      setError(null)
     } catch (err: unknown) {
-      console.error('Critical Overview loading failed:', err)
-      setError(err instanceof Error ? err.message : 'Failed to retrieve financial ledger data.')
+      console.error('Failed to load overview data:', err)
+      setError(err instanceof Error ? err.message : 'Database fetch failure')
     } finally {
       setLoading(false)
     }
@@ -100,58 +102,66 @@ export const useOverviewData = (period: PeriodOption) => {
       period
     )
 
-    // Current State (Stock Metrics)
-    const availableBalance = calculateAvailableBalance(rawData.accounts, rawData.transactions)
-    const netPosition = getSingleCurrencyNetPosition(rawData.accounts, rawData.transactions)
+    // Current State (Stock Metrics) using Multi versions
+    const availableBalance = calculateAvailableBalanceMulti(rawData.accounts, rawData.transactions)
+    const netPosition = getSingleCurrencyNetPositionMulti(rawData.accounts, rawData.transactions)
 
-    // Flow Metrics
-    const periodIncome = calculatePeriodIncome(rawData.transactions, startDate, endDate)
-    const periodExpenses = calculatePeriodExpenses(rawData.transactions, startDate, endDate)
-    const periodSavings = calculatePeriodSavings(rawData.transactions, startDate, endDate)
-    const savingsRate = calculateSavingsRate(periodIncome, periodExpenses)
+    // Flow Metrics using Multi versions
+    const periodIncome = calculatePeriodIncomeMulti(rawData.transactions, rawData.accounts, startDate, endDate)
+    const periodExpenses = calculatePeriodExpensesMulti(rawData.transactions, rawData.accounts, startDate, endDate)
+    const periodSavings = calculatePeriodSavingsMulti(rawData.transactions, rawData.accounts, startDate, endDate)
+    const savingsRate = calculateSavingsRateMulti(periodIncome, periodExpenses)
 
-    // Comparison Flow Metrics
-    const prevPeriodIncome = calculatePeriodIncome(rawData.transactions, prevStartDate, prevEndDate)
-    const prevPeriodExpenses = calculatePeriodExpenses(rawData.transactions, prevStartDate, prevEndDate)
-    const prevPeriodSavings = calculatePeriodSavings(rawData.transactions, prevStartDate, prevEndDate)
-    const prevPeriodSavingsRate = calculateSavingsRate(prevPeriodIncome, prevPeriodExpenses)
+    // Comparison Flow Metrics using Multi versions
+    const prevPeriodIncome = calculatePeriodIncomeMulti(rawData.transactions, rawData.accounts, prevStartDate, prevEndDate)
+    const prevPeriodExpenses = calculatePeriodExpensesMulti(rawData.transactions, rawData.accounts, prevStartDate, prevEndDate)
+    const prevPeriodSavings = calculatePeriodSavingsMulti(rawData.transactions, rawData.accounts, prevStartDate, prevEndDate)
+    const prevPeriodSavingsRate = calculateSavingsRateMulti(prevPeriodIncome, prevPeriodExpenses)
 
-    // Today's Glance
-    const todayExpenses = calculateTodaySpending(rawData.transactions, todayStr)
+    // Today's Glance using Multi versions
+    const todayExpenses = calculateTodaySpendingMulti(rawData.transactions, rawData.accounts, todayStr)
     const todayTxs = rawData.transactions.filter(
       (tx) => tx.transaction_date === todayStr && tx.transaction_type !== 'transfer'
     )
     const todayCount = todayTxs.length
+    
+    const accountCurrencyMap = new Map(rawData.accounts.map((a) => [a.id, a.currency_code.toUpperCase()]))
     const todayMaxExpense = todayTxs
-      .filter((tx) => tx.transaction_type === 'expense')
+      .filter((tx) => tx.transaction_type === 'expense' && accountCurrencyMap.get(tx.account_id) === primaryCurrency)
       .reduce<Transaction | null>((max, tx) => (!max || tx.amount > max.amount ? tx : max), null)
     
-    const dailyAverage = calculateAverageDailySpending(
+    const dailyAverage = calculateAverageDailySpendingMulti(
       rawData.transactions,
+      rawData.accounts,
       startDate,
       endDate,
       todayStr
     )
 
-    // Spending Category Share
-    const categorySpending = calculateCategorySpending(rawData.transactions, startDate, endDate)
+    // Spending Category Share: only process primaryCurrency to ensure compatibility
+    const primaryExpensesTotal = periodExpenses[primaryCurrency] || 0
+    const primaryTransactions = rawData.transactions.filter(
+      (tx) => accountCurrencyMap.get(tx.account_id) === primaryCurrency
+    )
+    const categorySpending = calculateCategorySpending(primaryTransactions, startDate, endDate)
+    
     const categoryShare = Object.entries(categorySpending).map(([catId, amount]) => {
       const category = rawData.categories.find((c) => c.id === catId) || null
-      const percentage = calculateCategoryShare(amount, periodExpenses)
+      const percentage = calculateCategoryShare(amount, primaryExpensesTotal)
       return { category, amount, percentage }
     }).sort((a, b) => b.amount - a.amount)
 
-    // Cash Flow Intervals
+    // Cash Flow Intervals: filter to primaryCurrency transactions for charts
     const cashFlowIntervals = groupCashFlowByInterval(
-      rawData.transactions,
+      primaryTransactions,
       period,
       startDate,
       endDate
     )
 
-    // Insight Priority List
+    // Insight Priority List (pass primary currency for comparison logic)
     const insights = generateInsights(
-      rawData.transactions,
+      primaryTransactions,
       rawData.categories,
       rawData.goals,
       rawData.contributions,
@@ -195,3 +205,4 @@ export const useOverviewData = (period: PeriodOption) => {
     refetch: fetchRawData
   }
 }
+export default useOverviewData

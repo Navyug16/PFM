@@ -20,27 +20,27 @@ export interface OverviewData {
   goalContributions: { [goalId: string]: GoalContribution[] }
   categories: Category[]
 
-  // Stock Metrics (Current State)
-  availableBalance: number
-  netPosition: number
+  // Stock Metrics (Current State) - Multi-Currency Dictionaries
+  availableBalance: { [currency: string]: number }
+  netPosition: { [currency: string]: number }
 
-  // Flow Metrics (Period State)
-  periodIncome: number
-  periodExpenses: number
-  periodSavings: number
-  savingsRate: number
+  // Flow Metrics (Period State) - Multi-Currency Dictionaries
+  periodIncome: { [currency: string]: number }
+  periodExpenses: { [currency: string]: number }
+  periodSavings: { [currency: string]: number }
+  savingsRate: { [currency: string]: number }
 
-  // Flow Metrics (Previous Comparison State)
-  prevPeriodIncome: number
-  prevPeriodExpenses: number
-  prevPeriodSavings: number
-  prevPeriodSavingsRate: number
+  // Flow Metrics (Previous Comparison State) - Multi-Currency Dictionaries
+  prevPeriodIncome: { [currency: string]: number }
+  prevPeriodExpenses: { [currency: string]: number }
+  prevPeriodSavings: { [currency: string]: number }
+  prevPeriodSavingsRate: { [currency: string]: number }
 
   // Today's Glance
-  todayExpenses: number
+  todayExpenses: { [currency: string]: number }
   todayCount: number
   todayMaxExpense: Transaction | null
-  dailyAverage: number
+  dailyAverage: { [currency: string]: number }
 
   // Spending Breakdown & Intervals
   categoryShare: { category: Category | null; amount: number; percentage: number }[]

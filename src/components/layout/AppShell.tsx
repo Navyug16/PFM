@@ -16,6 +16,8 @@ import {
 } from 'lucide-react'
 
 import { useAuth } from '@/features/auth/auth-provider'
+import { useSettings } from '@/features/settings/hooks/useSettings'
+import { APP_CONFIG } from '@/config/app-config'
 
 interface NavItem {
   name: string
@@ -37,6 +39,7 @@ const NAVIGATION_ITEMS: NavItem[] = [
 
 export const AppShell: React.FC = () => {
   const { user, signOut } = useAuth()
+  const { profile } = useSettings()
   const navigate = useNavigate()
   
   // Dropdown States and Refs
@@ -44,7 +47,7 @@ export const AppShell: React.FC = () => {
   const desktopDropdownRef = useRef<HTMLDivElement>(null)
   const mobileDropdownRef = useRef<HTMLDivElement>(null)
 
-  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || 'User'
+  const displayName = profile?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || 'User'
   const email = user?.email || 'user@example.com'
   const initials = displayName
     .split(' ')
@@ -84,9 +87,11 @@ export const AppShell: React.FC = () => {
         {/* Brand Header */}
         <div className="h-16 flex items-center gap-2 px-6 border-b border-border-neutral">
           <Wallet className="text-brand-purple" size={24} />
-          <span className="font-bold text-lg tracking-tight text-text-primary">PFM</span>
+          <span className="font-bold text-lg tracking-tight text-text-primary">
+            {APP_CONFIG.shortName}
+          </span>
           <span className="text-[10px] uppercase font-semibold text-brand-purple bg-brand-purple/10 px-1.5 py-0.5 rounded-custom-sm">
-            M3
+            v1.0
           </span>
         </div>
 
@@ -153,7 +158,9 @@ export const AppShell: React.FC = () => {
         <header className="md:hidden h-14 bg-surface-primary border-b border-border-neutral flex items-center justify-between px-4 sticky top-0 z-40">
           <div className="flex items-center gap-2">
             <Wallet className="text-brand-purple" size={20} />
-            <span className="font-bold text-base tracking-tight text-text-primary">PFM</span>
+            <span className="font-bold text-base tracking-tight text-text-primary">
+              {APP_CONFIG.shortName}
+            </span>
           </div>
 
           <div className="relative" ref={mobileDropdownRef}>
@@ -195,16 +202,19 @@ export const AppShell: React.FC = () => {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors duration-150 py-1 ${
-                isActive ? 'text-brand-purple' : 'text-text-secondary hover:text-text-primary'
+              `flex flex-col items-center justify-center gap-1 text-center transition-all ${
+                isActive ? 'text-brand-purple' : 'text-text-secondary'
               }`
             }
           >
-            <item.icon size={18} className="shrink-0" />
-            <span className="truncate max-w-full px-0.5">{item.name}</span>
+            <item.icon size={16} />
+            <span className="text-[8px] font-semibold tracking-tighter truncate max-w-[48px]">
+              {item.name}
+            </span>
           </NavLink>
         ))}
       </nav>
     </div>
   )
 }
+export default AppShell

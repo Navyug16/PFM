@@ -1,0 +1,27 @@
+{
+  "short_name": "PFM",
+  "name": "PFM - Personal Finance Manager",
+  "description": "Understand your money in under 60 seconds with offline-first speed and reporting intelligence.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#09090b",
+  "theme_color": "#7c3aed",
+  "display": "standalone",
+  "orientation": "portrait"
+}

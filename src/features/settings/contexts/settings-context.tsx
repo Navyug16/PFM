@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { useAuth } from '@/features/auth/auth-provider'
 import { APP_CONFIG } from '@/config/app-config'
 import type { UserProfile, ThemeOption } from '../types'
-import { getProfile, updateProfile as apiUpdateProfile } from '../api/settings-api'
+import { getProfile, updateProfile as apiUpdateProfile, createDefaultProfile } from '../api/settings-api'
 
 interface SettingsContextType {
   profile: UserProfile | null
@@ -19,6 +20,17 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  
+  const [prevUser, setPrevUser] = useState(user)
+  if (user !== prevUser) {
+    setPrevUser(user)
+    if (!user) {
+      setProfile(null)
+      setLoading(false)
+    } else {
+      setLoading(true)
+    }
+  }
 
   // Fast theme bootstrap from localStorage to prevent dark-mode flash during render
   const [theme, setTheme] = useState<ThemeOption>(() => {
@@ -47,8 +59,6 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Sync profile data from database
   const refetchProfile = useCallback(async () => {
     if (!user) {
-      setProfile(null)
-      setLoading(false)
       return
     }
 
@@ -59,6 +69,20 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       localStorage.setItem('pfm_theme', data.theme)
       setError(null)
     } catch (err: unknown) {
+      const errorObj = err as Record<string, unknown>
+      // Catch row not found (PGRST116) or missing row, and self-bootstrap profile
+      if (errorObj && (errorObj.code === 'PGRST116' || (typeof errorObj.message === 'string' && (errorObj.message.includes('PGRST116') || errorObj.message.includes('0 rows'))))) {
+        try {
+          const defaultData = await createDefaultProfile(user.id, user.email)
+          setProfile(defaultData)
+          setTheme(defaultData.theme)
+          localStorage.setItem('pfm_theme', defaultData.theme)
+          setError(null)
+          return
+        } catch (bootstrapErr) {
+          console.error('Self-bootstrapping profile failed:', bootstrapErr)
+        }
+      }
       console.error('Failed to load user profile:', err)
       setError(err instanceof Error ? err.message : 'Failed to load settings.')
     } finally {
@@ -87,8 +111,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Effect to load profile when user becomes authenticated
   useEffect(() => {
-    setLoading(true)
-    refetchProfile()
+    if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      refetchProfile()
+    }
   }, [user, refetchProfile])
 
   // Apply theme class instantly whenever theme state changes

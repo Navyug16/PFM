@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNetworkStatus } from '@/hooks/useNetworkStatus'
 import { WifiOff, X } from 'lucide-react'
 
 export const NetworkStatus: React.FC = () => {
   const isOnline = useNetworkStatus()
+  const [prevIsOnline, setPrevIsOnline] = useState(isOnline)
   const [dismissed, setDismissed] = useState(false)
 
-  // Reset dismissal state whenever connection goes offline
-  useEffect(() => {
+  if (isOnline !== prevIsOnline) {
+    setPrevIsOnline(isOnline)
     if (!isOnline) {
       setDismissed(false)
     }
-  }, [isOnline])
+  }
 
   if (isOnline || dismissed) {
     return null

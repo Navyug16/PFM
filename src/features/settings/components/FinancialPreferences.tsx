@@ -68,7 +68,7 @@ export const FinancialPreferences: React.FC = () => {
             value={currency}
             onChange={(e) => setCurrency(e.target.value as CurrencyOption)}
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value="INR">INR (₹)</option>
             <option value="USD">USD ($)</option>
@@ -89,7 +89,7 @@ export const FinancialPreferences: React.FC = () => {
             value={locale}
             onChange={(e) => setLocale(e.target.value as LocaleOption)}
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value="en-IN">English (India) - en-IN</option>
             <option value="en-US">English (United States) - en-US</option>
@@ -111,7 +111,7 @@ export const FinancialPreferences: React.FC = () => {
             value={dateFormat}
             onChange={(e) => setDateFormat(e.target.value as DateFormatOption)}
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value="YYYY-MM-DD">YYYY-MM-DD (e.g. 2026-07-10)</option>
             <option value="DD-MM-YYYY">DD-MM-YYYY (e.g. 10-07-2026)</option>
@@ -129,7 +129,7 @@ export const FinancialPreferences: React.FC = () => {
             value={weekStart}
             onChange={(e) => setWeekStart(Number(e.target.value))}
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value={1}>Monday</option>
             <option value={0}>Sunday</option>
@@ -146,7 +146,7 @@ export const FinancialPreferences: React.FC = () => {
             value={fyStart}
             onChange={(e) => setFyStart(Number(e.target.value))}
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value={4}>April 1st (Indian Standard)</option>
             <option value={1}>January 1st (Calendar standard)</option>
@@ -157,7 +157,7 @@ export const FinancialPreferences: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Saving Preferences...' : 'Save Preferences'}
         </button>

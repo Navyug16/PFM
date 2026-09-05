@@ -21,7 +21,7 @@ export const FinancialYearReview: React.FC<FinancialYearReviewProps> = ({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-border-neutral pb-3">
         <div>
           <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider flex items-center gap-2">
-            <Calendar size={18} className="text-brand-purple" />
+            <Calendar size={18} className="text-brand-orange" />
             <span>Indian Financial Year Review</span>
           </h3>
           <p className="text-[11px] text-text-secondary mt-0.5">
@@ -51,7 +51,7 @@ export const FinancialYearReview: React.FC<FinancialYearReviewProps> = ({
 
         <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-4 space-y-1">
           <span className="text-[10px] font-bold text-text-secondary uppercase">FY Savings Rate</span>
-          <p className="text-lg font-extrabold text-brand-purple">{fyReview.savingsRate.toFixed(1)}%</p>
+          <p className="text-lg font-extrabold text-brand-orange">{fyReview.savingsRate.toFixed(1)}%</p>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ export const FinancialYearReview: React.FC<FinancialYearReviewProps> = ({
 
         <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-5 flex flex-col justify-center space-y-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-brand-purple/10 text-brand-purple rounded-full">
+            <div className="p-2.5 bg-brand-orange/10 text-brand-orange rounded-full">
               <Target size={24} />
             </div>
             <div>
@@ -95,7 +95,7 @@ export const FinancialYearReview: React.FC<FinancialYearReviewProps> = ({
           </div>
           <div className="border-t border-border-neutral pt-3">
             <span className="text-xs font-semibold text-text-secondary block">Total FY Contributions</span>
-            <span className="text-2xl font-extrabold text-brand-purple mt-0.5 block">
+            <span className="text-2xl font-extrabold text-brand-orange mt-0.5 block">
               {formatCurrency(fyReview.totalGoalContributions)}
             </span>
           </div>

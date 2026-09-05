@@ -54,7 +54,7 @@ export const AppearanceSettings: React.FC = () => {
             disabled={loading}
             className={`flex flex-col items-center justify-center p-4 border rounded-custom-lg cursor-pointer transition-all duration-200 ${
               theme === 'light'
-                ? 'border-brand-purple bg-brand-purple/5 text-brand-purple'
+                ? 'border-brand-orange bg-brand-orange/5 text-brand-orange'
                 : 'border-border-neutral bg-surface-secondary text-text-secondary hover:text-text-primary'
             }`}
           >
@@ -68,7 +68,7 @@ export const AppearanceSettings: React.FC = () => {
             disabled={loading}
             className={`flex flex-col items-center justify-center p-4 border rounded-custom-lg cursor-pointer transition-all duration-200 ${
               theme === 'dark'
-                ? 'border-brand-purple bg-brand-purple/5 text-brand-purple'
+                ? 'border-brand-orange bg-brand-orange/5 text-brand-orange'
                 : 'border-border-neutral bg-surface-secondary text-text-secondary hover:text-text-primary'
             }`}
           >
@@ -82,7 +82,7 @@ export const AppearanceSettings: React.FC = () => {
             disabled={loading}
             className={`flex flex-col items-center justify-center p-4 border rounded-custom-lg cursor-pointer transition-all duration-200 ${
               theme === 'system'
-                ? 'border-brand-purple bg-brand-purple/5 text-brand-purple'
+                ? 'border-brand-orange bg-brand-orange/5 text-brand-orange'
                 : 'border-border-neutral bg-surface-secondary text-text-secondary hover:text-text-primary'
             }`}
           >

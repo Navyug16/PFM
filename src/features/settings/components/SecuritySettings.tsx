@@ -90,7 +90,7 @@ export const SecuritySettings: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-10 pr-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-10 pr-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -112,7 +112,7 @@ export const SecuritySettings: React.FC = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={loading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-10 pr-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-10 pr-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -121,7 +121,7 @@ export const SecuritySettings: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer disabled:opacity-50"
+            className="px-6 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer disabled:opacity-50"
           >
             {loading ? 'Updating Password...' : 'Update Password'}
           </button>

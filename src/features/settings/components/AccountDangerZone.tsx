@@ -22,8 +22,8 @@ export const AccountDangerZone: React.FC = () => {
           </p>
         </div>
 
-        <div className="p-3 bg-brand-purple/10 border border-brand-purple/20 rounded-custom-md text-xs text-text-secondary space-y-2">
-          <div className="flex items-center gap-2 font-bold text-brand-purple">
+        <div className="p-3 bg-brand-orange/10 border border-brand-orange/20 rounded-custom-md text-xs text-text-secondary space-y-2">
+          <div className="flex items-center gap-2 font-bold text-brand-orange">
             <HelpCircle size={16} />
             <span>V1 Account Deletion Status: Deferred</span>
           </div>
@@ -31,7 +31,7 @@ export const AccountDangerZone: React.FC = () => {
             For security compliance, complete database cascades and account deletions require a secure server-side execution context. Exposing administrative <code>service_role</code> bypass keys in browser code is a critical vulnerability and is strictly blocked in V1.
           </p>
           <p className="leading-relaxed">
-            To request permanent deletion of your account and related data, please email our security officer at: <strong className="text-brand-purple">security@pfm-app.local</strong>.
+            To request permanent deletion of your account and related data, please email our security officer at: <strong className="text-brand-orange">security@pfm-app.local</strong>.
           </p>
         </div>
 

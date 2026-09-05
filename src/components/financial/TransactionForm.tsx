@@ -106,7 +106,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
               setTransferToAccountId('')
             }}
             disabled={actionLoading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value="expense">Expense</option>
             <option value="income">Income</option>
@@ -127,7 +127,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0.00"
             disabled={actionLoading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           />
         </div>
 
@@ -141,7 +141,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
               value={accountId || (accounts.length > 0 ? accounts[0].id : '')}
               onChange={(e) => setAccountId(e.target.value)}
               disabled={actionLoading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             >
               <option value="" disabled>Select</option>
               {accounts.map((acc) => (
@@ -160,7 +160,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
                 value={transferToAccountId}
                 onChange={(e) => setTransferToAccountId(e.target.value)}
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               >
                 <option value="">Select Destination</option>
                 {accounts
@@ -180,7 +180,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               >
                 <option value="">Uncategorized</option>
                 {activeCategories.map((cat) => (
@@ -202,7 +202,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             value={date}
             onChange={(e) => setDate(e.target.value)}
             disabled={actionLoading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           />
         </div>
 
@@ -217,7 +217,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             onChange={(e) => setPayeeOrSource(e.target.value)}
             placeholder="e.g. Starbucks, Salary"
             disabled={actionLoading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           />
         </div>
 
@@ -232,7 +232,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             placeholder="Optional notes"
             disabled={actionLoading}
             rows={2}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all resize-none"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all resize-none"
           />
         </div>
 
@@ -250,7 +250,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           <button
             type="submit"
             disabled={actionLoading}
-            className="flex-1 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-semibold text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
+            className="flex-1 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-semibold text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
           >
             {initialTransaction ? <Save size={16} /> : <Plus size={16} />} 
             {actionLoading ? 'Saving...' : initialTransaction ? 'Save Changes' : 'Add Entry'}

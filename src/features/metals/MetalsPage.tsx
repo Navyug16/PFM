@@ -15,7 +15,7 @@ export const MetalsPage: React.FC = () => {
         <EmptyState
           title="Precious Metals Tracker Coming Soon"
           description="In future milestones, we will integrate live commodity APIs to fetch real-time and historical spot rates for Gold and Silver, helping you evaluate commodity asset values in your net worth."
-          icon={<Coins size={32} className="text-brand-purple" />}
+          icon={<Coins size={32} className="text-brand-orange" />}
         />
       </div>
     </PageContainer>

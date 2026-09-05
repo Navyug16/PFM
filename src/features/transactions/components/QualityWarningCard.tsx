@@ -18,8 +18,8 @@ export const QualityWarningCard: React.FC<QualityWarningCardProps> = ({
   const { message, severity } = warning
   
   const severityStyles = {
-    info: 'bg-brand-purple/5 border-brand-purple/10 text-brand-purple',
-    review: 'bg-brand-purple/10 border-brand-purple/20 text-brand-purple',
+    info: 'bg-brand-orange/5 border-brand-orange/10 text-brand-orange',
+    review: 'bg-brand-orange/10 border-brand-orange/20 text-brand-orange',
     important: 'bg-state-expense/10 border-state-expense/20 text-state-expense'
   }
 
@@ -39,7 +39,7 @@ export const QualityWarningCard: React.FC<QualityWarningCardProps> = ({
         onClick={() => onEdit(transaction)}
         className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-secondary hover:bg-surface-secondary/80 border border-border-neutral text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all self-end md:self-center"
       >
-        <Edit size={14} className="text-brand-purple" /> Fix Record
+        <Edit size={14} className="text-brand-orange" /> Fix Record
       </button>
     </div>
   )

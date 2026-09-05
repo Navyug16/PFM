@@ -180,7 +180,7 @@ export const ForgotPasswordPage: React.FC = () => {
           </p>
           <button
             onClick={() => navigate('/overview')}
-            className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 cursor-pointer text-center block border-none outline-none"
+            className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 cursor-pointer text-center block border-none outline-none"
           >
             Enter Dashboard
           </button>
@@ -197,7 +197,7 @@ export const ForgotPasswordPage: React.FC = () => {
         {step === 'request' && (
           <>
             <div className="flex flex-col items-center mb-8">
-              <div className="p-3 bg-brand-purple/10 text-brand-purple rounded-full mb-4">
+              <div className="p-3 bg-brand-orange/10 text-brand-orange rounded-full mb-4">
                 <KeyRound size={32} />
               </div>
               <h2 className="text-2xl font-bold text-text-primary tracking-tight">Reset password</h2>
@@ -236,7 +236,7 @@ export const ForgotPasswordPage: React.FC = () => {
                   className={`w-full bg-surface-secondary border rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                     emailError
                       ? 'border-state-expense focus:border-state-expense'
-                      : 'border-border-neutral focus:border-brand-purple'
+                      : 'border-border-neutral focus:border-brand-orange'
                   }`}
                 />
                 {emailError && (
@@ -249,7 +249,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 disabled:bg-brand-purple/40 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover disabled:opacity-50 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -265,7 +265,7 @@ export const ForgotPasswordPage: React.FC = () => {
             <div className="mt-8 text-center text-sm">
               <Link
                 to="/login"
-                className="text-brand-purple hover:text-brand-purple/80 font-medium transition-colors"
+                className="text-brand-orange hover:text-brand-orange-hover font-medium transition-colors"
               >
                 Back to Login
               </Link>
@@ -277,7 +277,7 @@ export const ForgotPasswordPage: React.FC = () => {
         {step === 'verify' && (
           <>
             <div className="flex flex-col items-center mb-8">
-              <div className="p-3 bg-brand-purple/10 text-brand-purple rounded-full mb-4">
+              <div className="p-3 bg-brand-orange/10 text-brand-orange rounded-full mb-4">
                 <Mail size={32} />
               </div>
               <h2 className="text-2xl font-bold text-text-primary tracking-tight">Enter verification code</h2>
@@ -318,7 +318,7 @@ export const ForgotPasswordPage: React.FC = () => {
                   className={`w-full bg-surface-secondary border rounded-custom-md px-4 py-2.5 text-center tracking-[0.3em] font-mono text-text-primary text-lg font-bold outline-none transition-all duration-200 ${
                     otpError
                       ? 'border-state-expense focus:border-state-expense'
-                      : 'border-border-neutral focus:border-brand-purple'
+                      : 'border-border-neutral focus:border-brand-orange'
                   }`}
                 />
                 {otpError && (
@@ -331,7 +331,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 disabled:bg-brand-purple/40 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover disabled:opacity-50 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -348,7 +348,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <button
                 onClick={handleRequest}
                 disabled={loading}
-                className="text-brand-purple hover:text-brand-purple/80 font-medium transition-colors cursor-pointer bg-transparent border-none outline-none"
+                className="text-brand-orange hover:text-brand-orange-hover font-medium transition-colors cursor-pointer bg-transparent border-none outline-none"
               >
                 Resend Code
               </button>
@@ -366,7 +366,7 @@ export const ForgotPasswordPage: React.FC = () => {
         {step === 'reset' && (
           <>
             <div className="flex flex-col items-center mb-8">
-              <div className="p-3 bg-brand-purple/10 text-brand-purple rounded-full mb-4">
+              <div className="p-3 bg-brand-orange/10 text-brand-orange rounded-full mb-4">
                 <ShieldCheck size={32} />
               </div>
               <h2 className="text-2xl font-bold text-text-primary tracking-tight">Create new password</h2>
@@ -406,7 +406,7 @@ export const ForgotPasswordPage: React.FC = () => {
                     className={`w-full bg-surface-secondary border rounded-custom-md pl-4 pr-10 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                       passwordError
                         ? 'border-state-expense focus:border-state-expense'
-                        : 'border-border-neutral focus:border-brand-purple'
+                        : 'border-border-neutral focus:border-brand-orange'
                     }`}
                   />
                   <button
@@ -448,7 +448,7 @@ export const ForgotPasswordPage: React.FC = () => {
                     className={`w-full bg-surface-secondary border rounded-custom-md pl-4 pr-10 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                       confirmPasswordError
                         ? 'border-state-expense focus:border-state-expense'
-                        : 'border-border-neutral focus:border-brand-purple'
+                        : 'border-border-neutral focus:border-brand-orange'
                     }`}
                   />
                   <button
@@ -470,7 +470,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 disabled:bg-brand-purple/40 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-4 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover disabled:opacity-50 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-4 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>

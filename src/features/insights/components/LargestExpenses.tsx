@@ -47,7 +47,7 @@ export const LargestExpenses: React.FC<LargestExpensesProps> = ({
           <button
             onClick={() => setLimit(5)}
             className={`px-3 py-1.5 rounded-custom-sm transition-all cursor-pointer ${
-              limit === 5 ? 'bg-brand-purple text-text-primary' : 'text-text-secondary hover:text-text-primary'
+              limit === 5 ? 'bg-brand-orange text-text-primary' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Top 5
@@ -55,7 +55,7 @@ export const LargestExpenses: React.FC<LargestExpensesProps> = ({
           <button
             onClick={() => setLimit(10)}
             className={`px-3 py-1.5 rounded-custom-sm transition-all cursor-pointer ${
-              limit === 10 ? 'bg-brand-purple text-text-primary' : 'text-text-secondary hover:text-text-primary'
+              limit === 10 ? 'bg-brand-orange text-text-primary' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Top 10
@@ -96,7 +96,7 @@ export const LargestExpenses: React.FC<LargestExpensesProps> = ({
                 <span>Account: {accountName}</span>
                 <Link
                   to={`/transactions?edit=${tx.id}`}
-                  className="inline-flex items-center gap-0.5 text-brand-purple hover:underline font-bold"
+                  className="inline-flex items-center gap-0.5 text-brand-orange hover:underline font-bold"
                 >
                   <Edit2 size={10} />
                   <span>Edit</span>
@@ -143,7 +143,7 @@ export const LargestExpenses: React.FC<LargestExpensesProps> = ({
                   <td className="py-3 text-right">
                     <Link
                       to={`/transactions?edit=${tx.id}`}
-                      className="inline-flex items-center gap-1 text-brand-purple hover:underline"
+                      className="inline-flex items-center gap-1 text-brand-orange hover:underline"
                     >
                       <Edit2 size={12} />
                       <span className="hidden sm:inline">Edit</span>

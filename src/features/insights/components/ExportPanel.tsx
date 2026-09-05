@@ -114,7 +114,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
     <div className="bg-surface-secondary border border-border-neutral rounded-custom-xl p-5 md:p-6 space-y-4">
       <div>
         <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider flex items-center gap-2">
-          <Download size={18} className="text-brand-purple" />
+          <Download size={18} className="text-brand-orange" />
           <span>Local Export Center</span>
         </h3>
         <p className="text-xs text-text-secondary mt-0.5">
@@ -133,7 +133,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
               className="bg-surface-primary border border-border-neutral rounded-custom-lg p-4 flex flex-col justify-between space-y-4 hover:shadow-subtle transition-all"
             >
               <div className="space-y-1">
-                <FileText size={20} className="text-brand-purple" />
+                <FileText size={20} className="text-brand-orange" />
                 <h4 className="text-xs font-bold text-text-primary mt-1">{btn.label}</h4>
                 <p className="text-[10px] text-text-secondary leading-normal">{btn.description}</p>
               </div>

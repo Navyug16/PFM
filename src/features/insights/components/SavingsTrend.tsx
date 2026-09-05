@@ -43,7 +43,7 @@ export const SavingsTrend: React.FC<SavingsTrendProps> = ({ savingsPoints }) => 
               </div>
               <div className="text-right space-y-0.5">
                 <span className="text-xs text-text-secondary font-semibold block">Savings Rate</span>
-                <span className="text-sm font-bold text-brand-purple">{pt.savingsRate.toFixed(0)}%</span>
+                <span className="text-sm font-bold text-brand-orange">{pt.savingsRate.toFixed(0)}%</span>
               </div>
             </div>
           )

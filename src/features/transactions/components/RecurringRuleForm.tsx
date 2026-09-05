@@ -115,7 +115,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               setCategoryId('')
             }}
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           >
             <option value="expense">Expense Rule</option>
             <option value="income">Income Rule</option>
@@ -134,7 +134,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Netflix Subscription"
             disabled={loading}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
           />
         </div>
 
@@ -152,7 +152,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             />
           </div>
 
@@ -165,7 +165,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               value={frequency}
               onChange={(e) => setFrequency(e.target.value as FrequencyType)}
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             >
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
@@ -185,7 +185,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             >
               <option value="" disabled>Select Account</option>
               {accounts.map((acc) => (
@@ -203,7 +203,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             >
               <option value="">Uncategorized</option>
               {activeCategories.map((cat) => (
@@ -225,7 +225,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             />
           </div>
 
@@ -239,7 +239,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
             />
           </div>
         </div>
@@ -255,7 +255,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
             placeholder="Add schedule context..."
             disabled={loading}
             rows={2}
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all resize-none"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all resize-none"
           />
         </div>
 
@@ -273,7 +273,7 @@ export const RecurringRuleForm: React.FC<RecurringRuleFormProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-semibold text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
+            className="flex-1 py-2.5 bg-brand-orange hover:bg-brand-orange/90 text-text-primary font-semibold text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
           >
             <Save size={16} /> {loading ? 'Saving...' : 'Save Schedule Rule'}
           </button>

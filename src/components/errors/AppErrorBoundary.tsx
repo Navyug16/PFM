@@ -45,7 +45,7 @@ export class AppErrorBoundary extends Component<Props, State> {
             </div>
             <button
               onClick={() => window.location.reload()}
-              className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md cursor-pointer transition-all"
+              className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md cursor-pointer transition-all"
             >
               Reload Application
             </button>

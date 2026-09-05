@@ -218,7 +218,7 @@ export const TransactionsPage: React.FC = () => {
           <p className="text-text-secondary text-xs font-semibold uppercase tracking-wider">
             Savings Rate
           </p>
-          <p className="text-xl font-bold text-brand-purple mt-1">
+          <p className="text-xl font-bold text-brand-orange mt-1">
             {rateTotal.toFixed(2)}%
           </p>
         </div>
@@ -229,7 +229,7 @@ export const TransactionsPage: React.FC = () => {
         {/* Input Form Card */}
         <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-6 h-fit">
           <h3 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Plus size={18} className="text-brand-purple" /> Log Transaction
+            <Plus size={18} className="text-brand-orange" /> Log Transaction
           </h3>
 
           <TransactionForm
@@ -245,7 +245,7 @@ export const TransactionsPage: React.FC = () => {
           {/* Filters Dashboard */}
           <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-5">
             <h4 className="text-sm font-bold text-text-primary mb-3 flex items-center gap-2">
-              <Filter size={16} className="text-brand-purple" /> Filter Results
+              <Filter size={16} className="text-brand-orange" /> Filter Results
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="relative">
@@ -255,14 +255,14 @@ export const TransactionsPage: React.FC = () => {
                   placeholder="Search notes/payee"
                   value={filterSearch}
                   onChange={(e) => setFilterSearch(e.target.value)}
-                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-9 pr-4 py-2 text-xs text-text-primary outline-none focus:border-brand-purple"
+                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-9 pr-4 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
                 />
               </div>
 
               <select
                 value={filterAccount}
                 onChange={(e) => setFilterAccount(e.target.value)}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-purple"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
               >
                 <option value="">All Accounts</option>
                 {accounts.map((acc) => (
@@ -273,7 +273,7 @@ export const TransactionsPage: React.FC = () => {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-purple"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
               >
                 <option value="">All Types</option>
                 <option value="income">Income</option>
@@ -284,7 +284,7 @@ export const TransactionsPage: React.FC = () => {
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-purple"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
               >
                 <option value="">All Categories</option>
                 {categories.map((cat) => (
@@ -296,20 +296,20 @@ export const TransactionsPage: React.FC = () => {
                 type="date"
                 value={filterDateFrom}
                 onChange={(e) => setFilterDateFrom(e.target.value)}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-purple"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
               />
               <input
                 type="date"
                 value={filterDateTo}
                 onChange={(e) => setFilterDateTo(e.target.value)}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-purple"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
               />
             </div>
           </div>
 
           {/* Inline Tag Attachment Dialog */}
           {selectedTxId && (
-            <div className="p-4 bg-surface-primary border border-brand-purple rounded-custom-lg flex items-center justify-between gap-4">
+            <div className="p-4 bg-surface-primary border border-brand-orange rounded-custom-lg flex items-center justify-between gap-4">
               <div className="flex-1">
                 <p className="text-xs text-text-secondary mb-2 font-semibold">Attach tag to selected transaction:</p>
                 <form onSubmit={handleCreateAndAttachTag} className="flex gap-2">
@@ -319,11 +319,11 @@ export const TransactionsPage: React.FC = () => {
                     placeholder="e.g. Taxes, Travel"
                     value={newTagName}
                     onChange={(e) => setNewTagName(e.target.value)}
-                    className="flex-1 bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-purple"
+                    className="flex-1 bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-orange"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-1.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer border-none"
+                    className="px-4 py-1.5 bg-brand-orange hover:bg-brand-orange/90 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer border-none"
                   >
                     Attach
                   </button>
@@ -352,7 +352,7 @@ export const TransactionsPage: React.FC = () => {
             <EmptyState
               title="No Entries Found"
               description="Log income, expenses, or transfers to build your financial history."
-              icon={<Receipt size={32} className="text-brand-purple" />}
+              icon={<Receipt size={32} className="text-brand-orange" />}
             />
           ) : (
             <div className="space-y-6">
@@ -379,7 +379,7 @@ export const TransactionsPage: React.FC = () => {
               {/* Quality Warnings Section */}
               {qualityWarnings.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-brand-purple uppercase tracking-wider flex items-center gap-1.5 select-none">
+                  <h4 className="text-xs font-bold text-brand-orange uppercase tracking-wider flex items-center gap-1.5 select-none">
                     <AlertCircle size={14} /> Ledger Quality Issues ({qualityWarnings.length})
                   </h4>
                   <div className="space-y-2">
@@ -420,7 +420,7 @@ export const TransactionsPage: React.FC = () => {
                             ? 'bg-state-positive/10 text-state-positive border-state-positive/20'
                             : tx.transaction_type === 'expense'
                             ? 'bg-state-expense/10 text-state-expense border-state-expense/20'
-                            : 'bg-brand-purple/10 text-brand-purple border-brand-purple/20'
+                            : 'bg-brand-orange/10 text-brand-orange border-brand-orange/20'
                         }`}>
                           <Receipt size={18} />
                         </div>
@@ -428,7 +428,7 @@ export const TransactionsPage: React.FC = () => {
                           <h4 className="font-semibold text-text-primary text-sm flex items-center gap-1.5">
                             {tx.payee_or_source || (tx.transaction_type === 'transfer' ? 'Internal Transfer' : 'Unspecified')}
                             {hasQuality && (
-                              <span title="Quality warning pending" className="text-brand-purple">
+                              <span title="Quality warning pending" className="text-brand-orange">
                                 <AlertCircle size={14} />
                               </span>
                             )}
@@ -458,7 +458,7 @@ export const TransactionsPage: React.FC = () => {
                               ? 'text-state-positive'
                               : tx.transaction_type === 'expense'
                               ? 'text-state-expense'
-                              : 'text-brand-purple'
+                              : 'text-brand-orange'
                           }`}>
                             {tx.transaction_type === 'expense' ? '-' : tx.transaction_type === 'income' ? '+' : ''}
                             {formatCurrency(tx.amount)}
@@ -481,14 +481,14 @@ export const TransactionsPage: React.FC = () => {
                           <button
                             onClick={() => setEditingTx(tx)}
                             title="Edit Transaction"
-                            className="p-1.5 text-text-secondary hover:text-brand-purple hover:bg-surface-secondary rounded cursor-pointer border-none bg-transparent"
+                            className="p-1.5 text-text-secondary hover:text-brand-orange hover:bg-surface-secondary rounded cursor-pointer border-none bg-transparent"
                           >
                             <Edit size={14} />
                           </button>
                           <button
                             onClick={() => setSelectedTxId(tx.id)}
                             title="Attach Tag"
-                            className="p-1.5 text-text-secondary hover:text-brand-purple hover:bg-surface-secondary rounded cursor-pointer border-none bg-transparent"
+                            className="p-1.5 text-text-secondary hover:text-brand-orange hover:bg-surface-secondary rounded cursor-pointer border-none bg-transparent"
                           >
                             <Tag size={14} />
                           </button>

@@ -187,7 +187,7 @@ export const GoalsPage: React.FC = () => {
         {/* Goal Form Card */}
         <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-6 h-fit">
           <h3 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Plus size={18} className="text-brand-purple" /> Create Goal
+            <Plus size={18} className="text-brand-orange" /> Create Goal
           </h3>
 
           {formError && (
@@ -210,7 +210,7 @@ export const GoalsPage: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Emergency Fund"
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               />
             </div>
 
@@ -223,7 +223,7 @@ export const GoalsPage: React.FC = () => {
                 value={type}
                 onChange={(e) => setType(e.target.value as GoalType)}
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               >
                 <option value="monthly_savings">Monthly Savings</option>
                 <option value="financial_year">Financial Year</option>
@@ -243,7 +243,7 @@ export const GoalsPage: React.FC = () => {
                 onChange={(e) => setTargetAmount(e.target.value)}
                 placeholder="0.00"
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               />
             </div>
 
@@ -259,7 +259,7 @@ export const GoalsPage: React.FC = () => {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   disabled={actionLoading}
-                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
                 />
               </div>
 
@@ -274,7 +274,7 @@ export const GoalsPage: React.FC = () => {
                   value={targetDate}
                   onChange={(e) => setTargetDate(e.target.value)}
                   disabled={actionLoading}
-                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
                 />
               </div>
             </div>
@@ -282,7 +282,7 @@ export const GoalsPage: React.FC = () => {
             <button
               type="submit"
               disabled={actionLoading}
-              className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               {actionLoading ? 'Saving...' : 'Add Goal'}
             </button>
@@ -304,7 +304,7 @@ export const GoalsPage: React.FC = () => {
             <EmptyState
               title="No Goals Found"
               description="Establish your savings targets and long term goals on the left."
-              icon={<Target size={32} className="text-brand-purple" />}
+              icon={<Target size={32} className="text-brand-orange" />}
             />
           ) : (
             <div className="space-y-6">
@@ -335,7 +335,7 @@ export const GoalsPage: React.FC = () => {
                             <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
                               paceStatus === 'ahead' ? 'bg-state-positive/10 text-state-positive border-state-positive/20' :
                               paceStatus === 'behind' ? 'bg-state-expense/10 text-state-expense border-state-expense/20' :
-                              'bg-brand-purple/10 text-brand-purple border-brand-purple/20'
+                              'bg-brand-orange/10 text-brand-orange border-brand-orange/20'
                             }`}>
                               {paceStatus === 'ahead' ? 'Ahead' : paceStatus === 'behind' ? 'Behind' : 'On Track'}
                             </span>
@@ -355,7 +355,7 @@ export const GoalsPage: React.FC = () => {
                         <button
                           onClick={() => handleArchive(g.id)}
                           title="Archive Goal"
-                          className="p-2 text-text-secondary hover:text-brand-purple hover:bg-surface-secondary rounded transition-colors cursor-pointer border-none bg-transparent"
+                          className="p-2 text-text-secondary hover:text-brand-orange hover:bg-surface-secondary rounded transition-colors cursor-pointer border-none bg-transparent"
                         >
                           <Archive size={16} />
                         </button>
@@ -366,11 +366,11 @@ export const GoalsPage: React.FC = () => {
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs font-semibold">
                         <span className="text-text-secondary">Progress</span>
-                        <span className="text-brand-purple">{progress.toFixed(1)}%</span>
+                        <span className="text-brand-orange">{progress.toFixed(1)}%</span>
                       </div>
                       <div className="w-full h-2 bg-surface-secondary rounded-full overflow-hidden border border-border-neutral">
                         <div
-                          className="h-full bg-brand-purple transition-all duration-300"
+                          className="h-full bg-brand-orange transition-all duration-300"
                           style={{ width: `${Math.min(progress, 100)}%` }}
                         />
                       </div>
@@ -385,14 +385,14 @@ export const GoalsPage: React.FC = () => {
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-4 bg-surface-secondary p-3 rounded-custom-md border border-border-neutral text-xs">
                           <div className="flex items-center gap-2">
-                            <DollarSign size={14} className="text-brand-purple" />
+                            <DollarSign size={14} className="text-brand-orange" />
                             <div>
                               <p className="text-text-muted uppercase text-[9px] font-bold">Monthly Target</p>
                               <p className="font-bold text-text-primary mt-0.5">{formatCurrency(reqMonthly)} / mo</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Calendar size={14} className="text-brand-purple" />
+                            <Calendar size={14} className="text-brand-orange" />
                             <div>
                               <p className="text-text-muted uppercase text-[9px] font-bold">Weekly Target</p>
                               <p className="font-bold text-text-primary mt-0.5">{formatCurrency(reqWeekly)} / wk</p>
@@ -432,14 +432,14 @@ export const GoalsPage: React.FC = () => {
                                 placeholder="Amount"
                                 value={contribAmount}
                                 onChange={(e) => setContribAmount(e.target.value)}
-                                className="bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-purple"
+                                className="bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-orange"
                               />
                               <input
                                 type="date"
                                 required
                                 value={contribDate}
                                 onChange={(e) => setContribDate(e.target.value)}
-                                className="bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-purple"
+                                className="bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-orange"
                               />
                             </div>
                             <input
@@ -447,7 +447,7 @@ export const GoalsPage: React.FC = () => {
                               placeholder="Notes (optional)"
                               value={contribNotes}
                               onChange={(e) => setContribNotes(e.target.value)}
-                              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-purple"
+                              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-1.5 text-xs text-text-primary outline-none focus:border-brand-orange"
                             />
                             <div className="flex gap-2 justify-end">
                               <button
@@ -459,7 +459,7 @@ export const GoalsPage: React.FC = () => {
                               </button>
                               <button
                                 type="submit"
-                                className="px-4 py-1.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer border-none"
+                                className="px-4 py-1.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer border-none"
                               >
                                 Log Savings
                               </button>
@@ -473,7 +473,7 @@ export const GoalsPage: React.FC = () => {
                                 setContribGoalId(g.id)
                                 setContribAmount('')
                               }}
-                              className="text-brand-purple hover:text-brand-purple/80 font-bold transition-colors cursor-pointer bg-transparent border-none outline-none"
+                              className="text-brand-orange hover:text-brand-orange-hover font-bold transition-colors cursor-pointer bg-transparent border-none outline-none"
                             >
                               + Contribute Savings
                             </button>

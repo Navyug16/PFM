@@ -60,7 +60,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
             <select
               value={preset}
               onChange={(e) => onPresetChange(e.target.value as ReportPeriodPreset)}
-              className="w-full md:w-64 bg-surface-primary border border-border-neutral rounded-custom-md px-3.5 py-2.5 text-text-primary text-sm font-semibold focus:outline-none focus:border-brand-purple transition-all cursor-pointer appearance-none pr-10"
+              className="w-full md:w-64 bg-surface-primary border border-border-neutral rounded-custom-md px-3.5 py-2.5 text-text-primary text-sm font-semibold focus:outline-none focus:border-brand-orange transition-all cursor-pointer appearance-none pr-10"
             >
               {presetsList.map((p) => (
                 <option key={p.value} value={p.value}>
@@ -85,7 +85,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
                   type="date"
                   value={startInput}
                   onChange={(e) => setStartInput(e.target.value)}
-                  className="w-full bg-surface-primary border border-border-neutral rounded-custom-md px-3 py-2 text-text-primary text-xs font-medium focus:outline-none focus:border-brand-purple transition-all"
+                  className="w-full bg-surface-primary border border-border-neutral rounded-custom-md px-3 py-2 text-text-primary text-xs font-medium focus:outline-none focus:border-brand-orange transition-all"
                 />
               </div>
 
@@ -97,13 +97,13 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
                   type="date"
                   value={endInput}
                   onChange={(e) => setEndInput(e.target.value)}
-                  className="w-full bg-surface-primary border border-border-neutral rounded-custom-md px-3 py-2 text-text-primary text-xs font-medium focus:outline-none focus:border-brand-purple transition-all"
+                  className="w-full bg-surface-primary border border-border-neutral rounded-custom-md px-3 py-2 text-text-primary text-xs font-medium focus:outline-none focus:border-brand-orange transition-all"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full sm:w-auto px-4 py-2 bg-brand-purple hover:bg-brand-purple/90 text-text-primary text-xs font-bold rounded-custom-md cursor-pointer transition-all h-[38px] shrink-0"
+                className="w-full sm:w-auto px-4 py-2 bg-brand-orange hover:bg-brand-orange-hover text-text-primary text-xs font-bold rounded-custom-md cursor-pointer transition-all h-[38px] shrink-0"
               >
                 Apply Range
               </button>

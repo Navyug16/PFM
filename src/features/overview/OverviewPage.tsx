@@ -279,7 +279,7 @@ export const OverviewPage: React.FC = () => {
           </div>
           <Link
             to="/planning"
-            className="text-xs font-bold text-brand-purple hover:underline shrink-0 bg-brand-purple/10 px-3.5 py-2 rounded-custom-md border border-brand-purple/20 text-center"
+            className="text-xs font-bold text-brand-orange hover:underline shrink-0 bg-brand-orange/10 px-3.5 py-2 rounded-custom-md border border-brand-orange/20 text-center"
           >
             Setup Plan
           </Link>
@@ -298,7 +298,7 @@ export const OverviewPage: React.FC = () => {
               {paceStatus === 'at_risk' ? 'At Risk' : paceStatus}
             </span>
           </div>
-          <Link to="/planning" className="text-xs font-semibold text-brand-purple hover:underline">
+          <Link to="/planning" className="text-xs font-semibold text-brand-orange hover:underline">
             Adjust Plan &rarr;
           </Link>
         </div>
@@ -312,7 +312,7 @@ export const OverviewPage: React.FC = () => {
             </div>
             <div className="w-full h-2 bg-surface-secondary rounded-custom-full overflow-hidden">
               <div
-                className={`h-full bg-brand-purple transition-all duration-300`}
+                className={`h-full bg-brand-orange transition-all duration-300`}
                 style={{ width: `${Math.min(usagePercentage, 100)}%` }}
               />
             </div>
@@ -349,7 +349,7 @@ export const OverviewPage: React.FC = () => {
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value as PeriodOption)}
-            className="w-full bg-surface-secondary border border-border-neutral hover:border-brand-purple text-text-primary text-sm font-semibold rounded-custom-md px-4 py-2.5 outline-none cursor-pointer appearance-none transition-all pr-10"
+            className="w-full bg-surface-secondary border border-border-neutral hover:border-brand-orange text-text-primary text-sm font-semibold rounded-custom-md px-4 py-2.5 outline-none cursor-pointer appearance-none transition-all pr-10"
           >
             <option value="week">This Week</option>
             <option value="month">This Month</option>
@@ -367,9 +367,9 @@ export const OverviewPage: React.FC = () => {
 
         {/* Daily Money Check-In Callout */}
         {hasDailyCheckInIssues && (
-          <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-custom-xl p-5 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-subtle select-none">
+          <div className="bg-brand-orange/10 border border-brand-orange/20 rounded-custom-xl p-5 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-subtle select-none">
             <div className="flex items-start gap-3">
-              <Calendar className="text-brand-purple shrink-0 mt-0.5" size={20} />
+              <Calendar className="text-brand-orange shrink-0 mt-0.5" size={20} />
               <div>
                 <h4 className="text-sm font-bold text-text-primary">Daily Money Check-In</h4>
                 <p className="text-xs text-text-secondary mt-1">
@@ -379,7 +379,7 @@ export const OverviewPage: React.FC = () => {
             </div>
             <button
               onClick={() => setIsDailyCheckInOpen(true)}
-              className="px-4.5 py-2.5 bg-brand-purple hover:bg-brand-purple/95 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all shrink-0 self-end md:self-center"
+              className="px-4.5 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all shrink-0 self-end md:self-center"
             >
               Start 60s Check-In
             </button>
@@ -390,10 +390,10 @@ export const OverviewPage: React.FC = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Primary Hero: Available Balance */}
-            <div className="lg:col-span-2 bg-gradient-to-br from-brand-purple/15 to-brand-purple/5 border border-brand-purple/20 rounded-custom-xl p-5 flex flex-col justify-between shadow-lg relative overflow-hidden min-h-[7rem]">
-              <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-36 h-36 rounded-full bg-brand-purple/5 blur-3xl pointer-events-none" />
+            <div className="lg:col-span-2 bg-gradient-to-br from-brand-orange/15 to-brand-orange/5 border border-brand-orange/20 rounded-custom-xl p-5 flex flex-col justify-between shadow-lg relative overflow-hidden min-h-[7rem]">
+              <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-36 h-36 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none" />
               <div>
-                <span className="text-[10px] font-semibold text-brand-purple uppercase tracking-wider bg-brand-purple/10 px-2 py-0.5 rounded-custom-full">
+                <span className="text-[10px] font-semibold text-brand-orange uppercase tracking-wider bg-brand-orange/10 px-2 py-0.5 rounded-custom-full">
                   Liquid Funds
                 </span>
                 <h4 className="text-xs font-semibold text-text-secondary mt-2">Available Balance</h4>
@@ -466,7 +466,7 @@ export const OverviewPage: React.FC = () => {
               <span className="text-text-secondary text-[10px] font-semibold uppercase tracking-wider">
                 Savings Rate
               </span>
-              <p className="text-lg font-bold text-brand-purple mt-1 tabular-nums">
+              <p className="text-lg font-bold text-brand-orange mt-1 tabular-nums">
                 {formatMultiPercentage(data.savingsRate)}
               </p>
               <div className="flex items-center gap-1 mt-1.5 text-[10px] text-text-muted">
@@ -480,7 +480,7 @@ export const OverviewPage: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base md:text-lg font-bold text-text-primary flex items-center gap-2">
-              <Sparkles size={18} className="text-brand-purple animate-pulse" />
+              <Sparkles size={18} className="text-brand-orange animate-pulse" />
               Questions about your money
             </h3>
             <span className="text-xs text-text-secondary font-medium hidden md:inline">
@@ -517,7 +517,7 @@ export const OverviewPage: React.FC = () => {
                     {ins.actionPath && (
                       <Link
                         to={ins.actionPath}
-                        className="text-xs font-bold text-brand-purple group-hover:underline flex items-center gap-0.5 cursor-pointer"
+                        className="text-xs font-bold text-brand-orange group-hover:underline flex items-center gap-0.5 cursor-pointer"
                       >
                         {ins.actionLabel || 'Analyze'} <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                       </Link>
@@ -558,7 +558,7 @@ export const OverviewPage: React.FC = () => {
               </button>
               <button
                 onClick={() => handleOpenQuickAdd('transfer')}
-                className="py-2.5 bg-brand-purple/10 hover:bg-brand-purple/15 text-brand-purple font-semibold text-xs md:text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-brand-purple/20"
+                className="py-2.5 bg-brand-orange/10 hover:bg-brand-orange/15 text-brand-orange font-semibold text-xs md:text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-brand-orange/20"
               >
                 <ArrowLeftRight size={14} /> Transfer
               </button>
@@ -569,7 +569,7 @@ export const OverviewPage: React.FC = () => {
           <div className="lg:col-span-2 bg-surface-primary border border-border-neutral rounded-custom-xl p-6 shadow-sm flex flex-col justify-between">
             <div>
               <h3 className="text-base font-bold text-text-primary flex items-center gap-2">
-                <Clock size={16} className="text-brand-purple" /> Today at a glance
+                <Clock size={16} className="text-brand-orange" /> Today at a glance
               </h3>
               <p className="text-xs text-text-secondary mt-1">Summary of today's activity.</p>
             </div>
@@ -614,7 +614,7 @@ export const OverviewPage: React.FC = () => {
           <div className="bg-surface-primary border border-border-neutral rounded-custom-xl p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-border-neutral/40">
               <h3 className="text-base font-bold text-text-primary">Spending Breakdown</h3>
-              <Link to="/transactions?type=expense" className="text-xs font-bold text-brand-purple hover:underline">
+              <Link to="/transactions?type=expense" className="text-xs font-bold text-brand-orange hover:underline">
                 View All
               </Link>
             </div>
@@ -633,7 +633,7 @@ export const OverviewPage: React.FC = () => {
                     {/* Compact Custom CSS Bar Indicator */}
                     <div className="w-full bg-surface-secondary rounded-full h-2.5 overflow-hidden">
                       <div
-                        className="bg-brand-purple h-full rounded-full transition-all duration-500"
+                        className="bg-brand-orange h-full rounded-full transition-all duration-500"
                         style={{ width: `${share.percentage}%` }}
                       />
                     </div>
@@ -653,7 +653,7 @@ export const OverviewPage: React.FC = () => {
               <h3 className="text-base font-bold text-text-primary">Cash Flow</h3>
               <div className="flex items-center gap-3 text-xs text-text-secondary">
                 <span className="flex items-center gap-1">
-                  <span className="inline-block w-2.5 h-2.5 rounded bg-brand-purple" /> Income
+                  <span className="inline-block w-2.5 h-2.5 rounded bg-brand-orange" /> Income
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="inline-block w-2.5 h-2.5 rounded bg-surface-secondary border border-border-neutral" /> Expense
@@ -669,7 +669,7 @@ export const OverviewPage: React.FC = () => {
                   <p className="text-lg font-bold text-state-positive tabular-nums">
                     {formatMultiCurrency(data.periodIncome)}
                   </p>
-                  <div className="w-8 h-1 bg-brand-purple rounded-full mx-auto mt-2" />
+                  <div className="w-8 h-1 bg-brand-orange rounded-full mx-auto mt-2" />
                 </div>
                 <div className="space-y-1 bg-surface-secondary/20 border border-border-neutral/40 rounded-custom-lg p-4 flex-1 mx-2">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">Total Expenses</span>
@@ -698,7 +698,7 @@ export const OverviewPage: React.FC = () => {
 
                       <div className="flex items-end gap-1 w-full h-full justify-center">
                         <div
-                          className="w-2 md:w-3 bg-brand-purple rounded-t-custom-xs transition-all duration-300"
+                          className="w-2 md:w-3 bg-brand-orange rounded-t-custom-xs transition-all duration-300"
                           style={{ height: `${Math.max(incPct, 2)}%` }}
                         />
                         <div
@@ -722,9 +722,9 @@ export const OverviewPage: React.FC = () => {
         <div className="bg-surface-primary border border-border-neutral rounded-custom-xl p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-border-neutral/40">
             <h3 className="text-base font-bold text-text-primary flex items-center gap-2">
-              <Target size={18} className="text-brand-purple" /> Goal progress
+              <Target size={18} className="text-brand-orange" /> Goal progress
             </h3>
-            <Link to="/goals" className="text-xs font-bold text-brand-purple hover:underline">
+            <Link to="/goals" className="text-xs font-bold text-brand-orange hover:underline">
               View All
             </Link>
           </div>
@@ -769,7 +769,7 @@ export const OverviewPage: React.FC = () => {
                             ? 'bg-state-positive/10 text-state-positive'
                             : pace === 'behind'
                             ? 'bg-state-expense/10 text-state-expense animate-pulse'
-                            : 'bg-brand-purple/10 text-brand-purple'
+                            : 'bg-brand-orange/10 text-brand-orange'
                         }`}>
                           {pace === 'ahead' ? 'Ahead' : pace === 'behind' ? 'Behind' : 'On Track'}
                         </span>
@@ -783,7 +783,7 @@ export const OverviewPage: React.FC = () => {
                     <div className="space-y-1.5">
                       <div className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-brand-purple h-full rounded-full transition-all duration-300"
+                          className="bg-brand-orange h-full rounded-full transition-all duration-300"
                           style={{ width: `${Math.min(progress, 100)}%` }}
                         />
                       </div>
@@ -808,7 +808,7 @@ export const OverviewPage: React.FC = () => {
       <div className="md:hidden fixed bottom-6 right-6 z-40">
         <button
           onClick={() => handleOpenQuickAdd('expense')}
-          className="w-14 h-14 bg-brand-purple hover:bg-brand-purple/95 text-text-primary rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+          className="w-14 h-14 bg-brand-orange hover:bg-brand-orange-hover text-text-primary rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer"
         >
           <Plus size={28} />
         </button>

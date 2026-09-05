@@ -38,7 +38,7 @@ export const CategoryAllocations: React.FC<CategoryAllocationsProps> = ({
   const getProgressColor = (usage: number) => {
     if (usage >= 100) return 'bg-state-expense'
     if (usage >= 85) return 'bg-amber-500'
-    return 'bg-brand-purple'
+    return 'bg-brand-orange'
   }
 
   return (
@@ -142,7 +142,7 @@ export const CategoryAllocations: React.FC<CategoryAllocationsProps> = ({
 
         {totalUnallocatedAmount > 0 && (
           <div className="flex items-start gap-2 bg-surface-secondary border border-border-neutral rounded-custom-md p-3.5 text-xs text-text-secondary">
-            <AlertCircle size={14} className="shrink-0 mt-0.5 text-brand-purple" />
+            <AlertCircle size={14} className="shrink-0 mt-0.5 text-brand-orange" />
             <span>
               You have {formatCurrency(totalUnallocatedAmount)} of your spending limit unallocated. You can edit this plan to assign it to category budgets.
             </span>

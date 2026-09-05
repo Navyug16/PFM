@@ -86,7 +86,7 @@ export const SpendingBreakdown: React.FC<SpendingBreakdownProps> = ({ breakdown 
             {/* Progress bar */}
             <div className="w-full bg-surface-primary rounded-full h-2 border border-border-neutral overflow-hidden">
               <div
-                className="bg-brand-purple h-full rounded-full transition-all duration-300"
+                className="bg-brand-orange h-full rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(item.percentage, 100)}%` }}
               />
             </div>

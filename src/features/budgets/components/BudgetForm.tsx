@@ -149,7 +149,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
           <input
             id="budgetName"
             type="text"
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-purple"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-orange"
             placeholder="e.g. July 2026 Household Budget"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -165,7 +165,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
             <input
               id="budgetStart"
               type="date"
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-purple"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-orange"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               disabled={loading}
@@ -179,7 +179,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
             <input
               id="budgetEnd"
               type="date"
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-purple"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-orange"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               disabled={loading}
@@ -195,7 +195,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
             id="budgetLimit"
             type="number"
             step="0.01"
-            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-purple font-mono"
+            className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3.5 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-orange font-mono"
             placeholder="e.g. 30000"
             value={totalLimit}
             onChange={(e) => setTotalLimit(e.target.value)}
@@ -230,7 +230,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
                 <input
                   type="number"
                   step="1"
-                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-2 py-1 text-xs text-text-primary text-right font-mono focus:outline-none focus:border-brand-purple"
+                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-2 py-1 text-xs text-text-primary text-right font-mono focus:outline-none focus:border-brand-orange"
                   placeholder="0"
                   value={allocations[cat.id] || ''}
                   onChange={(e) => handleAllocationChange(cat.id, e.target.value)}
@@ -277,7 +277,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
         )}
         <button
           type="submit"
-          className="flex items-center gap-1.5 px-4 py-2 bg-brand-purple hover:bg-brand-purple/90 text-white rounded-custom-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1.5 px-4 py-2 bg-brand-orange hover:bg-brand-orange-hover text-white rounded-custom-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={loading || isAllocationOverBudget}
         >
           <Save size={14} />

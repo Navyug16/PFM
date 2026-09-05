@@ -76,7 +76,7 @@ export const LoginPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-bg-primary px-4 py-12">
       <div className="w-full max-w-md bg-surface-primary border border-border-neutral rounded-custom-lg p-8 shadow-elevated">
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-brand-purple/10 text-brand-purple rounded-full mb-4">
+          <div className="p-3 bg-brand-orange/10 text-brand-orange rounded-full mb-4">
             <Shield size={32} />
           </div>
           <h2 className="text-2xl font-bold text-text-primary tracking-tight">Welcome back</h2>
@@ -113,7 +113,7 @@ export const LoginPage: React.FC = () => {
               className={`w-full bg-surface-secondary border rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                 emailError
                   ? 'border-state-expense focus:border-state-expense'
-                  : 'border-border-neutral focus:border-brand-purple'
+                  : 'border-border-neutral focus:border-brand-orange'
               }`}
             />
             {emailError && (
@@ -133,7 +133,7 @@ export const LoginPage: React.FC = () => {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-xs font-medium text-brand-purple hover:text-brand-purple/80 transition-colors"
+                className="text-xs font-medium text-brand-orange hover:text-brand-orange-hover transition-colors"
               >
                 Forgot password?
               </Link>
@@ -154,7 +154,7 @@ export const LoginPage: React.FC = () => {
                 className={`w-full bg-surface-secondary border rounded-custom-md pl-4 pr-10 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                   passwordError
                     ? 'border-state-expense focus:border-state-expense'
-                    : 'border-border-neutral focus:border-brand-purple'
+                    : 'border-border-neutral focus:border-brand-orange'
                 }`}
               />
               <button
@@ -176,7 +176,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 disabled:bg-brand-purple/40 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover disabled:opacity-50 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -193,7 +193,7 @@ export const LoginPage: React.FC = () => {
           <span className="text-text-secondary">Don't have an account? </span>
           <Link
             to="/signup"
-            className="text-brand-purple hover:text-brand-purple/80 font-medium transition-colors"
+            className="text-brand-orange hover:text-brand-orange-hover font-medium transition-colors"
           >
             Sign up
           </Link>

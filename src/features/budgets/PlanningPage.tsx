@@ -127,7 +127,7 @@ export const PlanningPage: React.FC = () => {
             title="No Active Spending Plan"
             description="Create a monthly budget to unlock safe-to-spend insights, category limits tracking, and variance alerts."
             actionLabel="Setup Spending Plan"
-            icon={<Sliders className="text-brand-purple" size={40} />}
+            icon={<Sliders className="text-brand-orange" size={40} />}
             onAction={() => setIsFormOpen(true)}
           />
         </div>

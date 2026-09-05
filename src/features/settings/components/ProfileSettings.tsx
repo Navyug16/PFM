@@ -78,7 +78,7 @@ export const ProfileSettings: React.FC = () => {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               disabled={loading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-10 pr-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-10 pr-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               placeholder="Enter your name"
             />
           </div>
@@ -111,7 +111,7 @@ export const ProfileSettings: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Saving Changes...' : 'Save Profile'}
         </button>

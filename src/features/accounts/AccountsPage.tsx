@@ -130,7 +130,7 @@ export const AccountsPage: React.FC = () => {
         {/* Creation Form */}
         <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-6 h-fit">
           <h3 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Plus size={18} className="text-brand-purple" /> Create Account
+            <Plus size={18} className="text-brand-orange" /> Create Account
           </h3>
 
           {formError && (
@@ -152,7 +152,7 @@ export const AccountsPage: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. HDFC Checking"
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               />
             </div>
 
@@ -165,7 +165,7 @@ export const AccountsPage: React.FC = () => {
                 value={type}
                 onChange={(e) => setType(e.target.value as AccountType)}
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               >
                 <option value="checking">Checking</option>
                 <option value="savings">Savings</option>
@@ -190,7 +190,7 @@ export const AccountsPage: React.FC = () => {
                   onChange={(e) => setCurrency(e.target.value)}
                   placeholder="INR"
                   disabled={actionLoading}
-                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all uppercase"
+                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all uppercase"
                 />
               </div>
 
@@ -206,7 +206,7 @@ export const AccountsPage: React.FC = () => {
                   onChange={(e) => setOpeningBalance(e.target.value)}
                   placeholder="0.00"
                   disabled={actionLoading}
-                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-purple transition-all"
+                  className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
                 />
               </div>
             </div>
@@ -214,7 +214,7 @@ export const AccountsPage: React.FC = () => {
             <button
               type="submit"
               disabled={actionLoading}
-              className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               {actionLoading ? 'Saving...' : 'Add Account'}
             </button>
@@ -260,7 +260,7 @@ export const AccountsPage: React.FC = () => {
             <EmptyState
               title="No Accounts Found"
               description="Create your first account on the left to start tracking assets and liabilities."
-              icon={<Landmark size={32} className="text-brand-purple" />}
+              icon={<Landmark size={32} className="text-brand-orange" />}
             />
           ) : (
             <div className="space-y-4">
@@ -276,7 +276,7 @@ export const AccountsPage: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-surface-secondary rounded-custom-md text-brand-purple border border-border-neutral">
+                      <div className="p-3 bg-surface-secondary rounded-custom-md text-brand-orange border border-border-neutral">
                         <Landmark size={20} />
                       </div>
                       <div>
@@ -310,7 +310,7 @@ export const AccountsPage: React.FC = () => {
                             onClick={() => handleArchive(acc.id)}
                             title="Archive Account"
                             disabled={actionLoading}
-                            className="p-2 text-text-secondary hover:text-brand-purple hover:bg-surface-secondary rounded transition-colors cursor-pointer border-none bg-transparent"
+                            className="p-2 text-text-secondary hover:text-brand-orange hover:bg-surface-secondary rounded transition-colors cursor-pointer border-none bg-transparent"
                           >
                             <Archive size={16} />
                           </button>

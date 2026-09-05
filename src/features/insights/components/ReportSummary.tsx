@@ -137,7 +137,7 @@ export const ReportSummary: React.FC<ReportSummaryProps> = ({
         <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">
           Savings Rate
         </span>
-        <h3 className="text-2xl font-extrabold text-brand-purple">
+        <h3 className="text-2xl font-extrabold text-brand-orange">
           {savingsRate.toFixed(1)}%
         </h3>
         <div className="flex items-center gap-1 mt-1">

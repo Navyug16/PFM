@@ -101,7 +101,7 @@ export const RecurringPage: React.FC = () => {
             setSelectedRule(null)
             setIsFormOpen(true)
           }}
-          className="flex items-center gap-1.5 px-4 py-2 bg-brand-purple hover:bg-brand-purple/90 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all shrink-0"
+          className="flex items-center gap-1.5 px-4 py-2 bg-brand-orange hover:bg-brand-orange-hover text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all shrink-0"
         >
           <Plus size={16} /> Create Rule
         </button>
@@ -113,7 +113,7 @@ export const RecurringPage: React.FC = () => {
           onClick={() => setActiveTab('rules')}
           className={`pb-3 transition-all cursor-pointer ${
             activeTab === 'rules'
-              ? 'text-brand-purple border-b-2 border-brand-purple'
+              ? 'text-brand-orange border-b-2 border-brand-orange'
               : 'text-text-secondary hover:text-text-primary'
           }`}
         >
@@ -123,7 +123,7 @@ export const RecurringPage: React.FC = () => {
           onClick={() => setActiveTab('timeline')}
           className={`pb-3 transition-all cursor-pointer ${
             activeTab === 'timeline'
-              ? 'text-brand-purple border-b-2 border-brand-purple'
+              ? 'text-brand-orange border-b-2 border-brand-orange'
               : 'text-text-secondary hover:text-text-primary'
           }`}
         >
@@ -133,7 +133,7 @@ export const RecurringPage: React.FC = () => {
 
       {loading ? (
         <div className="mt-12 flex justify-center py-8">
-          <RefreshCw size={24} className="animate-spin text-brand-purple" />
+          <RefreshCw size={24} className="animate-spin text-brand-orange" />
         </div>
       ) : error ? (
         <div className="mt-12 p-4 bg-state-expense/10 border border-state-expense/20 text-state-expense text-sm rounded-custom-md max-w-xl mx-auto flex items-center gap-2">
@@ -217,7 +217,7 @@ export const RecurringPage: React.FC = () => {
                           <button
                             onClick={() => handleEditClick(rule)}
                             title="Edit Rule"
-                            className="p-1.5 hover:bg-surface-secondary rounded-custom-md text-text-secondary hover:text-brand-purple cursor-pointer transition-all"
+                            className="p-1.5 hover:bg-surface-secondary rounded-custom-md text-text-secondary hover:text-brand-orange cursor-pointer transition-all"
                           >
                             <Edit2 size={14} />
                           </button>
@@ -270,7 +270,7 @@ export const RecurringPage: React.FC = () => {
                           isOverdue
                             ? 'bg-state-expense/10 text-state-expense border border-state-expense/25'
                             : isToday
-                            ? 'bg-brand-purple/10 text-brand-purple border border-brand-purple/25'
+                            ? 'bg-brand-orange/10 text-brand-orange border border-brand-orange/25'
                             : 'bg-surface-secondary text-text-secondary border border-border-neutral'
                         }`}>
                           {isOverdue ? 'Overdue' : isToday ? 'Due Today' : 'Upcoming'}

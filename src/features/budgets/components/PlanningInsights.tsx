@@ -123,7 +123,7 @@ export const PlanningInsights: React.FC<PlanningInsightsProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <Sparkles size={18} className="text-brand-purple" />
+        <Sparkles size={18} className="text-brand-orange" />
         <h3 className="text-base font-bold text-text-primary">Planning Insights</h3>
       </div>
 

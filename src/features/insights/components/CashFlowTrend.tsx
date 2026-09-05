@@ -48,7 +48,7 @@ export const CashFlowTrend: React.FC<CashFlowTrendProps> = ({ trendPoints }) => 
           </div>
           <div>
             <span className="text-xs text-text-secondary font-semibold block">Savings Rate</span>
-            <span className="text-sm font-bold text-brand-purple mt-1 block">
+            <span className="text-sm font-bold text-brand-orange mt-1 block">
               {pt.savingsRate.toFixed(0)}%
             </span>
           </div>

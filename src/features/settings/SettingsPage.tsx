@@ -43,7 +43,7 @@ export const SettingsPage: React.FC = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-custom-md text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap ${
                     isActive
-                      ? 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20'
+                      ? 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20'
                       : 'text-text-secondary hover:text-text-primary hover:bg-surface-secondary/40 border border-transparent'
                   }`}
                 >

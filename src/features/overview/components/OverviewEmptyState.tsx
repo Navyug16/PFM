@@ -14,7 +14,7 @@ export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
   if (type === 'no_accounts') {
     return (
       <div className="flex flex-col items-center justify-center text-center p-8 bg-surface-primary border border-border-neutral rounded-custom-xl max-w-lg mx-auto mt-12 space-y-6">
-        <div className="p-4 bg-brand-purple/10 rounded-full text-brand-purple">
+        <div className="p-4 bg-brand-orange/10 rounded-full text-brand-orange">
           <Landmark size={36} />
         </div>
         <div className="space-y-2">
@@ -25,7 +25,7 @@ export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
         </div>
         <Link
           to="/accounts"
-          className="px-5 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-semibold text-sm rounded-custom-md flex items-center gap-2 transition-all cursor-pointer"
+          className="px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-semibold text-sm rounded-custom-md flex items-center gap-2 transition-all cursor-pointer"
         >
           Manage Accounts <ArrowRight size={16} />
         </Link>
@@ -36,7 +36,7 @@ export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
   if (type === 'no_transactions') {
     return (
       <div className="flex flex-col items-center justify-center text-center p-8 bg-surface-primary border border-border-neutral rounded-custom-xl max-w-lg mx-auto mt-12 space-y-6">
-        <div className="p-4 bg-brand-purple/10 rounded-full text-brand-purple">
+        <div className="p-4 bg-brand-orange/10 rounded-full text-brand-orange">
           <Wallet size={36} />
         </div>
         <div className="space-y-2">
@@ -48,14 +48,14 @@ export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
         {onQuickAction ? (
           <button
             onClick={onQuickAction}
-            className="px-5 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-semibold text-sm rounded-custom-md flex items-center gap-2 transition-all cursor-pointer"
+            className="px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-semibold text-sm rounded-custom-md flex items-center gap-2 transition-all cursor-pointer"
           >
             Add Transaction <ArrowRight size={16} />
           </button>
         ) : (
           <Link
             to="/transactions"
-            className="px-5 py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-semibold text-sm rounded-custom-md flex items-center gap-2 transition-all cursor-pointer"
+            className="px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-semibold text-sm rounded-custom-md flex items-center gap-2 transition-all cursor-pointer"
           >
             Go to Transactions <ArrowRight size={16} />
           </Link>
@@ -83,7 +83,7 @@ export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
   if (type === 'no_goals') {
     return (
       <div className="flex flex-col items-center justify-center text-center p-6 bg-surface-primary/40 border border-border-neutral/60 rounded-custom-xl space-y-3">
-        <div className="p-3 bg-brand-purple/10 rounded-full text-brand-purple">
+        <div className="p-3 bg-brand-orange/10 rounded-full text-brand-orange">
           <Target size={24} />
         </div>
         <div className="space-y-1">
@@ -94,7 +94,7 @@ export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
         </div>
         <Link
           to="/goals"
-          className="text-xs font-bold text-brand-purple hover:underline flex items-center gap-1 cursor-pointer"
+          className="text-xs font-bold text-brand-orange hover:underline flex items-center gap-1 cursor-pointer"
         >
           Create Savings Goal <ArrowRight size={12} />
         </Link>

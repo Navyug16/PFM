@@ -27,15 +27,15 @@ export const InsightCards: React.FC<InsightCardsProps> = ({ insights }) => {
 
   const severityIcons = {
     positive: <CheckCircle size={18} className="text-state-income shrink-0 mt-0.5" />,
-    neutral: <Sparkles size={18} className="text-brand-purple shrink-0 mt-0.5" />,
-    review: <AlertTriangle size={18} className="text-brand-purple shrink-0 mt-0.5" />,
+    neutral: <Sparkles size={18} className="text-brand-orange shrink-0 mt-0.5" />,
+    review: <AlertTriangle size={18} className="text-brand-orange shrink-0 mt-0.5" />,
     important: <AlertCircle size={18} className="text-state-expense shrink-0 mt-0.5" />
   }
 
   const severityClasses = {
     positive: 'border-state-income/20 bg-state-income/5 text-text-primary',
     neutral: 'border-border-neutral bg-surface-secondary text-text-primary',
-    review: 'border-brand-purple/20 bg-brand-purple/5 text-text-primary',
+    review: 'border-brand-orange/20 bg-brand-orange/5 text-text-primary',
     important: 'border-state-expense/20 bg-state-expense/5 text-text-primary'
   }
 
@@ -43,13 +43,13 @@ export const InsightCards: React.FC<InsightCardsProps> = ({ insights }) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-base font-bold text-text-primary flex items-center gap-2">
-          <Sparkles size={18} className="text-brand-purple" />
+          <Sparkles size={18} className="text-brand-orange" />
           <span>Prioritized Financial Insights</span>
         </h3>
         {insights.length > 3 && (
           <button
             onClick={() => setShowAll(!showAll)}
-            className="text-xs font-bold text-brand-purple hover:underline cursor-pointer transition-all"
+            className="text-xs font-bold text-brand-orange hover:underline cursor-pointer transition-all"
           >
             {showAll ? 'Show Fewer Insights' : `View All (${insights.length})`}
           </button>
@@ -84,7 +84,7 @@ export const InsightCards: React.FC<InsightCardsProps> = ({ insights }) => {
             {insight.actionLabel && insight.actionPath && (
               <Link
                 to={insight.actionPath}
-                className="inline-flex items-center gap-1 text-xs font-bold text-brand-purple hover:underline self-start pl-7 transition-all"
+                className="inline-flex items-center gap-1 text-xs font-bold text-brand-orange hover:underline self-start pl-7 transition-all"
               >
                 <span>{insight.actionLabel}</span>
                 <ArrowRight size={12} />

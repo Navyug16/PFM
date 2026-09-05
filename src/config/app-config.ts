@@ -19,7 +19,7 @@ export const APP_CONFIG = {
   
   // PWA manifest variables
   pwa: {
-    themeColor: '#7c3aed', // Purple theme
+    themeColor: '#f97316', // Orange theme
     backgroundColor: '#09090b', // Sleek dark slate
   }
 }

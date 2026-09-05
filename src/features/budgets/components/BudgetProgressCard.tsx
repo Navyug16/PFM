@@ -51,7 +51,7 @@ export const BudgetProgressCard: React.FC<BudgetProgressCardProps> = ({
   const getProgressColor = () => {
     if (usagePercentage >= 100) return 'bg-state-expense'
     if (usagePercentage >= 85) return 'bg-amber-500'
-    return 'bg-brand-purple'
+    return 'bg-brand-orange'
   }
 
   const formatDate = (dateStr: string) => {

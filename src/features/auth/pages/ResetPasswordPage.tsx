@@ -102,7 +102,7 @@ export const ResetPasswordPage: React.FC = () => {
           </p>
           <button
             onClick={() => navigate('/overview')}
-            className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 cursor-pointer text-center block border-none"
+            className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 cursor-pointer text-center block border-none"
           >
             Enter Dashboard
           </button>
@@ -115,7 +115,7 @@ export const ResetPasswordPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-bg-primary px-4 py-12">
       <div className="w-full max-w-md bg-surface-primary border border-border-neutral rounded-custom-lg p-8 shadow-elevated">
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-brand-purple/10 text-brand-purple rounded-full mb-4">
+          <div className="p-3 bg-brand-orange/10 text-brand-orange rounded-full mb-4">
             <ShieldCheck size={32} />
           </div>
           <h2 className="text-2xl font-bold text-text-primary tracking-tight">Create new password</h2>
@@ -155,7 +155,7 @@ export const ResetPasswordPage: React.FC = () => {
                 className={`w-full bg-surface-secondary border rounded-custom-md pl-4 pr-10 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                   passwordError
                     ? 'border-state-expense focus:border-state-expense'
-                    : 'border-border-neutral focus:border-brand-purple'
+                    : 'border-border-neutral focus:border-brand-orange'
                 }`}
               />
               <button
@@ -197,7 +197,7 @@ export const ResetPasswordPage: React.FC = () => {
                 className={`w-full bg-surface-secondary border rounded-custom-md pl-4 pr-10 py-2.5 text-text-primary text-sm outline-none transition-all duration-200 ${
                   confirmPasswordError
                     ? 'border-state-expense focus:border-state-expense'
-                    : 'border-border-neutral focus:border-brand-purple'
+                    : 'border-border-neutral focus:border-brand-orange'
                 }`}
               />
               <button
@@ -219,7 +219,7 @@ export const ResetPasswordPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-brand-purple hover:bg-brand-purple/90 disabled:bg-brand-purple/40 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-4 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange-hover disabled:opacity-50 text-text-primary font-medium text-sm rounded-custom-md transition-all duration-200 mt-4 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

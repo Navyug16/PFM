@@ -15,7 +15,7 @@ export const DataPrivacySettings: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
         {/* RLS Security */}
         <div className="flex gap-4 p-4 bg-surface-secondary/40 border border-border-neutral/60 rounded-custom-lg">
-          <ShieldCheck size={20} className="text-brand-purple shrink-0 mt-0.5" />
+          <ShieldCheck size={20} className="text-brand-orange shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h4 className="text-xs font-bold text-text-primary">Row-Level Security (RLS)</h4>
             <p className="text-xs text-text-secondary leading-relaxed">
@@ -26,7 +26,7 @@ export const DataPrivacySettings: React.FC = () => {
 
         {/* Local CSV Assembling */}
         <div className="flex gap-4 p-4 bg-surface-secondary/40 border border-border-neutral/60 rounded-custom-lg">
-          <HardDrive size={20} className="text-brand-purple shrink-0 mt-0.5" />
+          <HardDrive size={20} className="text-brand-orange shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h4 className="text-xs font-bold text-text-primary">Local CSV Compile</h4>
             <p className="text-xs text-text-secondary leading-relaxed">
@@ -37,7 +37,7 @@ export const DataPrivacySettings: React.FC = () => {
 
         {/* Zero Sync */}
         <div className="flex gap-4 p-4 bg-surface-secondary/40 border border-border-neutral/60 rounded-custom-lg">
-          <RefreshCw size={20} className="text-brand-purple shrink-0 mt-0.5" />
+          <RefreshCw size={20} className="text-brand-orange shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h4 className="text-xs font-bold text-text-primary">No Automatic Banking Sync</h4>
             <p className="text-xs text-text-secondary leading-relaxed">
@@ -48,7 +48,7 @@ export const DataPrivacySettings: React.FC = () => {
 
         {/* Browser storage */}
         <div className="flex gap-4 p-4 bg-surface-secondary/40 border border-border-neutral/60 rounded-custom-lg">
-          <Eye size={20} className="text-brand-purple shrink-0 mt-0.5" />
+          <Eye size={20} className="text-brand-orange shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h4 className="text-xs font-bold text-text-primary">Minimal Cache Cookies</h4>
             <p className="text-xs text-text-secondary leading-relaxed">

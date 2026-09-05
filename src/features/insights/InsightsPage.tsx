@@ -53,7 +53,7 @@ export const InsightsPage: React.FC = () => {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center min-h-[300px] bg-surface-secondary border border-border-neutral rounded-custom-xl p-8 text-center space-y-3">
-            <RefreshCw size={28} className="animate-spin text-brand-purple" />
+            <RefreshCw size={28} className="animate-spin text-brand-orange" />
             <p className="text-sm font-semibold text-text-secondary">Compiling ledger reports...</p>
           </div>
         ) : error ? (
@@ -61,7 +61,7 @@ export const InsightsPage: React.FC = () => {
             <span>{error}</span>
             <button
               onClick={() => refetch()}
-              className="block mx-auto mt-2 text-xs font-bold text-brand-purple hover:underline cursor-pointer"
+              className="block mx-auto mt-2 text-xs font-bold text-brand-orange hover:underline cursor-pointer"
             >
               Retry Compilation
             </button>

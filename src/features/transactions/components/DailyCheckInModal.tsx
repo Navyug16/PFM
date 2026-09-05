@@ -128,19 +128,19 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
 
         {/* Steps Breadcrumbs Indicator */}
         <div className="bg-surface-secondary px-6 py-2 border-b border-border-neutral flex gap-4 text-xs font-semibold select-none shrink-0">
-          <span className={step === 'recurring' ? 'text-brand-purple' : 'text-text-secondary'}>
+          <span className={step === 'recurring' ? 'text-brand-orange' : 'text-text-secondary'}>
             1. Bills ({pendingOccurrences.length})
           </span>
           <span className="text-border-neutral">/</span>
-          <span className={step === 'duplicates' ? 'text-brand-purple' : 'text-text-secondary'}>
+          <span className={step === 'duplicates' ? 'text-brand-orange' : 'text-text-secondary'}>
             2. Duplicates ({duplicateWarnings.length})
           </span>
           <span className="text-border-neutral">/</span>
-          <span className={step === 'quality' ? 'text-brand-purple' : 'text-text-secondary'}>
+          <span className={step === 'quality' ? 'text-brand-orange' : 'text-text-secondary'}>
             3. Quality ({qualityWarnings.length})
           </span>
           <span className="text-border-neutral">/</span>
-          <span className={step === 'quick-add' ? 'text-brand-purple' : 'text-text-secondary'}>
+          <span className={step === 'quick-add' ? 'text-brand-orange' : 'text-text-secondary'}>
             4. Quick Log
           </span>
         </div>
@@ -151,7 +151,7 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
           {step === 'recurring' && (
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-text-primary font-semibold mb-2">
-                <Calendar size={18} className="text-brand-purple" />
+                <Calendar size={18} className="text-brand-orange" />
                 <span>Confirm expected bills due today or overdue</span>
               </div>
               
@@ -178,7 +178,7 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
                       <button
                         onClick={() => handleConfirm(occ.id)}
                         disabled={actionLoading}
-                        className="px-3 py-1.5 bg-brand-purple hover:bg-brand-purple/90 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all"
+                        className="px-3 py-1.5 bg-brand-orange hover:bg-brand-orange-hover text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all"
                       >
                         Confirm
                       </button>
@@ -211,7 +211,7 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
           {step === 'quality' && (
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-text-primary font-semibold mb-2">
-                <AlertCircle size={18} className="text-brand-purple" />
+                <AlertCircle size={18} className="text-brand-orange" />
                 <span>Resolve transactions with quality warnings</span>
               </div>
               <div className="space-y-3">
@@ -234,7 +234,7 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
           {step === 'quick-add' && (
             <div className="space-y-4 max-w-md mx-auto">
               <div className="flex items-center gap-2 text-text-primary font-semibold mb-2 justify-center">
-                <Plus size={18} className="text-brand-purple" />
+                <Plus size={18} className="text-brand-orange" />
                 <span>Log any other expenses or income from today</span>
               </div>
               
@@ -257,7 +257,7 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
               </p>
               <button
                 onClick={onClose}
-                className="mt-4 px-6 py-2 bg-brand-purple hover:bg-brand-purple/95 text-text-primary font-semibold text-sm rounded-custom-md cursor-pointer transition-all"
+                className="mt-4 px-6 py-2 bg-brand-orange hover:bg-brand-orange-hover text-text-primary font-semibold text-sm rounded-custom-md cursor-pointer transition-all"
               >
                 Close Check-In
               </button>
@@ -271,7 +271,7 @@ export const DailyCheckInModal: React.FC<DailyCheckInModalProps> = ({
           <div className="px-6 py-4 border-t border-border-neutral bg-surface-secondary flex justify-end shrink-0">
             <button
               onClick={handleNext}
-              className="flex items-center gap-1 px-4 py-2 bg-brand-purple hover:bg-brand-purple/90 text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all"
+              className="flex items-center gap-1 px-4 py-2 bg-brand-orange hover:bg-brand-orange-hover text-text-primary text-xs font-semibold rounded-custom-md cursor-pointer transition-all"
             >
               Continue <ChevronRight size={14} />
             </button>

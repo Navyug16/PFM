@@ -8,17 +8,37 @@ import { APP_CONFIG } from '@/config/app-config'
  * Formats a number as a currency string.
  * Defaults to configuration defaults if not specified.
  */
-export const formatCurrency = (
+export function formatCurrency(
+  val: number,
+  currency?: string,
+  options?: Intl.NumberFormatOptions
+): string
+export function formatCurrency(
+  val: number,
+  currency?: string,
+  locale?: string,
+  options?: Intl.NumberFormatOptions
+): string
+export function formatCurrency(
   val: number,
   currency: string = APP_CONFIG.defaults.currency,
-  locale: string = APP_CONFIG.defaults.locale,
+  localeOrOptions?: string | Intl.NumberFormatOptions,
   options?: Intl.NumberFormatOptions
-): string => {
+): string {
+  let locale = APP_CONFIG.defaults.locale
+  let formatOpts = options
+
+  if (typeof localeOrOptions === 'string') {
+    locale = localeOrOptions
+  } else if (typeof localeOrOptions === 'object' && localeOrOptions !== null) {
+    formatOpts = localeOrOptions
+  }
+
   try {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency,
-      ...options,
+      ...formatOpts,
     }).format(val)
   } catch (err) {
     // Fallback if locale or currency code is invalid
@@ -26,7 +46,7 @@ export const formatCurrency = (
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      ...options,
+      ...formatOpts,
     }).format(val)
   }
 }

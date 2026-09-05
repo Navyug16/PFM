@@ -25,7 +25,7 @@ export const PlanningInsights: React.FC<PlanningInsightsProps> = ({
   remainingDays,
   categoryBreakdown,
 }) => {
-  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', undefined, { maximumFractionDigits: 0 })
 
   // Generate insights list
   const insights: {

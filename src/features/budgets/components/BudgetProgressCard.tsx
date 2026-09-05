@@ -31,7 +31,7 @@ export const BudgetProgressCard: React.FC<BudgetProgressCardProps> = ({
   paceStatus,
   daysCounts,
 }) => {
-  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', undefined, { maximumFractionDigits: 0 })
 
   const getPaceBadgeColor = () => {
     switch (paceStatus) {

@@ -128,7 +128,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     }
   }
 
-  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', undefined, { maximumFractionDigits: 0 })
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

@@ -18,7 +18,7 @@ export const CategoryAllocations: React.FC<CategoryAllocationsProps> = ({
   totalUnallocatedAmount,
   totalLimit,
 }) => {
-  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', { maximumFractionDigits: 0 })
+  const formatCurrency = (val: number) => sharedFormatCurrency(val, 'INR', undefined, { maximumFractionDigits: 0 })
 
   const getPaceColor = (status: string) => {
     switch (status) {

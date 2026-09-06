@@ -23,6 +23,7 @@ All automated test suites, type checking, linting, production builds, and git sc
 - **Transfer UX**: When transaction type is `transfer`, `TransactionForm.tsx` renders a highlighted `Transfer Flow (From Source Account → To Destination Account)` visual box, making account direction explicit.
 - **Category Picker**: Filtered by transaction type with high-contrast text and clean dropdown options.
 - **Data Quality & Daily Check-In**: [`DailyCheckInModal.tsx`](file:///e:/PFM/src/features/transactions/components/DailyCheckInModal.tsx), [`DuplicateWarningCard.tsx`](file:///e:/PFM/src/features/transactions/components/DuplicateWarningCard.tsx), and [`QualityWarningCard.tsx`](file:///e:/PFM/src/features/transactions/components/QualityWarningCard.tsx) remain intact and fully functional.
+- **Goal Summary Fix**: Updated [`GoalSummaryCard.tsx`](file:///e:/PFM/src/features/overview/components/GoalSummaryCard.tsx) status filter from `'in_progress'` to include `'active'` (the default database status for created goals), ensuring goals properly display on the Overview dashboard.
 
 ### 2.2 Recurring UI & Actions Verification
 - **Action Center (Tab 1)**: Pending occurrences sorted by urgency (**Overdue** $\rightarrow$ **Due Today** $\rightarrow$ **Upcoming**).

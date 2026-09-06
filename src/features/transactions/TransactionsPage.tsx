@@ -48,6 +48,19 @@ export const TransactionsPage: React.FC = () => {
   const [filterSearch, setFilterSearch] = useState('')
   const [filterDateFrom, setFilterDateFrom] = useState('')
   const [filterDateTo, setFilterDateTo] = useState('')
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+
+  const hasActiveFilters = Boolean(filterAccount || filterCategory || filterType || filterSearch || filterDateFrom || filterDateTo)
+  const activeFilterCount = [filterAccount, filterCategory, filterType, filterSearch, filterDateFrom, filterDateTo].filter(Boolean).length
+
+  const handleResetFilters = () => {
+    setFilterAccount('')
+    setFilterCategory('')
+    setFilterType('')
+    setFilterSearch('')
+    setFilterDateFrom('')
+    setFilterDateTo('')
+  }
 
   // Tag Attachment State
   const [selectedTxId, setSelectedTxId] = useState<string | null>(null)
@@ -244,10 +257,37 @@ export const TransactionsPage: React.FC = () => {
           
           {/* Filters Dashboard */}
           <div className="bg-surface-primary border border-border-neutral rounded-custom-lg p-5">
-            <h4 className="text-sm font-bold text-text-primary mb-3 flex items-center gap-2">
-              <Filter size={16} className="text-brand-orange" /> Filter Results
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-sm font-bold text-text-primary flex items-center gap-2">
+                <Filter size={16} className="text-brand-orange" /> Filter Results
+                {activeFilterCount > 0 && (
+                  <span className="text-[10px] bg-brand-orange/15 text-brand-orange px-2 py-0.5 rounded-custom-full font-bold">
+                    {activeFilterCount} Active
+                  </span>
+                )}
+              </h4>
+
+              <div className="flex items-center gap-2">
+                {hasActiveFilters && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="text-xs text-text-secondary hover:text-brand-orange font-semibold flex items-center gap-1 transition-all cursor-pointer"
+                  >
+                    <X size={12} /> Reset Filters
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setIsMobileFilterOpen(true)}
+                  className="sm:hidden px-3 py-1.5 bg-surface-secondary hover:bg-surface-secondary/80 border border-border-neutral rounded-custom-md text-xs font-semibold text-text-primary flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Filter size={14} /> Filter Drawer
+                </button>
+              </div>
+            </div>
+
+            {/* Desktop / Responsive Filters */}
+            <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <div className="relative">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                 <input
@@ -305,7 +345,134 @@ export const TransactionsPage: React.FC = () => {
                 className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2 text-xs text-text-primary outline-none focus:border-brand-orange"
               />
             </div>
+
+            {/* Quick Mobile Search Input when Drawer is Closed */}
+            <div className="sm:hidden relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <input
+                type="text"
+                placeholder="Search notes/payee..."
+                value={filterSearch}
+                onChange={(e) => setFilterSearch(e.target.value)}
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-9 pr-4 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+              />
+            </div>
           </div>
+
+          {/* Mobile Filter Drawer Sheet */}
+          {isMobileFilterOpen && (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:hidden">
+              <div className="bg-surface-primary border-t border-border-neutral rounded-t-custom-xl p-5 w-full max-h-[85vh] overflow-y-auto space-y-4">
+                <div className="flex items-center justify-between border-b border-border-neutral pb-3">
+                  <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
+                    <Filter size={16} className="text-brand-orange" /> Filter Transactions
+                  </h3>
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="p-1 hover:bg-surface-secondary rounded-custom-md text-text-secondary hover:text-text-primary"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-text-secondary text-xs font-semibold uppercase mb-1">Search</label>
+                    <div className="relative">
+                      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                      <input
+                        type="text"
+                        placeholder="Search notes/payee"
+                        value={filterSearch}
+                        onChange={(e) => setFilterSearch(e.target.value)}
+                        className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md pl-9 pr-4 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-text-secondary text-xs font-semibold uppercase mb-1">Account</label>
+                    <select
+                      value={filterAccount}
+                      onChange={(e) => setFilterAccount(e.target.value)}
+                      className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+                    >
+                      <option value="">All Accounts</option>
+                      {accounts.map((acc) => (
+                        <option key={acc.id} value={acc.id}>{acc.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-text-secondary text-xs font-semibold uppercase mb-1">Type</label>
+                    <select
+                      value={filterType}
+                      onChange={(e) => setFilterType(e.target.value)}
+                      className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+                    >
+                      <option value="">All Types</option>
+                      <option value="income">Income</option>
+                      <option value="expense">Expense</option>
+                      <option value="transfer">Transfer</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-text-secondary text-xs font-semibold uppercase mb-1">Category</label>
+                    <select
+                      value={filterCategory}
+                      onChange={(e) => setFilterCategory(e.target.value)}
+                      className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+                    >
+                      <option value="">All Categories</option>
+                      {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>{cat.name} ({cat.transaction_type})</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-text-secondary text-xs font-semibold uppercase mb-1">From Date</label>
+                      <input
+                        type="date"
+                        value={filterDateFrom}
+                        onChange={(e) => setFilterDateFrom(e.target.value)}
+                        className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-text-secondary text-xs font-semibold uppercase mb-1">To Date</label>
+                      <input
+                        type="date"
+                        value={filterDateTo}
+                        onChange={(e) => setFilterDateTo(e.target.value)}
+                        className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-3 py-2.5 text-xs text-text-primary outline-none focus:border-brand-orange"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2 border-t border-border-neutral">
+                  {hasActiveFilters && (
+                    <button
+                      onClick={handleResetFilters}
+                      className="flex-1 py-2.5 bg-surface-secondary text-text-secondary font-semibold text-xs rounded-custom-md border border-border-neutral"
+                    >
+                      Reset Filters
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="flex-1 py-2.5 bg-brand-orange text-text-primary font-semibold text-xs rounded-custom-md"
+                  >
+                    Apply Filters ({activeFilterCount})
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Inline Tag Attachment Dialog */}
           {selectedTxId && (

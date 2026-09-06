@@ -52,3 +52,32 @@ export interface DuplicateDismissal {
   tx2_id: string
   created_at: string
 }
+
+export type DerivedOccurrenceState = 'overdue' | 'due_today' | 'upcoming' | 'confirmed' | 'skipped'
+
+export function getDerivedOccurrenceState(
+  dueDate: string,
+  status: OccurrenceStatus,
+  todayStr: string = new Date().toISOString().split('T')[0]
+): DerivedOccurrenceState {
+  if (status === 'confirmed') return 'confirmed'
+  if (status === 'skipped') return 'skipped'
+  if (dueDate < todayStr) return 'overdue'
+  if (dueDate === todayStr) return 'due_today'
+  return 'upcoming'
+}
+
+export function calculateMonthlyCommitment(amount: number, frequency: FrequencyType): number {
+  switch (frequency) {
+    case 'weekly':
+      return (amount * 52) / 12
+    case 'monthly':
+      return amount
+    case 'quarterly':
+      return amount / 3
+    case 'yearly':
+      return amount / 12
+    default:
+      return amount
+  }
+}

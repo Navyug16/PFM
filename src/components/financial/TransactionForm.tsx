@@ -131,46 +131,72 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="tx-form-source" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">
-              {type === 'transfer' ? 'From Account' : 'Account'}
-            </label>
-            <select
-              id="tx-form-source"
-              value={accountId || (accounts.length > 0 ? accounts[0].id : '')}
-              onChange={(e) => setAccountId(e.target.value)}
-              disabled={actionLoading}
-              className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
-            >
-              <option value="" disabled>Select</option>
-              {accounts.map((acc) => (
-                <option key={acc.id} value={acc.id}>{acc.name}</option>
-              ))}
-            </select>
-          </div>
-
-          {type === 'transfer' ? (
-            <div>
-              <label htmlFor="tx-form-dest" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">
-                To Account
-              </label>
-              <select
-                id="tx-form-dest"
-                value={transferToAccountId}
-                onChange={(e) => setTransferToAccountId(e.target.value)}
-                disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
-              >
-                <option value="">Select Destination</option>
-                {accounts
-                  .filter((acc) => acc.id !== accountId)
-                  .map((acc) => (
+        {type === 'transfer' ? (
+          <div className="bg-surface-secondary/40 border border-border-neutral rounded-custom-md p-3.5 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-brand-orange uppercase tracking-wider">
+              <span>Transfer Flow</span>
+              <span className="text-text-secondary font-normal">(From Source Account → To Destination Account)</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="tx-form-source" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-1.5">
+                  From Account
+                </label>
+                <select
+                  id="tx-form-source"
+                  value={accountId || (accounts.length > 0 ? accounts[0].id : '')}
+                  onChange={(e) => setAccountId(e.target.value)}
+                  disabled={actionLoading}
+                  className="w-full bg-surface-primary border border-border-neutral rounded-custom-md px-3 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
+                >
+                  <option value="" disabled>Select Source</option>
+                  {accounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>{acc.name}</option>
                   ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="tx-form-dest" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-1.5">
+                  To Account
+                </label>
+                <select
+                  id="tx-form-dest"
+                  value={transferToAccountId}
+                  onChange={(e) => setTransferToAccountId(e.target.value)}
+                  disabled={actionLoading}
+                  className="w-full bg-surface-primary border border-border-neutral rounded-custom-md px-3 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
+                >
+                  <option value="">Select Destination</option>
+                  {accounts
+                    .filter((acc) => acc.id !== (accountId || (accounts.length > 0 ? accounts[0].id : '')))
+                    .map((acc) => (
+                      <option key={acc.id} value={acc.id}>{acc.name}</option>
+                    ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="tx-form-source" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">
+                Account
+              </label>
+              <select
+                id="tx-form-source"
+                value={accountId || (accounts.length > 0 ? accounts[0].id : '')}
+                onChange={(e) => setAccountId(e.target.value)}
+                disabled={actionLoading}
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
+              >
+                <option value="" disabled>Select Account</option>
+                {accounts.map((acc) => (
+                  <option key={acc.id} value={acc.id}>{acc.name}</option>
+                ))}
               </select>
             </div>
-          ) : (
+
             <div>
               <label htmlFor="tx-form-category" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">
                 Category
@@ -180,16 +206,18 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 disabled={actionLoading}
-                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
               >
                 <option value="">Uncategorized</option>
                 {activeCategories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
                 ))}
               </select>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div>
           <label htmlFor="tx-form-date" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">

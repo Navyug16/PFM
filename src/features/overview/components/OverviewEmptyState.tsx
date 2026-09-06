@@ -3,12 +3,12 @@ import { Wallet, Landmark, TrendingUp, Target, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface OverviewEmptyStateProps {
-  type: 'no_accounts' | 'no_transactions' | 'no_period_expenses' | 'no_goals'
+  type?: 'no_accounts' | 'no_transactions' | 'no_period_expenses' | 'no_goals'
   onQuickAction?: () => void
 }
 
 export const OverviewEmptyState: React.FC<OverviewEmptyStateProps> = ({
-  type,
+  type = 'no_accounts',
   onQuickAction
 }) => {
   if (type === 'no_accounts') {

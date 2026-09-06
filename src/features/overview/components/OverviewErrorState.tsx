@@ -2,12 +2,14 @@ import React from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 
 interface OverviewErrorStateProps {
+  error?: string
   message?: string
   onRetry?: () => void
 }
 
 export const OverviewErrorState: React.FC<OverviewErrorStateProps> = ({
-  message = 'An unexpected database error occurred while building your money overview dashboard.',
+  error,
+  message = error || 'An unexpected database error occurred while building your money overview dashboard.',
   onRetry
 }) => {
   return (

@@ -1,6 +1,13 @@
 import type { Account, Transaction, Goal, GoalContribution, Category } from '../financial/types'
 
-export type PeriodOption = 'week' | 'month' | 'last_month' | 'financial_year'
+export type PeriodOption =
+  | 'week'
+  | 'month'
+  | 'last_month'
+  | 'last_3_months'
+  | 'last_6_months'
+  | 'calendar_year'
+  | 'financial_year'
 
 export interface FinancialInsight {
   id: string
@@ -14,6 +21,8 @@ export interface FinancialInsight {
 }
 
 export interface OverviewData {
+  startDate: string
+  endDate: string
   accounts: Account[]
   transactions: Transaction[]
   activeGoals: Goal[]

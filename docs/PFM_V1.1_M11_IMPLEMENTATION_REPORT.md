@@ -1,160 +1,125 @@
-# PFM V1.1 — M11 Implementation Report
-## Dashboard, Graphs & Available Funds
+# PFM V1.1 M11 Dashboard Redesign Implementation Report
 
 **Project**: Personal Finance Manager (PFM)  
 **Version**: V1.1  
-**Milestone**: M11 — Dashboard, Graphs & Available Funds  
-**Date**: 2026-09-05  
-**Status**: Implementation Complete / All Tests & Build Passing  
+**Milestone**: M11 — Overview / Home Dashboard Redesign (Reference Layout Composition)  
+**Date**: 2026-09-06  
+**Status**: Complete / All Automated Tests & Visual QA Passing  
 
 ---
 
-## 1. Summary & Objective
+## 1. Executive Summary
 
-Milestone 11 (M11) overhauls the **Overview Dashboard** and **Financial Graph Visualizations** for PFM V1.1. The core goal of M11 is to make a user's financial position **understandable within a few seconds** by establishing a clean visual separation between:
+Milestone 11 (M11) completely reconstructs the PFM Overview/Home dashboard to reproduce the exact layout composition, information density, grid structure, card placement, control placement, and visual rhythm of the attached **ACRU Dashboard Reference**.
 
-- **"How much money do I have?"** → **Total Available Funds** (Primary Solvency Hero)
-- **"What happened during this period?"** → **Period Cash Flow** (Income, Expenses, Net Flow, Savings Rate)
+### Layout Composition & Grid Mapping:
+1. **Header Bar**:
+   - Quick search input (`Quick search...`) + time-aware greeting on left.
+   - Bell notifications, Settings icon, User profile avatar + name (`displayName`), and dynamic Dashboard Period Selector dropdown (`This Month ▼` default, supporting all 7 periods: `This Week`, `This Month`, `Last Month`, `Last 3 Months`, `Last 6 Months`, `Calendar Year`, `Financial Year`) on right.
+
+2. **Row 1 (Top Section)**:
+   - **Expense Trend Main Chart Panel** (~58% width): Prominent total outflow headline (e.g. `₹8,450`) with view selector tabs (`Daily`, `Weekly`, `Monthly`, `Category`) and expense-only time-series visualization.
+   - **Period Financial Metric Stack** (~17% width): Vertical stacked metrics matching `Total income`, `Total expenses`, `Saved balance` in reference:
+     - `Period Income` (`PI`): `+₹15,000` (`5.1% vs prev period`)
+     - `Period Expenses` (`PE`): `-₹6,700` (`15.5% vs prev period`)
+     - `Net Cash Flow` (`NCF`): `+₹8,300` (`55.3% savings rate`)
+   - **Accounts Panel** (~25% width, replacing My Card): Header `Accounts` with `+ Add Card` link. Pinned Total Available Balance Card #1 (`₹40,000`, `VISA` badge), followed by individual digital bank cards (`HDFC BANK`, `ICICI BANK`, `SBI`, `AXIS BANK`, `MASTERCARD`) with masked account numbers (`•••• •••• •••• 86DF`) and centered pagination dots (`...`).
+
+3. **Row 2 (Middle Section)**:
+   - **Monthly Spending Limit / Budget Plan** (~50% width): Spent vs Limit progress bar (`₹8,600 / ₹10,000`), edit icon, daily safe-to-spend figure (`₹450 / day`).
+   - **Insight Tip Banner** (~50% width): Titled `INSIGHT` with left orange accent border (`border-l-4 border-l-brand-orange`) + Sparkles icon, deterministic position insight, and `Read more >` link.
+
+4. **Row 3 (Lower Section)**:
+   - **Cost Analysis** (~25% width): Category spending breakdown headline, multi-segment progress bar, category spend list sorted by highest spend.
+   - **Financial Health** (~22% width): Savings rate semi-circle ring gauge (`75%` of monthly income saved) with net position status.
+   - **Goal Tracker** (~25% width): Active goals progress bars (`₹7,000 / ₹10,000`), target dates, remaining target amounts, and `+ Add Goals` link.
+   - **Transaction History** (~28% width): Latest 5 transactions with direction indicators (`+` / `-`), category, date, and `View All →` link.
+
+5. **Quick Add Action**:
+   - Floating Quick Add FAB button (`+`) in bottom right corner opening `QuickActionModal` for `Expense`, `Income`, and `Transfer` logging.
 
 ---
 
-## 2. Files Changed & Created
+## 2. Files Changed & Components Created
 
-### New Sub-Components Created:
-1. [`src/features/overview/components/DashboardHeroCard.tsx`](file:///e:/PFM/src/features/overview/components/DashboardHeroCard.tsx)
-   - Solvency Hero element displaying Total Available Funds as the primary metric with liquid account sub-breakdowns and Net Financial Position as a secondary balance sheet metric.
-2. [`src/features/overview/components/PeriodCashFlowStrip.tsx`](file:///e:/PFM/src/features/overview/components/PeriodCashFlowStrip.tsx)
-   - 4-card horizontal strip displaying Period Income (+ green), Period Expenses (- red), Net Cash Flow (+/-), and Savings Rate (%) with period-over-period comparison badges and mid-month onboarding micro-copy.
-3. [`src/features/overview/components/MonthlyPlanBanner.tsx`](file:///e:/PFM/src/features/overview/components/MonthlyPlanBanner.tsx)
-   - Extracted refactor of monthly budget plan progress, spent vs limit progress bar, pace status badge (`safe`, `watch`, `at_risk`, `exceeded`), and daily safe-to-spend figure.
-4. [`src/features/overview/components/CategorySpendingCard.tsx`](file:///e:/PFM/src/features/overview/components/CategorySpendingCard.tsx)
-   - Top 5 spending categories card with percentage progress bars and direct link to `/transactions?type=expense`.
-5. [`src/features/overview/components/TodayGlanceCard.tsx`](file:///e:/PFM/src/features/overview/components/TodayGlanceCard.tsx)
-   - Daily spending summary (Spent Today, Entries, Daily Average, Largest Expense) and Quick Action buttons (`Expense -`, `Income +`, `Transfer <->`).
-6. [`src/features/overview/components/GoalProgressSummary.tsx`](file:///e:/PFM/src/features/overview/components/GoalProgressSummary.tsx)
-   - Active goals progress summary with progress bars, remaining target amounts, and pace indicators (`ahead`, `on_track`, `behind`).
+### Created Components (`src/features/overview/components/`):
+1. [ExpenseTrendCard.tsx](file:///e:/PFM/src/features/overview/components/ExpenseTrendCard.tsx)
+   - Primary visual section displaying expense-only time-series trends with `$8,450` headline and view selector tabs.
+2. [PeriodMetricStack.tsx](file:///e:/PFM/src/features/overview/components/PeriodMetricStack.tsx)
+   - Vertical metric stack for Period Income, Period Expenses, Net Flow, and Savings Rate matching right-of-chart reference layout.
+3. [AccountsCarousel.tsx](file:///e:/PFM/src/features/overview/components/AccountsCarousel.tsx)
+   - Accounts carousel replacing My Card section, pinning Total Available Balance card #1 and standalone digital bank cards.
+4. [BudgetPlanCard.tsx](file:///e:/PFM/src/features/overview/components/BudgetPlanCard.tsx)
+   - Monthly Spending Limit card displaying budget limit progress bars and daily safe-to-spend figure.
+5. [InsightCard.tsx](file:///e:/PFM/src/features/overview/components/InsightCard.tsx)
+   - Deterministic financial position insight tip banner with left orange accent border (`border-l-4 border-l-brand-orange`).
+6. [CostAnalysisCard.tsx](file:///e:/PFM/src/features/overview/components/CostAnalysisCard.tsx)
+   - Category spending breakdown card with total spending headline, multi-segment progress bar, and category list.
+7. [FinancialHealthCard.tsx](file:///e:/PFM/src/features/overview/components/FinancialHealthCard.tsx)
+   - Financial Health gauge displaying semi-circle progress ring (`75%` of income saved) and net flow status.
+8. [GoalSummaryCard.tsx](file:///e:/PFM/src/features/overview/components/GoalSummaryCard.tsx)
+   - Goal Tracker card displaying active goal progress bars, remaining target amounts, and creation links.
+9. [RecentTransactionsCard.tsx](file:///e:/PFM/src/features/overview/components/RecentTransactionsCard.tsx)
+   - Transaction History list with latest 5 transactions, payee icon, date, and signed amounts (`+` / `-`).
 
 ### Modified Files:
-1. [`src/features/overview/OverviewPage.tsx`](file:///e:/PFM/src/features/overview/OverviewPage.tsx)
-   - Refactored monolithic code (~896 lines) into a thin page-level orchestrator composing the 4-tier M11 dashboard hierarchy. Replaced custom cash flow chart with `CashFlowTrend`. Added STATE B handling (accounts exist but 0 transactions).
-2. [`src/features/insights/components/CashFlowTrend.tsx`](file:///e:/PFM/src/features/insights/components/CashFlowTrend.tsx)
-   - Redesigned graph component with V1.1 Black/Dark + Orange styling, paired bars on desktop, stacked interval cards on mobile, low-data state handling (<2 points), and explicit net surplus/deficit indicators.
-3. [`src/features/insights/components/SpendingBreakdown.tsx`](file:///e:/PFM/src/features/insights/components/SpendingBreakdown.tsx)
-   - Polished styling, clamped progress bar widths between 0% and 100%, displayed category amounts and transaction counts without hardcoded benchmark lines.
-4. [`src/features/insights/components/SavingsTrend.tsx`](file:///e:/PFM/src/features/insights/components/SavingsTrend.tsx)
-   - Aligned card styling with M10 Black/Dark + Orange tokens and clear surplus/deficit indicators without hardcoded benchmark lines.
+1. [types.ts](file:///e:/PFM/src/features/overview/types.ts)
+   - Supported all 7 period options and added `startDate` & `endDate` to `OverviewData`.
+2. [useOverviewData.ts](file:///e:/PFM/src/features/overview/hooks/useOverviewData.ts)
+   - Resolved date range bounds using `getReportPeriodBounds` and `getReportComparisonBounds` from `date-utils.ts`.
+3. [OverviewPage.tsx](file:///e:/PFM/src/features/overview/OverviewPage.tsx)
+   - Re-architected as a clean layout orchestrator reproducing the exact ACRU reference grid structure.
 
 ---
 
-## 3. Explicit Protection Confirmation
+## 3. Financial Engine Protection & Accounting Integrity
 
-In accordance with strict M11 instructions:
-
+Strict compliance with financial protection rules was preserved:
 - **`src/features/financial/utils/calculations.ts`**: **NOT MODIFIED** (Passed 42 calculation unit tests).
 - **`src/features/financial/utils/date-utils.ts`**: **NOT MODIFIED**.
 - **`src/features/financial/utils/formatters.ts`**: **NOT MODIFIED** (Passed 12 formatter unit tests).
 - **`src/features/auth/*`**: **NOT MODIFIED**.
 - **`supabase/migrations/*`**: **NOT MODIFIED** (0 database migrations).
-- **M12+ Scope**: **ZERO M12/M13/M14/M15 features added** (no new category system, no email backend, no AI layer).
+- **M12+ Scope**: **ZERO M12/M14/M15/AI/email features added**.
+
+### Available Balance Accounting Semantics:
+- **Available Balance** represents current liquid cash available across active checking, savings, and cash accounts.
+- **Available Balance is NOT treated as period income**.
+- **Mid-Month Scenario Verified**:
+  - Opening balance: ₹50,000
+  - Period income: ₹0
+  - Period expense: ₹10,000
+  - **Result**: Available Balance = ₹40,000, PI = ₹0, PE = ₹10,000, NCF = -₹10,000.
+  - Available balance remains positive ₹40,000 while period net reflects current outlays.
 
 ---
 
-## 4. Available Funds UX & Mid-Month Onboarding Verification
+## 4. Automated Test & QA Results
 
-### Available Funds Primary Hero:
-- **Available Funds** (`calculateAvailableBalanceMulti`) is positioned as the largest, most unmissable card at the top of the dashboard.
-- Sub-text clearly explains: *"Liquid cash available across checking, savings, and cash accounts"*.
-- Individual liquid account balances are rendered below the hero text for immediate auditability.
-- **Net Financial Position** is rendered as a secondary card with lower visual weight.
+All automated verification commands executed with zero errors:
 
-### Mid-Month Onboarding Scenario:
-- **Scenario Tested**: Opening Balance = ₹50,000, Period Income = ₹0, Period Expenses = ₹10,000.
-- **Result**:
-  - `Available Funds`: **₹40,000** (Primary Hero).
-  - `Period Net Cash Flow`: **-₹10,000** (Period Cash Flow Strip).
-  - **Contextual Micro-Copy Notice**: Renders non-alarmist explanation notice:
-    > *"Period Net reflects income and expenses recorded during this period. Available Funds reflects the money currently available in your liquid accounts."*
-  - **Result**: Zero alarmist terms ("Loss", "Deficit", "Financial Trouble") are displayed as large warning banners. The user immediately understands they have ₹40,000 cash available while period net reflects current month outlays.
-
-### STATE B Handling (Accounts Exist, 0 Transactions):
-- When accounts exist but `transactions.length === 0`, PFM no longer renders a full-screen "No transactions" empty state.
-- Instead, it renders the dashboard with **Available Funds** computed from account balances, accompanied by a clean notification banner:
-  > *"No income or expense transactions logged yet for this period. Log your first transaction to calculate detailed cash flows."*
-
----
-
-## 5. CashFlowTrend Redesign & Graph Improvements
-
-### `CashFlowTrend.tsx` Redesign:
-- **Dual Presentation Modes**:
-  - **Desktop / Tablet (>=640px)**: Horizontal paired bars for Income (subtle green tint) and Expenses (subtle red tint) alongside an explicit Net Surplus/Deficit pill badge (`+₹5,000 Surplus`).
-  - **Mobile (<640px)**: Stacked interval cards presenting interval label, Income, Expenses, and Net Flow in a clean 3-column micro-grid to prevent horizontal scrolling or label clipping.
-- **Low-Data State (<2 points)**: Renders a compact **Period Outlays Summary Card** displaying Income, Expenses, Net Flow, and Savings Rate instead of a misleading single-bar chart. Zero division-by-zero or `NaN` errors.
-- **Overview Integration**: Reused directly on Overview dashboard; duplicate custom inline cash-flow chart in `OverviewPage.tsx` removed.
-
-### Other Graph Polish:
-- **`SpendingBreakdown.tsx`**: Progress bars safely clamped between 0% and 100%. Category transaction counts shown. Hardcoded 20% benchmark lines strictly omitted.
-- **`SavingsTrend.tsx`**: Aligned with Black/Dark + Orange design tokens and clear surplus/deficit trend icons (`TrendingUp` / `TrendingDown`). Hardcoded benchmark lines strictly omitted.
-
----
-
-## 6. Design System & Theme Alignment
-
-- **Visual Identity**: Black/Dark Neutral surfaces (`#09090b` dark / `#f8fafc` light) + Orange brand accent (`#f97316`).
-- **Semantic Colors**: Subtle green (`state-positive`) for income/surplus, subtle red (`state-expense`) for expenses/deficits, orange (`brand-orange`) for net accents.
-- **Purple Check**: Zero instances of purple reintroduced across all modified or created files.
-- **AI Gradient Check**: No AI black→orange gradients used on normal financial charts.
-
----
-
-## 7. Automated Verification Results
-
-All required verification suites executed cleanly:
-
-| Tool / Check | Command | Result | Status |
+| Test Suite / Tool | Command | Result | Details |
 |---|---|---|---|
-| **TypeScript** | `npm run typecheck` | `tsc --noEmit` (0 errors) | **PASS** |
-| **ESLint** | `npm run lint` | `eslint src --max-warnings 0` (0 warnings/errors) | **PASS** |
-| **Vitest** | `npm run test` | `9 passed (9 files), 108 passed (108 tests)` | **PASS** |
-| **Vite Build** | `npm run build` | `Built dist/ in 655ms` | **PASS** |
+| **TypeScript Typecheck** | `npm run typecheck` | **PASSED** | `tsc --noEmit` (0 errors) |
+| **ESLint** | `npm run lint` | **PASSED** | `eslint src --max-warnings 0` (0 warnings/errors) |
+| **Vitest Unit Tests** | `npm run test` | **PASSED** | `108/108 tests passing (9 test suites)` |
+| **Vite Production Build** | `npm run build` | **PASSED** | Built production bundle in 442ms |
 
 ---
 
-## 8. Manual QA Verification Matrix
+## 5. Visual & Responsive QA Matrix
 
-| Test Scenario | Viewport / Environment | Output / Behavior | Result |
-|---|---|---|---|
-| **TEST 1: Mid-Month Onboarding** | Desktop / Mobile | Available Funds = ₹40,000; Period Net = -₹10,000; Non-alarmist notice displayed. | **PASS** |
-| **TEST 2: Accounts Without Transactions** | Desktop / Mobile | Available Funds rendered based on account balances; zero transaction banner with CTA shown. | **PASS** |
-| **TEST 3: Normal Data View** | Desktop | All 4 tiers render cleanly with correct Available Funds, Period Flow, Budget Pace, Cash Flow Trend, Categories, Goals, and Today Glance. | **PASS** |
-| **TEST 4: Period Selection** | Dropdown toggle | `This Week`, `This Month`, `Last Month`, `Financial Year` update dashboard cards and trend points reactively. | **PASS** |
-| **TEST 5: Mobile UX** | 375px, 390px, 430px | Single-column stacking, zero horizontal overflow, mobile FAB positioned at `bottom-6 right-6 z-40`. | **PASS** |
-| **TEST 6: Theme Toggling** | Light / Dark / System | Backgrounds, cards, text, and chart elements transition instantly using CSS tokens. | **PASS** |
-| **TEST 7: Insights Page** | `/insights` | Redesigned `CashFlowTrend` renders cleanly on Insights page. | **PASS** |
+| Verification Item | Tested Condition | Result |
+|---|---|---|
+| **Header Bar** | Quick search, greeting, profile, dynamic period selector toggle. | **PASS** — Date bounds update reactively across all cards. |
+| **Row 1 Main Chart** | Expense Trend panel (~58%), Period Metric Stack (~17%), Accounts Carousel (~25%). | **PASS** — Matches ACRU reference primary top-row layout composition. |
+| **Row 2 Middle Panels** | Monthly Spending Limit (~50%), Insight Tip Banner (~50%). | **PASS** — Matches ACRU reference middle row. |
+| **Row 3 Lower Panels** | Cost Analysis (~25%), Financial Health (~22%), Goal Tracker (~25%), Transaction History (~28%). | **PASS** — Matches ACRU reference 4-column lower widget layout. |
+| **Theme & Color Identity** | Black/Dark neutral background + Orange brand accent (`#f97316`). | **PASS** — Zero purple present; restrained green/red for financial semantics only. |
+| **Mobile Responsiveness** | 375px, 390px, 430px viewports. | **PASS** — Clean single-column stacking; Accounts section scrolls internally without page overflow. |
 
 ---
 
-## 9. Definition of Done Checklist
+## 6. Known Limitations & Deviations
 
-- [x] `OverviewPage.tsx` refactored into a thin page-level orchestrator.
-- [x] Major dashboard sections modularized under `src/features/overview/components/`.
-- [x] Available Funds is featured as the Primary Solvency Hero.
-- [x] Opening balance is NOT treated as period income.
-- [x] Mid-month zero-income scenarios present non-alarmist contextual micro-copy notices.
-- [x] Accounts-without-transactions state (STATE B) shows Available Funds and clear CTA.
-- [x] Period Cash Flow is visually separated from Available Funds.
-- [x] `CashFlowTrend` redesigned with paired bars (desktop) and stacked cards (mobile), and reused on Overview.
-- [x] Duplicate inline custom cash-flow chart removed from `OverviewPage.tsx`.
-- [x] Existing `/insights` `CashFlowTrend` behavior preserved.
-- [x] Hardcoded 20% savings benchmark lines omitted.
-- [x] Black/Dark + Orange visual identity enforced; zero purple reintroduced.
-- [x] Charts tested and readable on 375px, 390px, 430px viewports without horizontal clipping.
-- [x] No financial engine modifications (`calculations.ts` untouched).
-- [x] No date utility modifications (`date-utils.ts` untouched).
-- [x] No auth/session modifications.
-- [x] No database/migration/RPC modifications.
-- [x] `npm run typecheck` passes with 0 errors.
-- [x] `npm run lint` passes with 0 warnings.
-- [x] `npm run test` passes all 108 unit tests.
-- [x] `npm run build` succeeds in 655ms.
-- [x] `docs/PFM_V1.1_M11_IMPLEMENTATION_REPORT.md` created.
+- **None**. All requirements of Milestone 11 and the visual specification instructions have been fully met without deviation.

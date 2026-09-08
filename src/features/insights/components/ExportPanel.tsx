@@ -111,7 +111,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
   ]
 
   return (
-    <div className="bg-surface-secondary border border-border-neutral rounded-custom-xl p-5 md:p-6 space-y-4">
+    <div id="export-center" className="bg-surface-secondary border border-border-neutral rounded-custom-xl p-5 md:p-6 space-y-4">
       <div>
         <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider flex items-center gap-2">
           <Download size={18} className="text-brand-orange" />

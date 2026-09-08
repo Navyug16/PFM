@@ -5,13 +5,13 @@ import { useInsightsData } from './hooks/useInsightsData'
 import type { ReportPeriodPreset } from '@/features/financial/utils/date-utils'
 import { PeriodSelector } from './components/PeriodSelector'
 import { ReportSummary } from './components/ReportSummary'
+import { FinancialQuestions } from './components/FinancialQuestions'
 import { InsightCards } from './components/InsightCards'
 import { SpendingBreakdown } from './components/SpendingBreakdown'
 import { CashFlowTrend } from './components/CashFlowTrend'
 import { SavingsTrend } from './components/SavingsTrend'
 import { LargestExpenses } from './components/LargestExpenses'
 import { FinancialYearReview } from './components/FinancialYearReview'
-import { ExportPanel } from './components/ExportPanel'
 import { RefreshCw } from 'lucide-react'
 
 export const InsightsPage: React.FC = () => {
@@ -42,13 +42,26 @@ export const InsightsPage: React.FC = () => {
       />
 
       <div className="mt-8 space-y-6">
-        {/* 1. Period Selector Presets Dropdown */}
+        {/* 1. Period Selector & Compact Export Header Bar */}
         <PeriodSelector
           preset={preset}
           onPresetChange={setPreset}
           customStart={customStart}
           customEnd={customEnd}
           onCustomDatesChange={handleCustomDatesChange}
+          exportData={
+            data
+              ? {
+                  transactions: data.rawTransactions,
+                  accounts: data.rawAccounts,
+                  categories: data.rawCategories,
+                  goals: data.rawGoals,
+                  contributionsMap: data.rawContributionsMap,
+                  todayStr: data.todayStr,
+                  periodExpenses: data.expenses
+                }
+              : undefined
+          }
         />
 
         {loading ? (
@@ -80,19 +93,29 @@ export const InsightsPage: React.FC = () => {
               prevSavingsRate={data.prevSavingsRate}
             />
 
-            {/* 3. Prioritized Financial Insights */}
+            {/* 3. Deterministic Financial Questions */}
+            <FinancialQuestions
+              transactions={data.rawTransactions}
+              accounts={data.rawAccounts}
+              categories={data.rawCategories}
+              preset={preset}
+              customStart={customStart}
+              customEnd={customEnd}
+            />
+
+            {/* 4. Prioritized Financial Insights */}
             <InsightCards insights={data.insights} />
 
-            {/* 4. Multi-column Analytics Grid */}
+            {/* 5. Multi-column Analytics Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Category Outlays */}
               <SpendingBreakdown breakdown={data.categoriesBreakdown} />
 
-              {/* Cash Flow Trends */}
+              {/* Cash Flow Trends (Vertical Bar Chart) */}
               <CashFlowTrend trendPoints={data.trendPoints} />
             </div>
 
-            {/* 5. Indian Financial Year Review Section (renders only when preset is active) */}
+            {/* 6. Indian Financial Year Review Section (renders only when preset is active) */}
             {preset === 'indian_financial_year' && (
               <FinancialYearReview
                 fyReview={data.fyReview}
@@ -101,7 +124,7 @@ export const InsightsPage: React.FC = () => {
               />
             )}
 
-            {/* 6. Savings and Balance Progression (over full ledger history) */}
+            {/* 7. Savings and Balance Progression (over full ledger history) */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <SavingsTrend savingsPoints={data.monthlySavingsTrend} />
               <LargestExpenses
@@ -110,21 +133,11 @@ export const InsightsPage: React.FC = () => {
                 categories={data.rawCategories}
               />
             </div>
-
-            {/* 7. Local Export Panel */}
-            <ExportPanel
-              transactions={data.rawTransactions}
-              accounts={data.rawAccounts}
-              categories={data.rawCategories}
-              goals={data.rawGoals}
-              contributionsMap={data.rawContributionsMap}
-              todayStr={data.todayStr}
-              periodExpenses={data.expenses}
-            />
           </div>
         ) : null}
       </div>
     </PageContainer>
   )
 }
+
 export default InsightsPage;

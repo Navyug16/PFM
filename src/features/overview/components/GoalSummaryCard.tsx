@@ -71,7 +71,7 @@ export const GoalSummaryCard: React.FC<GoalSummaryCardProps> = ({
   }
 
   const activeGoalsList = useMemo(() => {
-    const list = (goals || []).filter((g) => g.status === 'active' || g.status === 'in_progress' || !g.status)
+    const list = (goals || []).filter((g) => g.status === 'active' || !g.status)
     return list.map((g) => {
       const contribs = contributions[g.id] || []
       const saved = calculateGoalSavedAmount(contribs)

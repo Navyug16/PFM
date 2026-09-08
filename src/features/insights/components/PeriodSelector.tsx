@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import type { ReportPeriodPreset } from '@/features/financial/utils/date-utils'
+import type { Transaction, Account, Category, Goal, GoalContribution } from '@/features/financial/types'
 import { Calendar } from 'lucide-react'
+import { ExportButton } from './ExportButton'
 
 interface PeriodSelectorProps {
   preset: ReportPeriodPreset
@@ -8,6 +10,15 @@ interface PeriodSelectorProps {
   customStart: string
   customEnd: string
   onCustomDatesChange: (start: string, end: string) => void
+  exportData?: {
+    transactions: Transaction[]
+    accounts: Account[]
+    categories: Category[]
+    goals: Goal[]
+    contributionsMap: { [goalId: string]: GoalContribution[] }
+    todayStr: string
+    periodExpenses: number
+  }
 }
 
 export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
@@ -15,7 +26,8 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   onPresetChange,
   customStart,
   customEnd,
-  onCustomDatesChange
+  onCustomDatesChange,
+  exportData
 }) => {
   const [startInput, setStartInput] = useState(customStart)
   const [endInput, setEndInput] = useState(customEnd)
@@ -52,26 +64,42 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   return (
     <div className="bg-surface-secondary border border-border-neutral rounded-custom-xl p-4 md:p-6 space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">
-            Analysis Period
-          </label>
-          <div className="relative">
-            <select
-              value={preset}
-              onChange={(e) => onPresetChange(e.target.value as ReportPeriodPreset)}
-              className="w-full md:w-64 bg-surface-primary border border-border-neutral rounded-custom-md px-3.5 py-2.5 text-text-primary text-sm font-semibold focus:outline-none focus:border-brand-orange transition-all cursor-pointer appearance-none pr-10"
-            >
-              {presetsList.map((p) => (
-                <option key={p.value} value={p.value}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-text-secondary">
-              <Calendar size={16} />
+        <div className="flex flex-wrap items-end justify-between sm:justify-start gap-3 flex-1">
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">
+              Analysis Period
+            </label>
+            <div className="relative">
+              <select
+                value={preset}
+                onChange={(e) => onPresetChange(e.target.value as ReportPeriodPreset)}
+                className="w-full md:w-64 bg-surface-primary border border-border-neutral rounded-custom-md px-3.5 py-2.5 text-text-primary text-sm font-semibold focus:outline-none focus:border-brand-orange transition-all cursor-pointer appearance-none pr-10"
+              >
+                {presetsList.map((p) => (
+                  <option key={p.value} value={p.value}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-text-secondary">
+                <Calendar size={16} />
+              </div>
             </div>
           </div>
+
+          {exportData && (
+            <div className="self-end">
+              <ExportButton
+                transactions={exportData.transactions}
+                accounts={exportData.accounts}
+                categories={exportData.categories}
+                goals={exportData.goals}
+                contributionsMap={exportData.contributionsMap}
+                todayStr={exportData.todayStr}
+                periodExpenses={exportData.periodExpenses}
+              />
+            </div>
+          )}
         </div>
 
         {preset === 'custom' && (

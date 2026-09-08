@@ -95,7 +95,7 @@ export const RecentTransactionsCard: React.FC<RecentTransactionsCardProps> = ({
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-bold text-text-primary truncate">
-                      {tx.description || tx.payee || categoryName}
+                      {tx.notes || tx.payee_or_source || categoryName}
                     </p>
                     <span className="text-[10px] text-text-muted block">
                       {new Date(tx.transaction_date).toLocaleDateString(userLocale, {

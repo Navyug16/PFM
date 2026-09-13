@@ -24,6 +24,7 @@ export const AccountsPage: React.FC = () => {
 
   // Form State
   const [name, setName] = useState('')
+  const [accountNumber, setAccountNumber] = useState('')
   const [type, setType] = useState<AccountType>('checking')
   const [currency, setCurrency] = useState('INR')
   const [openingBalance, setOpeningBalance] = useState('')
@@ -76,9 +77,11 @@ export const AccountsPage: React.FC = () => {
         account_type: type,
         currency_code: currency.toUpperCase().trim(),
         opening_balance: balanceNum,
+        account_number: accountNumber.trim() || undefined,
         is_active: true,
       })
       setName('')
+      setAccountNumber('')
       setOpeningBalance('')
       await fetchData()
     } catch (err: unknown) {
@@ -153,6 +156,21 @@ export const AccountsPage: React.FC = () => {
                 placeholder="e.g. HDFC Checking"
                 disabled={actionLoading}
                 className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="acc-num" className="block text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">
+                Account / Card Number (Optional)
+              </label>
+              <input
+                id="acc-num"
+                type="text"
+                value={accountNumber}
+                onChange={(e) => setAccountNumber(e.target.value)}
+                placeholder="e.g. 4532 8912 3456 7890"
+                disabled={actionLoading}
+                className="w-full bg-surface-secondary border border-border-neutral rounded-custom-md px-4 py-2.5 text-text-primary text-sm outline-none focus:border-brand-orange transition-all font-mono"
               />
             </div>
 

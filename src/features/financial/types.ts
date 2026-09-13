@@ -17,6 +17,7 @@ export interface Account {
   currency_code: string
   opening_balance: number
   is_active: boolean
+  account_number?: string
   created_at: string
   updated_at: string
 }

@@ -12,6 +12,9 @@ export interface UserProfile {
   week_start: number // 0 = Sunday, 1 = Monday
   fy_start_month: number // 1 = Jan, 4 = Apr
   date_format: DateFormatOption
+  email_notifications_enabled: boolean
+  weekly_summary_enabled: boolean
+  monthly_report_enabled: boolean
   created_at: string
   updated_at: string
 }

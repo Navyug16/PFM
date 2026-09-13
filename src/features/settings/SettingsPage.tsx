@@ -4,12 +4,13 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { ProfileSettings } from './components/ProfileSettings'
 import { FinancialPreferences } from './components/FinancialPreferences'
 import { AppearanceSettings } from './components/AppearanceSettings'
+import { NotificationSettings } from './components/NotificationSettings'
 import { SecuritySettings } from './components/SecuritySettings'
 import { DataPrivacySettings } from './components/DataPrivacySettings'
 import { AccountDangerZone } from './components/AccountDangerZone'
-import { User, Sliders, Sun, ShieldCheck, HelpCircle, AlertTriangle } from 'lucide-react'
+import { User, Sliders, Sun, Bell, ShieldCheck, HelpCircle, AlertTriangle } from 'lucide-react'
 
-type SettingsTab = 'profile' | 'preferences' | 'appearance' | 'security' | 'privacy' | 'danger'
+type SettingsTab = 'profile' | 'preferences' | 'appearance' | 'notifications' | 'security' | 'privacy' | 'danger'
 
 export const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile')
@@ -18,6 +19,7 @@ export const SettingsPage: React.FC = () => {
     { id: 'profile' as const, label: 'Profile', icon: User },
     { id: 'preferences' as const, label: 'Preferences', icon: Sliders },
     { id: 'appearance' as const, label: 'Theme', icon: Sun },
+    { id: 'notifications' as const, label: 'Notifications', icon: Bell },
     { id: 'security' as const, label: 'Security', icon: ShieldCheck },
     { id: 'privacy' as const, label: 'Data & Privacy', icon: HelpCircle },
     { id: 'danger' as const, label: 'Danger Zone', icon: AlertTriangle },
@@ -27,7 +29,7 @@ export const SettingsPage: React.FC = () => {
     <PageContainer>
       <PageHeader
         title="Settings"
-        description="Configure your profile, financial preferences, appearance, and security credentials."
+        description="Configure your profile, financial preferences, appearance, and notification settings."
       />
 
       <div className="mt-8 flex flex-col md:flex-row gap-8">
@@ -60,6 +62,7 @@ export const SettingsPage: React.FC = () => {
           {activeTab === 'profile' && <ProfileSettings />}
           {activeTab === 'preferences' && <FinancialPreferences />}
           {activeTab === 'appearance' && <AppearanceSettings />}
+          {activeTab === 'notifications' && <NotificationSettings />}
           {activeTab === 'security' && <SecuritySettings />}
           {activeTab === 'privacy' && <DataPrivacySettings />}
           {activeTab === 'danger' && <AccountDangerZone />}

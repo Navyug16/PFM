@@ -33,7 +33,10 @@ export const createDefaultProfile = async (userId: string, email?: string): Prom
       locale: 'en-IN',
       week_start: 1,
       fy_start_month: 4,
-      date_format: 'YYYY-MM-DD'
+      date_format: 'YYYY-MM-DD',
+      email_notifications_enabled: false,
+      weekly_summary_enabled: false,
+      monthly_report_enabled: false
     })
     .select()
     .single()
